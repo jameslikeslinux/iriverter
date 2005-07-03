@@ -10,6 +10,14 @@ AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 
+case "$host_os" in
+	cygwin* | mingw*)
+		windows="yes"
+	;;
+esac
+
+AM_CONDITIONAL(BUILD_WIN, test "$windows" = "yes")
+
 AC_ARG_WITH(gcj, [  --with-gcj              build JunePimp using the GCJ compiler], gcj="$withval", gcj="no")
 AM_CONDITIONAL(BUILD_GCJ, test "$gcj" = "yes")
 
