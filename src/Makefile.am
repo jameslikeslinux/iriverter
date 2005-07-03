@@ -109,7 +109,7 @@ iriverter.jar: $(iriverter_jar_class_files)
 
 if BUILD_GCJ
 iriverter_SOURCES = iriverter.jar
-iriverter_GCJFLAGS = -fjni
+iriverter_GCJFLAGS = --classpath=../swt/swt-iriverter.jar
 iriverter_LDFLAGS = --main=net.sourceforge.iriverter.ConverterUI
 iriverter_LDADD = ../swt/libswt-iriverter.la
 endif

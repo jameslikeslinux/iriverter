@@ -5,7 +5,7 @@ libswt_iriverter_la_GCJFLAGS = -fjni
 endif
 
 extract_zip_files:
-	unzip -u swt*.zip src.zip "*swt*" -x swt-iriverter.jar 
+	unzip -u swt*.zip src.zip "*swt*" -x swt.jar 
 	unzip -u src.zip "org/*"
 
 swt_libraries = $(shell ls lib* *dll 2>/dev/null | grep -v "iriverter")
