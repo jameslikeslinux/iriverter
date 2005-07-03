@@ -89,10 +89,8 @@ iriverter_resources = \
 	gnu/regexp/MessagesBundle_fr.properties \
 	gnu/regexp/MessagesBundle.properties
 
-if !BUILD_GCJ
 iriverter_jardir = $(pkgdatadir)/lib
 iriverter_jar_DATA = iriverter.jar
-endif
 
 iriverter_jar_class_files = $(iriverter_source_files:.java=.class)
 
