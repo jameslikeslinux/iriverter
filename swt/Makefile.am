@@ -1,33 +1,35 @@
-swt_zip = $(shell ls swt*.zip)
-swt_libraries = $(shell unzip -ql $(swt_zip) "*swt*" -x swt.jar | grep -o "[a-z0-9\-]*\..*")
+extract_zip_files:
+	unzip -u swt*.zip src.zip "*swt*" -x swt.jar
+	unzip -u src.zip "org/*"
+
+swt_libraries = $(shell ls lib* *dll 2>/dev/null | grep -v "iriverter")
 swt_libraries_extension = $(shell echo $(swt_libraries) | sed 's/.*\.//' | uniq)
-swt_iriverter_libraries = $(swt_libraries:.$(swt_libraries_extension)=-iriverter.$(swt_libraries_extension))
-
-swt_iriverter_librariesdir = $(pkglibdir)
-swt_iriverter_libraries_DATA = $(swt_iriverter_libraries)
-
-$(swt_libraries): $(swt_zip)
-	unzip $(swt_zip) $@
-
-$(swt_iriverter_libraries): %-iriverter.$(swt_libraries_extension): %.$(swt_libraries_extension)
-	mv -f $< $@
-
-src_zip = $(shell unzip $(swt_zip) src.zip)
-swt_jar_source_files = $(shell unzip -ql src.zip "*.java" | grep -o "[/a-zA-Z0-9\-]*\..*";)
+swt_iriverter_libraries = $(shell ls *iriverter* 2>/dev/null)
+swt_jar_source_files = $(shell find org -iname "*.java")
 swt_jar_class_files = $(swt_jar_source_files:.java=.class)
 
-$(swt_jar_class_files): %.class: %.java
-	cat $< | sed 's/System\.loadLibrary[ ]*([\"a-zA-Z]*/& + \"-iriverter\"/g' > $<.new && mv -f $<.new $<
+move_libraries: extract_zip_files
+	rename .$(swt_libraries_extension) -iriverter.$(swt_libraries_extension) $(swt_libraries)
+	for file in `grep -Rl "System\.loadLibrary" org`; do sed 's/System\.loadLibrary[ ]*([\"a-zA-Z]*/& + \"-iriverter\"/g' $$file > $$file.new && mv -f $$file.new $$file; done
+
 if BUILD_GCJ
+$(swt_jar_class_files): %.class: %.java
 	$(GCJ) -C $<
 else
+$(swt_jar_class_files): %.class: %.java
 	$(JAVAC) $<
 endif
 
 all_swt_jar_class_files = $(shell find . -iname "*.class" | sed 's/\$$/\\\$$/g')
 
-swt.jar: $(swt_jar_class_files)
+swt.jar: move_libraries
+	make $(swt_jar_class_files)
 	$(JAR) cf $@ $(all_swt_jar_class_files)
 
 CLEANFILES = \
-	$(swt_iriverter_libraries)
+	$(swt_iriverter_libraries) \
+	org \
+	src.zip
+
+clean-generic:
+	-test -z "$(CLEANFILES)" || rm -rf $(CLEANFILES)
