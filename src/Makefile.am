@@ -107,16 +107,19 @@ all_iriverter_jar_class_files = $(shell find . -iname '*.class' | sed 's/\$$/\\\
 iriverter.jar: $(iriverter_jar_class_files)
 	$(JAR) cf $@ $(all_iriverter_jar_class_files) $(iriverter_icons) $(iriverter_resources)
 
+resource.o: resource.rc
+	$(WINDRES) -o $@ $<
+
 if BUILD_GCJ
+iriverter_SOURCES = iriverter.jar
 if BUILD_WIN
-iriverter_SOURCES = iriverter.jar
 iriverter_LDFLAGS = -mwindows --main=net.sourceforge.iriverter.ConverterUI
+iriverter_LDADD = resource.o ../swt/libswt-iriverter.la
 else
-iriverter_SOURCES = iriverter.jar
 iriverter_LDFLAGS = --main=net.sourceforge.iriverter.ConverterUI
+iriverter_LDADD = ../swt/libswt-iriverter.la
 endif
 iriverter_GCJFLAGS = --classpath=../swt/swt-iriverter.jar
-iriverter_LDADD = ../swt/libswt-iriverter.la
 endif
 
 CLEANFILES = \

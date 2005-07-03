@@ -25,6 +25,13 @@ if test "$gcj" = "yes"; then
 	if test "$GCJ" = ""; then
 		AC_MSG_ERROR([Can't find "gcj" in your PATH])
 	fi
+
+	if test "$windows" = "yes"
+		AC_PATH_PROG(WINDRES, "$host_alias"-windres)
+		if test "$WINDRES" = ""; then
+			AC_MSG_ERROR([Can't find "$host_alias-windres" in your PATH])
+		fi
+	fi
 else
 	if test "$JAVAC" = ""; then
 		AC_MSG_ERROR([Can't find "javac" in your PATH])
