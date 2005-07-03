@@ -6,7 +6,7 @@ AC_SUBST(VERSION)
 AM_INIT_AUTOMAKE(iriverter, $VERSION)
 
 AM_PROG_GCJ
-AC_DISABLE_STATIC
+AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 AC_PROG_INSTALL
 
@@ -37,13 +37,4 @@ if test "$JAR" = ""; then
 	AC_MSG_ERROR([Can't find "fastjar", "gcj-jar", or "jar" in your PATH])
 fi
 
-AC_ARG_WITH(swt, [  --with-swt=JAR          the jar contating the SWT library], swt="$withval", swt="no")
-
-if test "$swt" = "no"; then
-	AC_MSG_ERROR([Can't find "swt.jar"])
-else
-	SWT_JAR="$swt"
-	AC_SUBST(SWT_JAR)
-fi
-
-AC_OUTPUT([Makefile src/Makefile])
+AC_OUTPUT([Makefile src/Makefile swt/Makefile])

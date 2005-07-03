@@ -98,10 +98,10 @@ iriverter_jar_class_files = $(iriverter_source_files:.java=.class)
 
 if BUILD_GCJ
 $(iriverter_jar_class_files): %.class: %.java
-	$(GCJ) -C -classpath $(SWT_JAR):. $<
+	$(GCJ) -C -classpath ../swt/swt.jar:. $<
 else
 $(iriverter_jar_class_files): %.class: %.java
-	$(JAVAC) -classpath $(SWT_JAR):. $<
+	$(JAVAC) -classpath ../swt/swt.jar:. $<
 endif
 
 all_iriverter_jar_class_files = $(shell find . -iname '*.class' | sed 's/\$$/\\\$$/g')
@@ -111,8 +111,9 @@ iriverter.jar: $(iriverter_jar_class_files)
 
 if BUILD_GCJ
 iriverter_SOURCES = iriverter.jar
-iriverter_LDFLAGS = -fjni --main=net.sourceforge.iriverter.ConverterUI
-iriverter_LDADD = $(SWT_JAR)
+iriverter_GCJFLAGS = -fjni
+iriverter_LDFLAGS = --main=net.sourceforge.iriverter.ConverterUI
+iriverter_LDADD = ../swt/libswt-iriverter.la
 endif
 
 CLEANFILES = \
