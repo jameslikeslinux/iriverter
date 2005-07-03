@@ -98,10 +98,10 @@ iriverter_jar_class_files = $(iriverter_source_files:.java=.class)
 
 if BUILD_GCJ
 $(iriverter_jar_class_files): %.class: %.java
-	$(GCJ) -C -classpath ../swt/swt.jar:. $<
+	$(GCJ) -C -classpath ../swt/swt-iriverter.jar:. $<
 else
 $(iriverter_jar_class_files): %.class: %.java
-	$(JAVAC) -classpath ../swt/swt.jar:. $<
+	$(JAVAC) -classpath ../swt/swt-iriverter.jar:. $<
 endif
 
 all_iriverter_jar_class_files = $(shell find . -iname '*.class' | sed 's/\$$/\\\$$/g')
