@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+	<!ENTITY introduction SYSTEM "introduction.xml">
+	<!ENTITY installing SYSTEM "installing.xml">
+	<!ENTITY using SYSTEM "using.xml">
+	<!ENTITY troubleshooting SYSTEM "troubleshooting.xml">
+]>
+<book lang="en">
+	<bookinfo>
+		<title>iriverter Help</title>
+		
+		<author>
+			<firstname>James</firstname>
+			<surname>Lee</surname>
+			<affiliation>
+				<address><email>jlee23@umbc.edu</email></address>
+			</affiliation>
+		</author>
+		
+		<date>6/9/2005</date>
+		<releaseinfo>0.13</releaseinfo>
+
+		<abstract>
+			<para>iriverter is a cross-platform frontend to mencoder designed to facilitate the conversion of almost any video format to one that is playable on iriver and iAudio multimedia players.</para>
+		</abstract>
+	</bookinfo>
+
+	&introduction;
+	&installing;
+	&using;
+	&troubleshooting;
+</book>

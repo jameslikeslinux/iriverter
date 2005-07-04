@@ -26,7 +26,7 @@ if test "$gcj" = "yes"; then
 		AC_MSG_ERROR([Can't find "gcj" in your PATH])
 	fi
 
-	if test "$windows" = "yes"
+	if test "$windows" = "yes"; then
 		AC_PATH_PROG(WINDRES, "$host_alias"-windres)
 		if test "$WINDRES" = ""; then
 			AC_MSG_ERROR([Can't find "$host_alias-windres" in your PATH])
@@ -52,4 +52,4 @@ if test "$JAR" = ""; then
 	AC_MSG_ERROR([Can't find "fastjar", "gcj-jar", or "jar" in your PATH])
 fi
 
-AC_OUTPUT([Makefile src/Makefile swt/Makefile])
+AC_OUTPUT([Makefile doc/Makefile doc/html/Makefile doc/images/Makefile src/Makefile swt/Makefile])

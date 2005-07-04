@@ -1,0 +1,343 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Advanced Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="iriverter Help"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Using iriverter"
+HREF="using.html"><LINK
+REL="PREVIOUS"
+TITLE="Setting Conversion Options"
+HREF="options.html"><LINK
+REL="NEXT"
+TITLE="Troubleshooting"
+HREF="troubleshooting.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>iriverter Help</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="options.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 3. Using iriverter</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="troubleshooting.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="advanced"
+>3.3. Advanced Functions</A
+></H1
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>These functions were designed for advanced users only.  If you don't know what you are doing, you could create unplayable videos or crash iriverter</P
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="split"
+>3.3.1. Manually Splitting Videos</A
+></H2
+><P
+>iriverter can automatically split videos to a specified length for easy seeking in long videos.  For the H300, it is necessary for videos to be under an hour in length.  It tries to make equally sized parts, but if you want to take control of the splitting yourself unselect
+				<SPAN
+CLASS="guimenu"
+>Options</SPAN
+>-&gt;<SPAN
+CLASS="guisubmenu"
+>Advanced</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Automatically Split</SPAN
+> and convert your videos as you would normally.  When that is done select
+				<SPAN
+CLASS="guimenu"
+>Jobs</SPAN
+>-&gt;<SPAN
+CLASS="guisubmenu"
+>New</SPAN
+>-&gt;<SPAN
+CLASS="guisubmenu"
+>Advanced</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Manual Split</SPAN
+>, choose your input video, add the times to split around and press <SPAN
+CLASS="guibutton"
+>Convert</SPAN
+> again.  You will get a video file for each desired split in the same directory as the input video.</P
+><P
+>To determine where to put the split marks, you can open the video file in iriverter's video player by selecting
+				<SPAN
+CLASS="guimenu"
+>Jobs</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Play File...</SPAN
+> (<B
+CLASS="shortcut"
+><B
+CLASS="keycap"
+>Shift</B
+>-<B
+CLASS="keycap"
+>Ctrl</B
+>-<B
+CLASS="keycap"
+>F</B
+></B
+>).  You can see the current position by pressing <B
+CLASS="keycap"
+>O</B
+> to activate the on-screen-display.  You can move forward and backwards by pressing <B
+CLASS="keycap"
+>Right</B
+> or <B
+CLASS="keycap"
+>Left</B
+>, respectively.  You can pause by pressing <B
+CLASS="keycap"
+>P</B
+>.</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="joining"
+>3.3.2. Joining Videos</A
+></H2
+><P
+>iriverter can merge any number of videos into one.  This is handled as a conversion job and can be started from
+				<SPAN
+CLASS="guimenu"
+>Jobs</SPAN
+>-&gt;<SPAN
+CLASS="guisubmenu"
+>New</SPAN
+>-&gt;<SPAN
+CLASS="guisubmenu"
+>Advanced</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Join Videos</SPAN
+>. Continue to add the videos that you want to merge, select a place for the output file to be written and start the conversion as outlined in <A
+HREF="using.html#starting_conversion"
+>Section 3.1.4</A
+>.</P
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>iriverter does not impose any restrictions on the videos that you can merge, however, if the output is to be playable, the input videos must be of the same video and audio formats, resolution, and bitrates.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="sync"
+>3.3.3. Fixing Audio/Video Sync</A
+></H2
+><P
+>If you find that the audio is out of sync with the video, you can specify an amount of time up to 1000 milliseconds with which to delay or advance the audio stream in
+				<SPAN
+CLASS="guimenu"
+>Options</SPAN
+>-&gt;<SPAN
+CLASS="guisubmenu"
+>Advanced</SPAN
+>-&gt;<SPAN
+CLASS="guimenuitem"
+>Audio Sync...</SPAN
+>.</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>If you are using Linux and do not have the MPlayer patch applied, you cannot bring the audio ahead of the video.  See <A
+HREF="linux.html"
+>Section 2.3</A
+> for more information.</P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="options.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="troubleshooting.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Setting Conversion Options</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="using.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Troubleshooting</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

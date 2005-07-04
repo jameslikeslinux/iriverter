@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="using">
+	<title>Using iriverter</title>
+
+	<sect1 id="converting">
+		<title>Converting Videos</title>
+		<para>iriverter can convert many types of files including (although there may be more):</para>
+
+		<itemizedlist>
+			<listitem><para>AVI Video</para></listitem>
+			<listitem><para>Matroska Video</para></listitem>
+			<listitem><para>MPEG Video</para></listitem>
+			<listitem><para>Ogg Video</para></listitem>
+			<listitem><para>Quicktime Movies</para></listitem>
+			<listitem><para>Real Video (with extra codecs)</para></listitem>
+			<listitem><para>Windows Media Video</para></listitem>
+		</itemizedlist>
+
+		<para>To simplify the user interface, the conversion of different types of files have been split up into three modes: single video, directory, and DVD.  You can queue up as many of these jobs as you want.</para>
+
+		<sect2 id="single_video">
+			<title>Single Videos</title>
+			<para>To create a new single video conversion job, select
+				<menuchoice>
+					<shortcut>
+						<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>S</keycap></keycombo>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guisubmenu>New</guisubmenu>
+					<guimenuitem>Single Video</guimenuitem>
+				</menuchoice>, press <guiicon><inlinegraphic fileref="../images/singlevideo-24.png" /></guiicon> on the toolbar, or drag a supported video from your file manager to the iriverter window.</para>
+
+			<para>Finally select your input and output videos if necessary.</para>
+			
+			<important><para>Your output video must end in <filename>.avi</filename>.  If in doubt, just accept the default name provided.</para></important>
+		</sect2>
+
+		<sect2 id="directory">
+			<title>Directories of Videos</title>
+			<para>To create a new directory conversion job, select
+				<menuchoice>
+					<shortcut>
+						<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>D</keycap></keycombo>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guisubmenu>New</guisubmenu>
+					<guimenuitem>Directory</guimenuitem>
+				</menuchoice>, press <guiicon><inlinegraphic fileref="../images/directory-24.png" /></guiicon> on the toolbar, or drag a directory from your file manager to the iriverter window.</para>
+
+			<para>iriverter will automatically suggest a new output directory for the converted files, but you can change that as you wish.  iriverter will convert all of the supported videos in the selected input directory and its subdirectories if specified and will change their endings to <filename>.h300.avi</filename> or <filename>.pmp.avi</filename> depending on your device so you don't need to worry about it overwriting your original videos.</para>
+		</sect2>
+
+		<sect2 id="dvd">
+			<title>DVDs</title>
+			
+			<para>To convert a DVD, select
+				<menuchoice>
+					<shortcut>
+						<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>V</keycap></keycombo>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guisubmenu>New</guisubmenu>
+					<guimenuitem>DVD</guimenuitem>
+				</menuchoice>, press <guiicon><inlinegraphic fileref="../images/dvd-24.png" /></guiicon> on the toolbar, or drag your DVD drive icon from your file manager to the iriverter window.</para>
+
+			<para>If you have a DVD in the drive already (and it is mounted if you are using Linux), iriverter will automatically detect the drive and the DVD's titles, chapters and languages.  Otherwise you need to put the DVD in the drive (and mount it on Linux) and select "Other..." from the DVD Drive drop-down box and pick the appropriate drive (or mount point in Linux).</para>
+
+			<sect3 id="titles">
+				<title>Selecting the Title to Convert</title>
+
+				<para>If you are unfamiliar with DVDs, they are made up of titles, and those titles contain chapters.  Each title represents a different feature of the DVD.  For example, one could be the main movie, another could be the outtakes, and another could be a behind-the-scenes featurette.  There could be dozens of titles on a DVD, but the first one is usually the main movie.  If in doubt, play a little bit of it back in your DVD player.  It will tell you the currently playing title.</para>
+
+				<note><para>A preview function will be implemented in iriverter soon to make the selection easier</para></note>
+			</sect3>
+			
+			<sect3 id="chapters">
+				<title>Selecting Chapters to Convert</title>
+
+				<para>You can have iriverter convert only certain chapters of a movie if you want to (by default all of the chapters are converted into a single file).  To do so press <guibutton>Chapters</guibutton>.  From here select chapters that you want converted and deselect the ones that you don't.  If you do not have <guibutton>One file per continuous selection</guibutton> selected, then you will get one video file for each chapter you have selected.  When it is pressed, you will get one file for each continuous selection.  For example, if you have chapters 2, 3, 4, 7, 8, 9, and 10 selected, you will get one file for 2 through 4 and one for 7 through 10.</para>
+			</sect3>
+
+			<sect3 id="languages">
+				<title>Specifying Audio and Subtitle Languages</title>
+
+				<para>Using the default audio language will result in the language that the film was shot in.  If you require another language, select it from the Audio Stream drop-down box.  If there are multiple streams of the same language, the first is usually the one you want.  The same applies for the subtitle language.</para>
+
+				<note><para>Subtitles fonts are "hard-coded" onto the DVD by the DVD author, therefore there is no way to increase their size or position.</para></note>
+			</sect3>
+		</sect2>
+	
+		<sect2 id="starting_conversion">
+			<title>Starting Conversion</title>
+			<para>iriverter will start with the first tabbed job and work its way through all that you have open.  At any time you can close a tabbed job with
+				<menuchoice>
+					<shortcut>
+						<keycombo><keycap>Ctrl</keycap><keycap>W</keycap></keycombo>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guimenuitem>Close</guimenuitem>
+				</menuchoice> or press the X button on the tab itself.  All of the tabbed jobs can be closed with
+				<menuchoice>
+					<shortcut>
+						<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>W</keycap></keycombo>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guimenuitem>Close All</guimenuitem>
+				</menuchoice>.  A job can be move up and down in the queue with
+				<menuchoice>
+					<shortcut>
+						<keycap>Page Up</keycap>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guimenuitem>Move Up</guimenuitem>
+				</menuchoice> and
+				<menuchoice>
+					<shortcut>
+						<keycap>Page Down</keycap>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guimenuitem>Move Down</guimenuitem>
+				</menuchoice>, respectively.</para>
+
+			<para>To begin the conversion after you have set up the jobs that you want to do, select
+				<menuchoice>
+					<shortcut>
+						<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>C</keycap></keycombo>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guimenuitem>Convert...</guimenuitem>
+				</menuchoice> or press <guiicon><inlinegraphic fileref="../images/convert-24.png" /></guiicon> on the toolbar.  A popup will appear indicating the conversion progress along with any questions like overwriting files and possible errors.</para>
+		</sect2>
+	</sect1>
+
+	<sect1 id="options">
+		<title>Setting Conversion Options</title>
+		<para>iriverter has a few options that give you as much flexibility with conversion as the iriver will allow</para>
+
+		<sect2 id="bitrates">
+			<title>Video and Audio Bitrates</title>
+			<para>The bitrate that a multimedia stream is encoded at is basically the amount of information to include per second.  A higher bitrate allows more information to be encoded so it will appear or sound nicer than something encoded at a lower bitrate, but its filesize will be higher too.  The defaults that iriverter provides are recommended, but if you want to change them you can do so by selecting
+				<menuchoice>
+					<shortcut>
+						<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>B</keycap></keycombo>
+					</shortcut>
+					<guimenu>Options</guimenu>
+					<guimenuitem>Bitrate...</guimenuitem>
+				</menuchoice>.</para>
+		</sect2>
+
+		<sect2 id="pmpopts">
+			<title>Video Size and Frame Rate</title>
+			<para>If you are using a PMP then you can set the dimensions and frame rate of the converted videos.</para>
+			
+			<para>320x240 is the size of the PMP screen providing a small file size, but it might not look so good when outputted to a TV.  640x480 is the size of a standard TV so it will look nice on a TV, but the video's file size will be larger.  512x384 is a good compromise between the other two.</para>
+
+			<para>As far as the frame rate, the higher the frame rate, the smoother the video will appear, but the file size will increase as well.</para>
+		</sect2>
+
+		<sect2 id="otheroptions">
+			<title>Other Options</title>
+			<variablelist>
+				<varlistentry>
+					<term>
+						<menuchoice>
+							<shortcut>
+								<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
+							</shortcut>
+							<guimenu>Options</guimenu>
+							<guimenuitem>Normalize Volume</guimenuitem>
+						</menuchoice>
+					</term>
+					<listitem><para>Increases or decreases the volume of the video to a normal loudness.  Use this if your videos seem too quiet.</para></listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>
+						<menuchoice>
+							<shortcut>
+								<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>P</keycap></keycombo>
+							</shortcut>
+							<guimenu>Options</guimenu>
+							<guimenuitem>Pan and Scan</guimenuitem>
+						</menuchoice>
+					</term>
+					<listitem><para>Turns widescreen videos into fullscreen ones without distorting the image.  Be aware that this could take sizeable portions of the sides of your video off.</para></listitem>
+				</varlistentry>
+			</variablelist>
+		</sect2>
+	</sect1>
+
+	<sect1 id="advanced">
+		<title>Advanced Functions</title>
+		<warning><para>These functions were designed for advanced users only.  If you don't know what you are doing, you could create unplayable videos or crash iriverter</para></warning>
+	
+		<sect2 id="split">
+			<title>Manually Splitting Videos</title>
+			<para>iriverter can automatically split videos to a specified length for easy seeking in long videos.  For the H300, it is necessary for videos to be under an hour in length.  It tries to make equally sized parts, but if you want to take control of the splitting yourself unselect
+				<menuchoice>
+					<guimenu>Options</guimenu>
+					<guisubmenu>Advanced</guisubmenu>
+					<guimenuitem>Automatically Split</guimenuitem>
+				</menuchoice> and convert your videos as you would normally.  When that is done select
+				<menuchoice>
+					<guimenu>Jobs</guimenu>
+					<guisubmenu>New</guisubmenu>
+					<guisubmenu>Advanced</guisubmenu>
+					<guimenuitem>Manual Split</guimenuitem>
+				</menuchoice>, choose your input video, add the times to split around and press <guibutton>Convert</guibutton> again.  You will get a video file for each desired split in the same directory as the input video.</para>
+
+			<para>To determine where to put the split marks, you can open the video file in iriverter's video player by selecting
+				<menuchoice>
+					<shortcut>
+						<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>F</keycap></keycombo>
+					</shortcut>
+					<guimenu>Jobs</guimenu>
+					<guimenuitem>Play File...</guimenuitem>
+				</menuchoice>.  You can see the current position by pressing <keycap>O</keycap> to activate the on-screen-display.  You can move forward and backwards by pressing <keycap>Right</keycap> or <keycap>Left</keycap>, respectively.  You can pause by pressing <keycap>P</keycap>.</para>
+		</sect2>
+
+		<sect2 id="joining">
+			<title>Joining Videos</title>
+			<para>iriverter can merge any number of videos into one.  This is handled as a conversion job and can be started from
+				<menuchoice>
+					<guimenu>Jobs</guimenu>
+					<guisubmenu>New</guisubmenu>
+					<guisubmenu>Advanced</guisubmenu>
+					<guimenuitem>Join Videos</guimenuitem>
+				</menuchoice>. Continue to add the videos that you want to merge, select a place for the output file to be written and start the conversion as outlined in <xref linkend="starting_conversion" />.</para>
+			<warning><para>iriverter does not impose any restrictions on the videos that you can merge, however, if the output is to be playable, the input videos must be of the same video and audio formats, resolution, and bitrates.</para></warning>
+		</sect2>
+
+		<sect2 id="sync">
+			<title>Fixing Audio/Video Sync</title>
+			<para>If you find that the audio is out of sync with the video, you can specify an amount of time up to 1000 milliseconds with which to delay or advance the audio stream in
+				<menuchoice>
+					<guimenu>Options</guimenu>
+					<guisubmenu>Advanced</guisubmenu>
+					<guimenuitem>Audio Sync...</guimenuitem>
+				</menuchoice>.</para>
+			<note><para>If you are using Linux and do not have the MPlayer patch applied, you cannot bring the audio ahead of the video.  See <xref linkend="linux" /> for more information.</para></note>
+		</sect2>
+	</sect1>
+</chapter>
