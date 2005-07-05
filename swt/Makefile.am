@@ -2,6 +2,9 @@ if BUILD_GCJ
 lib_LTLIBRARIES = libswt-iriverter.la
 libswt_iriverter_la_SOURCES = swt-iriverter.jar
 libswt_iriverter_la_GCJFLAGS = -fjni
+else
+swt_iriverter_jardir = $(pkgdatadir)/lib
+swt_iriverter_jar_DATA = swt-iriverter.jar
 endif
 
 extract_zip_files:
@@ -17,8 +20,6 @@ swt_iriverter_libraries_DATA = $(swt_iriverter_libraries)
 
 swt_iriverter_jar_source_files = $(shell find org -iname "*.java" 2>/dev/null)
 swt_iriverter_jar_class_files = $(swt_iriverter_jar_source_files:.java=.class)
-swt_iriverter_jardir = $(pkgdatadir)/lib
-swt_iriverter_jar_DATA = swt-iriverter.jar
 
 move_libraries: extract_zip_files
 	rename .$(swt_libraries_extension) -iriverter.$(swt_libraries_extension) $(swt_libraries)
