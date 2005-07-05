@@ -90,7 +90,7 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 			String file = fileDialog.open();
 			if (file != null) {
 				inputVideoInput.setText(file);
-				outputVideoInput.setText(file.substring(0, file.lastIndexOf('.')) + "." + converterOptions.getShortDevice() + ".avi");
+				outputVideoInput.setText(file.substring(0, file.lastIndexOf('.')) + "." + converterOptions.getCurrentProfile().getProfileName() + ".avi");
 				tabItem.setText(new File(file).getName());
 			}
 		}
@@ -114,7 +114,7 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		tabItem.setText(new File(inputVideo).getName());
 		
 		inputVideoInput.setText(inputVideo);
-		outputVideoInput.setText(inputVideo.substring(0, inputVideo.lastIndexOf('.')) + "." + converterOptions.getShortDevice() + ".avi");
+		outputVideoInput.setText(inputVideo.substring(0, inputVideo.lastIndexOf('.')) + "." + converterOptions.getCurrentProfile().getProfileName() + ".avi");
 	}
 	
 	public synchronized String getInputVideo() {		

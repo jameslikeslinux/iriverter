@@ -158,28 +158,13 @@ public class MPlayerInfo {
 		return frameRate;
 	}
 
-	public int getWidth() {
-		int width = 0;
+	public Dimensions getDimensions() {
 		Matcher matcher = Pattern.compile("=> [0-9]*x[0-9]*").matcher(mplayerOutput);
 
 		if (!matcher.find())
-			return -1;
-		
-		width = Integer.parseInt(matcher.group().substring(matcher.group().indexOf(' ') + 1, matcher.group().indexOf('x')));
+			return new Dimensions(-1, -1);
 
-		return width;
-	}
-
-	public int getHeight() {
-		int height = 0;
-		Matcher matcher = Pattern.compile("=> [0-9]*x[0-9]*").matcher(mplayerOutput);
-
-		if (!matcher.find())
-			return -1;
-		
-		height = Integer.parseInt(matcher.group().substring(matcher.group().indexOf('x') + 1, matcher.group().length()));
-
-		return height;
+		return new Dimensions(matcher.group().substring(matcher.group().indexOf(' ') + 1));
 	}
 	
 	public static String getMPlayerPath() {
@@ -202,7 +187,7 @@ public class MPlayerInfo {
 	}
 	
 	public boolean videoSupported() {
-		if (getFrameRate() == -1 || getWidth() == -1 || getHeight() == -1)
+		if (getFrameRate() == -1 || getDimensions().getWidth() == -1 || getDimensions().getHeight() == -1)
 			return false;
 		
 		return true;

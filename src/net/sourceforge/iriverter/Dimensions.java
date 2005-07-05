@@ -9,16 +9,15 @@ public class Dimensions {
 	}
 
 	public Dimensions(String dimensions) {
-		String[] widthAndHeight = dimensions.split("x");
-		width = Integer.parseInt(widthAndHeight[0]);
-		height = Integer.parseInt(widthAndHeight[1]);
+		width = Integer.parseInt(dimensions.substring(0, dimensions.indexOf('x')));
+		height = Integer.parseInt(dimensions.substring(dimensions.indexOf('x') + 1));
 	}
 
-	public void getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
-	public void getHeight() {
+	public int getHeight() {
 		return height;
 	}
 }

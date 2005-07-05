@@ -83,7 +83,7 @@ public class Converter extends Thread {
 			if (new File(directoryInfo.getInputDirectory() + File.separator + directory[i]).isDirectory() && directoryInfo.getConvertSubdirectories())
 				newJobs.addAll(convertDirectoryToSingleVideos(new DirectoryAdapter(directoryInfo.getInputDirectory() + File.separator + directory[i], directoryInfo.getOutputDirectory() + File.separator + directory[i], directoryInfo.getConvertSubdirectories()), converterOptions));
 			else if (new File(directoryInfo.getInputDirectory() + File.separator + directory[i]).isFile())
-				newJobs.add(new SingleVideoAdapter(directoryInfo.getInputDirectory() + File.separator + directory[i], directoryInfo.getOutputDirectory() + File.separator + directory[i].substring(0, directory[i].lastIndexOf('.')) + "." + converterOptions.getShortDevice() + ".avi"));
+				newJobs.add(new SingleVideoAdapter(directoryInfo.getInputDirectory() + File.separator + directory[i], directoryInfo.getOutputDirectory() + File.separator + directory[i].substring(0, directory[i].lastIndexOf('.')) + "." + converterOptions.getCurrentProfile().getProfileName() + ".avi"));
 			
 		return newJobs;
 	}
@@ -166,19 +166,19 @@ public class Converter extends Thread {
 		
 		MPlayerInfo info = new MPlayerInfo(singleVideoInfo.getInputVideo());
 		
-		int scaledWidth = converterOptions.getWidth();
-		int scaledHeight = (info.getHeight() * converterOptions.getWidth()) / info.getWidth();
+		int scaledWidth = converterOptions.getDimensions().getWidth();
+		int scaledHeight = (info.getDimensions().getHeight() * converterOptions.getDimensions().getWidth()) / info.getDimensions().getWidth();
 		
-		if (scaledHeight > converterOptions.getHeight()) {
-			scaledWidth = (scaledWidth * converterOptions.getHeight()) / scaledHeight;
-			scaledHeight = converterOptions.getHeight();
+		if (scaledHeight > converterOptions.getDimensions().getHeight()) {
+			scaledWidth = (scaledWidth * converterOptions.getDimensions().getHeight()) / scaledHeight;
+			scaledHeight = converterOptions.getDimensions().getHeight();
 		}
 		
 		String vf = "harddup";
 		if (converterOptions.getPanAndScan())
-			vf = "scale=" + ((int) ((info.getWidth()) * (((double) converterOptions.getHeight()) / (double) info.getHeight()))) + ":" + converterOptions.getHeight() + ",crop=" + converterOptions.getWidth() + ":" + converterOptions.getHeight() + "," + vf;
+			vf = "scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight() + "," + vf;
 		else
-			vf = "scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getWidth() + ":" + converterOptions.getHeight() + "," + vf;
+			vf = "scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight() + "," + vf;
 		
 		String af = "resample=44100";
 		if (converterOptions.getNormalizeVolume())
@@ -247,19 +247,19 @@ public class Converter extends Thread {
 		
 		MPlayerInfo info = new MPlayerInfo("dvd://" + dvdInfo.getTitle(), dvdInfo.getDrive());
 		
-		int scaledWidth = converterOptions.getWidth();
-		int scaledHeight = (info.getHeight() * converterOptions.getWidth()) / info.getWidth();
+		int scaledWidth = converterOptions.getDimensions().getWidth();
+		int scaledHeight = (info.getDimensions().getHeight() * converterOptions.getDimensions().getWidth()) / info.getDimensions().getWidth();
 		
-		if (scaledHeight > converterOptions.getHeight()) {
-			scaledWidth = (scaledWidth * converterOptions.getHeight()) / scaledHeight;
-			scaledHeight = converterOptions.getHeight();
+		if (scaledHeight > converterOptions.getDimensions().getHeight()) {
+			scaledWidth = (scaledWidth * converterOptions.getDimensions().getHeight()) / scaledHeight;
+			scaledHeight = converterOptions.getDimensions().getHeight();
 		}
 		
 		String vf = "filmdint=io=" + ((int) (info.getFrameRate() * 100)) + ":" + (converterOptions.getFrameRate() * 100);
 		if (converterOptions.getPanAndScan())
-			vf += ",scale=" + ((int) ((info.getWidth()) * (((double) converterOptions.getHeight()) / (double) info.getHeight()))) + ":" + converterOptions.getHeight() + ",crop=" + converterOptions.getWidth() + ":" + converterOptions.getHeight();
+			vf += ",scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		else
-			vf += ",scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getWidth() + ":" + converterOptions.getHeight();
+			vf += ",scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		vf += ",harddup";
 		
 		String af = "resample=44100";
@@ -423,7 +423,7 @@ public class Converter extends Thread {
 		if (length < converterOptions.getSplitTime() * 60)
 			return;
 		
-		if (!converterOptions.getAutomaticallySplit()) {
+		if (!converterOptions.getAutoSplit()) {
 			notSplitVideos.add(inputVideo);
 			return;
 		}

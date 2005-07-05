@@ -100,7 +100,7 @@ public class Directory extends Composite implements SelectionListener, TabItemCo
 			String directory = directoryDialog.open();
 			if (directory != null) {
 				inputDirectoryInput.setText(directory);
-				outputDirectoryInput.setText(directory + "-" + converterOptions.getShortDevice());
+				outputDirectoryInput.setText(directory + "-" + converterOptions.getCurrentProfile().getProfileName());
 				tabItem.setText(new File(directory).getName());
 			}
 		}
@@ -122,7 +122,7 @@ public class Directory extends Composite implements SelectionListener, TabItemCo
 		tabItem.setText(new File(directory).getName());
 		
 		inputDirectoryInput.setText(directory);
-		outputDirectoryInput.setText(directory + "-" + converterOptions.getShortDevice());
+		outputDirectoryInput.setText(directory + "-" + converterOptions.getCurrentProfile().getProfileName());
 	}
 	
 	public synchronized String getInputDirectory() {

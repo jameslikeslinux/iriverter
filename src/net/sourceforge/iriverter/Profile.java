@@ -3,24 +3,31 @@ package net.sourceforge.iriverter;
 import java.io.*;
 
 public class Profile {
-	private File optionsFile;
-	private String profileName;
+	private File profileFile;
 
-	private Profile(File optionsFile, String profileName) {
-		this.optionsFile = optionsFile;
-		this.profileName = profileName;
+	private Profile(File profileFile) {
+		this.profileFile = profileFile;
 	}
 
 	public static Profile getProfile(String profileName) {
-		return new Profile(new File("../share/iriverter/profiles/" + profileName + ".profile"), profileName);
+		return new Profile(new File("../share/iriverter/profiles/" + profileName + ".profile"));
+	}
+
+	public static Profile[] getAllProfiles() {
+		String[] profilesStrings = new File("../share/iriverter/profiles/").list();
+		Profile[] profiles = new Profile[profilesStrings.length];
+
+		for (int i = 0; i < profiles.length; i++)
+			profiles[i] = new Profile(new File("../share/iriverter/profiles/" + profilesStrings[i]));
+
+		return profiles;
 	}
 
 	private String readOption(String option) {
 		String returnSetting = "";
 
 		try {
-			BufferedReader input = new BufferedReader(new FileReader(
-					optionsFile));
+			BufferedReader input = new BufferedReader(new FileReader(profileFile));
 			String line;
 
 			while ((line = input.readLine()) != null)
@@ -36,7 +43,8 @@ public class Profile {
 	}
 	
 	public String getProfileName() {
-		return profileName;
+		String profileFileName = profileFile.getName();
+		return profileFileName.substring(0, profileFileName.indexOf('.'));
 	}
 	
 	public String getDevice() {
@@ -44,11 +52,11 @@ public class Profile {
 	}
 	
 	public int getMaxVideoBitrate() {
-		return Integer.parseInt(readOption("videoBitrate"));
+		return Integer.parseInt(readOption("maxVideoBitrate"));
 	}
 	
 	public int getMaxAudioBitrate() {
-		return Integer.parseInt(readOption("audioBitrate"));
+		return Integer.parseInt(readOption("maxAudioBitrate"));
 	}
 	
 	public Dimensions[] getDimensions() {
@@ -62,10 +70,14 @@ public class Profile {
 	}
 	
 	public int getMaxFrameRate() {
-		return Integer.parseInt(readOption("frameRate"));
+		return Integer.parseInt(readOption("maxFrameRate"));
 	}
 	
-	public int getSplitTime() {
-		return Integer.parseInt(readOption("splitTime"));
+	public int getMaxLength() {
+		try {
+			return Integer.parseInt(readOption("maxLength"));
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 }

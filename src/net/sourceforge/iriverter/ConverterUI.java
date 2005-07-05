@@ -17,7 +17,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	private Shell shell;
 	private ToolItem convertTool, newSingleVideoTool, newDirectoryTool, newDVDTool;
 	private CTabFolder tabFolder;
-	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, h300Series, pmpSeries, iAudioX5, bitrate, videoSize, size320x240, size512x384, size640x480, frameRate, normalizeVolume, panAndScan, advancedOptions, audioSync, automaticallySplit, contents, about;
+	private Map profileMenuItems;
+	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, frameRate, normalizeVolume, panAndScan, advancedOptions, audioSync, automaticallySplit, contents, about;
 	private DropTarget target;
 	private String fileName;
 	private Process proc;
@@ -161,24 +162,22 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		
 		MenuItem device = new MenuItem(optionsMenu, SWT.CASCADE);
 		device.setText("&Device");
-		
+
 		Menu deviceMenu = new Menu(shell, SWT.DROP_DOWN);
 		device.setMenu(deviceMenu);
-		
-		h300Series = new MenuItem(deviceMenu, SWT.RADIO);
-		h300Series.setText("&H300 Series");
-		h300Series.setSelection(converterOptions.getDevice().equals("H300 Series"));
-		h300Series.addSelectionListener(this);
-		
-		pmpSeries = new MenuItem(deviceMenu, SWT.RADIO);
-		pmpSeries.setText("&PMP Series");
-		pmpSeries.setSelection(converterOptions.getDevice().equals("PMP Series"));
-		pmpSeries.addSelectionListener(this);
-		
-		iAudioX5 = new MenuItem(deviceMenu, SWT.RADIO);
-		iAudioX5.setText("&iAudio X5");
-		iAudioX5.setSelection(converterOptions.getDevice().equals("iAudio X5"));
-		iAudioX5.addSelectionListener(this);
+	
+		profileMenuItems = new HashMap();
+		Profile[] profiles = Profile.getAllProfiles();
+		Profile currentProfile = converterOptions.getCurrentProfile();
+
+		for (int i = 0; i < profiles.length; i++) {
+			MenuItem profileMenuItem = new MenuItem(deviceMenu, SWT.CHECK);
+			profileMenuItem.setText("&" + (i + 1) + " " + profiles[i].getDevice());
+			profileMenuItem.setSelection(profiles[i].equals(currentProfile));
+			profileMenuItem.addSelectionListener(this);
+			
+			profileMenuItems.put(profileMenuItem, profiles[i].getProfileName());
+		}
 		
 		new MenuItem(optionsMenu, SWT.SEPARATOR);
 		
@@ -191,29 +190,12 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		
 		videoSize = new MenuItem(optionsMenu, SWT.CASCADE);
 		videoSize.setText("Video &Size");
-		videoSize.setEnabled(converterOptions.getDevice().equals("PMP Series"));
 		
 		Menu videoSizeMenu = new Menu(shell, SWT.DROP_DOWN);
 		videoSize.setMenu(videoSizeMenu);
 		
-		size320x240 = new MenuItem(videoSizeMenu, SWT.RADIO);
-		size320x240.setText("&1 320x240");
-		size320x240.setSelection(converterOptions.getWidth() == 320 && converterOptions.getHeight() == 240);
-		size320x240.addSelectionListener(this);
-		
-		size512x384 = new MenuItem(videoSizeMenu, SWT.RADIO);
-		size512x384.setText("&2 512x384");
-		size512x384.setSelection(converterOptions.getWidth() == 512 && converterOptions.getHeight() == 384);
-		size512x384.addSelectionListener(this);
-		
-		size640x480 = new MenuItem(videoSizeMenu, SWT.RADIO);
-		size640x480.setText("&3 640x480");
-		size640x480.setSelection(converterOptions.getWidth() == 640 && converterOptions.getHeight() == 480);
-		size640x480.addSelectionListener(this);
-		
 		frameRate = new MenuItem(optionsMenu, SWT.PUSH);
 		frameRate.setText("&Frame Rate...");
-		frameRate.setEnabled(!converterOptions.getDevice().equals("H300 Series"));
 		frameRate.addSelectionListener(this);
 
 		new MenuItem(optionsMenu, SWT.SEPARATOR);
@@ -309,16 +291,6 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			converter.start();
 			progressDialog.open();
 			converter.cancel();
-			
-			if (converterOptions.getDevice().equals("H300 Series")) {
-				java.util.List notSplitVideos = converter.getNotSplitVideos();
-				for (int i = 0; i < notSplitVideos.size(); i++) {
-					MessageBox dialog = new MessageBox(shell, SWT.ICON_WARNING);
-					dialog.setText("Video Not Split");
-					dialog.setMessage(new File((String) notSplitVideos.get(i)).getName() + " must be split in order to be playable on the H300");
-					dialog.open();
-				}
-			}
 		}
 		
 		if (e.getSource() == playFile) {
@@ -424,66 +396,17 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		if (e.getSource() == quit)
 			shell.dispose();
 		
-		if (e.getSource() == h300Series) {
-			converterOptions.writeOption("device", "H300 Series");
-			videoSize.setEnabled(false);
-			frameRate.setEnabled(false);
-			
-			if (converterOptions.getVideoBitrate() > 500)
-				converterOptions.writeOption("videoBitrate", "500");
-		
-			if (converterOptions.getAudioBitrate() > 128)
-				converterOptions.writeOption("audioBitrate", "128");
-			
-			if (converterOptions.getSplitTime() > 60)
-				converterOptions.writeOption("splitTime", "60");
-		}
-		
-		if (e.getSource() == pmpSeries) {
-			converterOptions.writeOption("device", "PMP Series");
-			videoSize.setEnabled(true);
-			frameRate.setEnabled(true);
-		}
-		
-		if (e.getSource() == iAudioX5) {
-			converterOptions.writeOption("device", "iAudio X5");
-			videoSize.setEnabled(false);
-			frameRate.setEnabled(true);
-			
-			if (converterOptions.getVideoBitrate() > 256)
-				converterOptions.writeOption("videoBitrate", "256");
-			
-			if (converterOptions.getAudioBitrate() > 128)
-				converterOptions.writeOption("audioBitrate", "128");
-		}
-		
 		if (e.getSource() == bitrate) {
 			int maxVideoBitrate = 0;
-			String device = converterOptions.getDevice();
-			if (device.equals("H300 Series"))
-				maxVideoBitrate = 500;
-			if (device.equals("PMP Series"))
-				maxVideoBitrate = 1500;
-			if (device.equals("iAudio X5"))
-				maxVideoBitrate = 256;
 			
-			BitrateDialog bitrateDialog = new BitrateDialog(shell, SWT.NONE, new Bitrate(maxVideoBitrate, (converterOptions.getDevice().equals("PMP Series") ? 192 : 128)), new Bitrate(converterOptions.getVideoBitrate(), converterOptions.getAudioBitrate()));
+			BitrateDialog bitrateDialog = new BitrateDialog(shell, SWT.NONE, new Bitrate(maxVideoBitrate, 1000), new Bitrate(converterOptions.getVideoBitrate(), converterOptions.getAudioBitrate()));
 			Bitrate newBitrate = bitrateDialog.open();
 			converterOptions.writeOption("videoBitrate", "" + newBitrate.getVideo());
 			converterOptions.writeOption("audioBitrate", "" + newBitrate.getAudio());
 		}
 		
-		if (e.getSource() == size320x240)
-			converterOptions.writeOption("dimensions", "320x240");
-		
-		if (e.getSource() == size512x384)
-			converterOptions.writeOption("dimensions", "512x384");
-		
-		if (e.getSource() == size640x480)
-			converterOptions.writeOption("dimensions", "640x480");
-
 		if (e.getSource() == frameRate) {
-			FrameRateDialog frameRateDialog = new FrameRateDialog(shell, SWT.NONE, (converterOptions.getDevice().equals("PMP Series") ? 30 : 15), converterOptions.getFrameRate());
+			FrameRateDialog frameRateDialog = new FrameRateDialog(shell, SWT.NONE, 40, 10);
 			converterOptions.writeOption("frameRate", "" + frameRateDialog.open());
 		}
 		
@@ -514,13 +437,6 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			} else {
 				converterOptions.writeOption("autoSplit", "true");
 				converterOptions.writeOption("splitTime", "" + splitTime);
-			}
-			
-			if (converterOptions.getDevice().equals("H300 Series") && (splitTime == AutomaticallySplitDialog.NO_SPLIT || splitTime > 60)) {
-				MessageBox dialog = new MessageBox(shell, SWT.ICON_WARNING);
-				dialog.setText("Videos Must be Split on the H300");
-				dialog.setMessage("Any videos over an hour must be split in order to be playable on the H300");
-				dialog.open();
 			}
 		}
 		

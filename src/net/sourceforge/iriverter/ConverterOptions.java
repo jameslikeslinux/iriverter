@@ -46,8 +46,7 @@ public class ConverterOptions {
 		String returnSetting = "";
 
 		try {
-			BufferedReader input = new BufferedReader(new FileReader(
-					optionsFile));
+			BufferedReader input = new BufferedReader(new FileReader(optionsFile));
 			String line;
 
 			while ((line = input.readLine()) != null)
@@ -60,6 +59,16 @@ public class ConverterOptions {
 		}
 
 		return returnSetting;
+	}
+
+	public void setCurrentProfile(Profile profile) {
+		writeOption("currentProfile", profile.getProfileName());
+		writeOption("videoBitrate", "");
+		writeOption("audioBitrate", "");
+		writeOption("frameRate", "");
+		writeOption("dimensions", "");
+		writeOption("autoSplit", "");
+		writeOption("splitTime", "");
 	}
 
 	public Profile getCurrentProfile() {
@@ -86,14 +95,6 @@ public class ConverterOptions {
 		return normalizeVolume.equals("true");
 	}
 	
-	public boolean getAutomaticallySplit() {
-		String automaticallySplit = readOption("automaticallySplit");
-		if (automaticallySplit.equals(""))
-				return true;
-		
-		return automaticallySplit.equals("true");
-	}
-	
 	public int getVideoBitrate() {
 		String videoBitrate = readOption("videoBitrate");
 		if (videoBitrate.equals(""))
@@ -113,9 +114,17 @@ public class ConverterOptions {
 	public int getFrameRate() {
 		String frameRate = readOption("frameRate");
 		if (frameRate.equals(""))
-			return getCurrentProfile().getMaxFramerate();
+			return getCurrentProfile().getMaxFrameRate();
 		
 		return Integer.parseInt(frameRate);
+	}
+
+	public Dimensions getDimensions() {
+		String dimensions = readOption("dimensions");
+		if (dimensions.equals(""))
+			return getCurrentProfile().getDimensions()[0];
+
+		return new Dimensions(dimensions);
 	}
 	
 	public boolean getAutoSync() {
@@ -137,7 +146,7 @@ public class ConverterOptions {
 	public boolean getAutoSplit() {
 		String autoSplit = readOption("autoSplit");
 		if (autoSplit.equals(""))
-			return true;
+			return getCurrentProfile().getMaxLength() > 0;
 		
 		return autoSplit.equals("true");
 	}
@@ -145,16 +154,8 @@ public class ConverterOptions {
 	public int getSplitTime() {
 		String splitTime = readOption("splitTime");
 		if (splitTime.equals(""))
-			getCurrentProfile().getSplitTime();
+			return getCurrentProfile().getMaxLength();
 		
 		return Integer.parseInt(splitTime);
-	}
-	
-	public String getLastDir() {
-		String lastDir = readOption("lastDir");
-		if (lastDir.equals(""))
-			return System.getProperty("user.home");
-		
-		return lastDir;
 	}
 }
