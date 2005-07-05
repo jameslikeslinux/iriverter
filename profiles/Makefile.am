@@ -1,2 +1,2 @@
 profilesdir = $(pkgdatadir)/profiles
-profiles_DATA = *.profiles
+profiles_DATA = *.profile
