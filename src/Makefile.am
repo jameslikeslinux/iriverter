@@ -31,8 +31,10 @@ iriverter_source_files = \
 	net/sourceforge/iriverter/DVDInfoReader.java \
 	net/sourceforge/iriverter/OverwriteDialog.java \
 	net/sourceforge/iriverter/ConverterOptions.java \
+	net/sourceforge/iriverter/Dimensions.java \
 	net/sourceforge/iriverter/OutputVideoInfo.java \
 	net/sourceforge/iriverter/JoinVideosInfo.java \
+	net/sourceforge/iriverter/Profile.java \
 	net/sourceforge/iriverter/Bitrate.java \
 	net/sourceforge/iriverter/regex/Pattern.java \
 	net/sourceforge/iriverter/regex/Matcher.java \
@@ -89,8 +91,10 @@ iriverter_resources = \
 	gnu/regexp/MessagesBundle_fr.properties \
 	gnu/regexp/MessagesBundle.properties
 
+if !BUILD_GCJ
 iriverter_jardir = $(pkgdatadir)/lib
 iriverter_jar_DATA = iriverter.jar
+endif
 
 iriverter_jar_class_files = $(iriverter_source_files:.java=.class)
 

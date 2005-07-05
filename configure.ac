@@ -52,4 +52,4 @@ if test "$JAR" = ""; then
 	AC_MSG_ERROR([Can't find "fastjar", "gcj-jar", or "jar" in your PATH])
 fi
 
-AC_OUTPUT([Makefile doc/Makefile doc/html/Makefile doc/images/Makefile src/Makefile swt/Makefile])
+AC_OUTPUT([Makefile doc/Makefile doc/html/Makefile doc/images/Makefile profiles/Makefile src/Makefile swt/Makefile])
