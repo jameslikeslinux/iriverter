@@ -1,3 +1,5 @@
+SUBDIRS = profiles
+
 if BUILD_GCJ
 bin_PROGRAMS = iriverter
 endif
