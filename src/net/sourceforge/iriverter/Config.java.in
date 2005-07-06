@@ -1,6 +1,18 @@
 package net.sourceforge.iriverter;
 
+import java.io.*;
+
 public class Config {
 	private static final String PREFIX = "@prefix@";
-	public static final String DATADIR = "@datadir@".replaceAll("${prefix}", PREFIX);
+	private static final String DATADIR = "@datadir@".replaceAll("\\$\\{prefix\\}", PREFIX);
+
+	public static String getPackageDataDir() {
+		if (new File(DATADIR + "/iriverter").exists())
+			return DATADIR + "/iriverter";
+
+		if (new File("../share/iriverter").exists())
+			return "../share/iriverter";
+
+		return "";
+	}
 }

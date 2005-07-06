@@ -10,15 +10,15 @@ public class Profile {
 	}
 
 	public static Profile getProfile(String profileName) {
-		return new Profile(new File("../share/iriverter/profiles/" + profileName + ".profile"));
+		return new Profile(new File(Config.getPackageDataDir() + "/profiles/" + profileName + ".profile"));
 	}
 
 	public static Profile[] getAllProfiles() {
-		String[] profilesStrings = new File("../share/iriverter/profiles/").list();
+		String[] profilesStrings = new File(Config.getPackageDataDir() + "/profiles/").list();
 		Profile[] profiles = new Profile[profilesStrings.length];
 
 		for (int i = 0; i < profiles.length; i++)
-			profiles[i] = new Profile(new File("../share/iriverter/profiles/" + profilesStrings[i]));
+			profiles[i] = new Profile(new File(Config.getPackageDataDir() + "/profiles/" + profilesStrings[i]));
 
 		return profiles;
 	}

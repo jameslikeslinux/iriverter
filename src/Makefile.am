@@ -44,6 +44,7 @@ iriverter_source_files = \
 	net/sourceforge/iriverter/Dimensions.java \
 	net/sourceforge/iriverter/OutputVideoInfo.java \
 	net/sourceforge/iriverter/JoinVideosInfo.java \
+	net/sourceforge/iriverter/Config.java \
 	net/sourceforge/iriverter/Profile.java \
 	net/sourceforge/iriverter/Bitrate.java \
 	net/sourceforge/iriverter/regex/Pattern.java \
