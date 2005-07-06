@@ -6,96 +6,96 @@ endif
 
 if !BUILD_WIN
 icondir = $(datadir)/pixmaps
-icon_DATA = net/sourceforge/iriverter/icons/iriverter.png
+icon_DATA = org/thestaticvoid/iriverter/icons/iriverter.png
 
 launcherdir = $(datadir)/applications
 launcher_DATA = iriverter.desktop
 endif
 
 iriverter_source_files = \
-	net/sourceforge/iriverter/FrameRateDialog.java \
-	net/sourceforge/iriverter/DVD.java \
-	net/sourceforge/iriverter/SingleVideoAdapter.java \
-	net/sourceforge/iriverter/DVDProgressDialog.java \
-	net/sourceforge/iriverter/ConverterUI.java \
-	net/sourceforge/iriverter/JoinVideos.java \
-	net/sourceforge/iriverter/Directory.java \
-	net/sourceforge/iriverter/AboutDialog.java \
-	net/sourceforge/iriverter/ProgressDialog.java \
-	net/sourceforge/iriverter/BitrateDialog.java \
-	net/sourceforge/iriverter/TabItemControl.java \
-	net/sourceforge/iriverter/Converter.java \
-	net/sourceforge/iriverter/DVDAdapter.java \
-	net/sourceforge/iriverter/ManualSplitInfo.java \
-	net/sourceforge/iriverter/MPlayerInfo.java \
-	net/sourceforge/iriverter/HelpBrowser.java \
-	net/sourceforge/iriverter/AudioSyncDialog.java \
-	net/sourceforge/iriverter/DVDTitleInfo.java \
-	net/sourceforge/iriverter/DirectoryInfo.java \
-	net/sourceforge/iriverter/DVDInfo.java \
-	net/sourceforge/iriverter/SingleVideoInfo.java \
-	net/sourceforge/iriverter/ManualSplitAdapter.java \
-	net/sourceforge/iriverter/SingleVideo.java \
-	net/sourceforge/iriverter/ListOfFiles.java \
-	net/sourceforge/iriverter/Chapters.java \
-	net/sourceforge/iriverter/DVDInfoReader.java \
-	net/sourceforge/iriverter/OverwriteDialog.java \
-	net/sourceforge/iriverter/ConverterOptions.java \
-	net/sourceforge/iriverter/Dimensions.java \
-	net/sourceforge/iriverter/OutputVideoInfo.java \
-	net/sourceforge/iriverter/JoinVideosInfo.java \
-	net/sourceforge/iriverter/Config.java \
-	net/sourceforge/iriverter/Profile.java \
-	net/sourceforge/iriverter/Bitrate.java \
-	net/sourceforge/iriverter/regex/Pattern.java \
-	net/sourceforge/iriverter/regex/Matcher.java \
-	net/sourceforge/iriverter/regex/PatternSyntaxException.java \
-	net/sourceforge/iriverter/Mark.java \
-	net/sourceforge/iriverter/ChapterDialog.java \
-	net/sourceforge/iriverter/DirectoryAdapter.java \
-	net/sourceforge/iriverter/VideoFileFilter.java \
-	net/sourceforge/iriverter/AutomaticallySplitDialog.java \
-	net/sourceforge/iriverter/regexp/REToken.java \
-	net/sourceforge/iriverter/regexp/RE.java \
-	net/sourceforge/iriverter/regexp/RETokenEndSub.java \
-	net/sourceforge/iriverter/regexp/UncheckedRE.java \
-	net/sourceforge/iriverter/regexp/RESyntax.java \
-	net/sourceforge/iriverter/regexp/REMatchEnumeration.java \
-	net/sourceforge/iriverter/regexp/CharIndexedCharArray.java \
-	net/sourceforge/iriverter/regexp/CharIndexedString.java \
-	net/sourceforge/iriverter/regexp/RETokenChar.java \
-	net/sourceforge/iriverter/regexp/RETokenOneOf.java \
-	net/sourceforge/iriverter/regexp/RETokenWordBoundary.java \
-	net/sourceforge/iriverter/regexp/RETokenRepeated.java \
-	net/sourceforge/iriverter/regexp/RETokenLookAhead.java \
-	net/sourceforge/iriverter/regexp/REMatch.java \
-	net/sourceforge/iriverter/regexp/REException.java \
-	net/sourceforge/iriverter/regexp/CharIndexedInputStream.java \
-	net/sourceforge/iriverter/regexp/RETokenPOSIX.java \
-	net/sourceforge/iriverter/regexp/CharIndexedStringBuffer.java \
-	net/sourceforge/iriverter/regexp/RETokenEnd.java \
-	net/sourceforge/iriverter/regexp/RETokenStart.java \
-	net/sourceforge/iriverter/regexp/RETokenRange.java \
-	net/sourceforge/iriverter/regexp/REFilterInputStream.java \
-	net/sourceforge/iriverter/regexp/RETokenBackRef.java \
-	net/sourceforge/iriverter/regexp/RETokenAny.java \
-	net/sourceforge/iriverter/regexp/CharIndexed.java \
-	net/sourceforge/iriverter/ProgressDialogInfo.java \
-	net/sourceforge/iriverter/MencoderStreamParser.java \
-	net/sourceforge/iriverter/ManualSplit.java
+	org/thestaticvoid/iriverter/FrameRateDialog.java \
+	org/thestaticvoid/iriverter/DVD.java \
+	org/thestaticvoid/iriverter/SingleVideoAdapter.java \
+	org/thestaticvoid/iriverter/DVDProgressDialog.java \
+	org/thestaticvoid/iriverter/ConverterUI.java \
+	org/thestaticvoid/iriverter/JoinVideos.java \
+	org/thestaticvoid/iriverter/Directory.java \
+	org/thestaticvoid/iriverter/AboutDialog.java \
+	org/thestaticvoid/iriverter/ProgressDialog.java \
+	org/thestaticvoid/iriverter/BitrateDialog.java \
+	org/thestaticvoid/iriverter/TabItemControl.java \
+	org/thestaticvoid/iriverter/Converter.java \
+	org/thestaticvoid/iriverter/DVDAdapter.java \
+	org/thestaticvoid/iriverter/ManualSplitInfo.java \
+	org/thestaticvoid/iriverter/MPlayerInfo.java \
+	org/thestaticvoid/iriverter/HelpBrowser.java \
+	org/thestaticvoid/iriverter/AudioSyncDialog.java \
+	org/thestaticvoid/iriverter/DVDTitleInfo.java \
+	org/thestaticvoid/iriverter/DirectoryInfo.java \
+	org/thestaticvoid/iriverter/DVDInfo.java \
+	org/thestaticvoid/iriverter/SingleVideoInfo.java \
+	org/thestaticvoid/iriverter/ManualSplitAdapter.java \
+	org/thestaticvoid/iriverter/SingleVideo.java \
+	org/thestaticvoid/iriverter/ListOfFiles.java \
+	org/thestaticvoid/iriverter/Chapters.java \
+	org/thestaticvoid/iriverter/DVDInfoReader.java \
+	org/thestaticvoid/iriverter/OverwriteDialog.java \
+	org/thestaticvoid/iriverter/ConverterOptions.java \
+	org/thestaticvoid/iriverter/Dimensions.java \
+	org/thestaticvoid/iriverter/OutputVideoInfo.java \
+	org/thestaticvoid/iriverter/JoinVideosInfo.java \
+	org/thestaticvoid/iriverter/Config.java \
+	org/thestaticvoid/iriverter/Profile.java \
+	org/thestaticvoid/iriverter/Bitrate.java \
+	org/thestaticvoid/iriverter/regex/Pattern.java \
+	org/thestaticvoid/iriverter/regex/Matcher.java \
+	org/thestaticvoid/iriverter/regex/PatternSyntaxException.java \
+	org/thestaticvoid/iriverter/Mark.java \
+	org/thestaticvoid/iriverter/ChapterDialog.java \
+	org/thestaticvoid/iriverter/DirectoryAdapter.java \
+	org/thestaticvoid/iriverter/VideoFileFilter.java \
+	org/thestaticvoid/iriverter/AutomaticallySplitDialog.java \
+	org/thestaticvoid/iriverter/regexp/REToken.java \
+	org/thestaticvoid/iriverter/regexp/RE.java \
+	org/thestaticvoid/iriverter/regexp/RETokenEndSub.java \
+	org/thestaticvoid/iriverter/regexp/UncheckedRE.java \
+	org/thestaticvoid/iriverter/regexp/RESyntax.java \
+	org/thestaticvoid/iriverter/regexp/REMatchEnumeration.java \
+	org/thestaticvoid/iriverter/regexp/CharIndexedCharArray.java \
+	org/thestaticvoid/iriverter/regexp/CharIndexedString.java \
+	org/thestaticvoid/iriverter/regexp/RETokenChar.java \
+	org/thestaticvoid/iriverter/regexp/RETokenOneOf.java \
+	org/thestaticvoid/iriverter/regexp/RETokenWordBoundary.java \
+	org/thestaticvoid/iriverter/regexp/RETokenRepeated.java \
+	org/thestaticvoid/iriverter/regexp/RETokenLookAhead.java \
+	org/thestaticvoid/iriverter/regexp/REMatch.java \
+	org/thestaticvoid/iriverter/regexp/REException.java \
+	org/thestaticvoid/iriverter/regexp/CharIndexedInputStream.java \
+	org/thestaticvoid/iriverter/regexp/RETokenPOSIX.java \
+	org/thestaticvoid/iriverter/regexp/CharIndexedStringBuffer.java \
+	org/thestaticvoid/iriverter/regexp/RETokenEnd.java \
+	org/thestaticvoid/iriverter/regexp/RETokenStart.java \
+	org/thestaticvoid/iriverter/regexp/RETokenRange.java \
+	org/thestaticvoid/iriverter/regexp/REFilterInputStream.java \
+	org/thestaticvoid/iriverter/regexp/RETokenBackRef.java \
+	org/thestaticvoid/iriverter/regexp/RETokenAny.java \
+	org/thestaticvoid/iriverter/regexp/CharIndexed.java \
+	org/thestaticvoid/iriverter/ProgressDialogInfo.java \
+	org/thestaticvoid/iriverter/MencoderStreamParser.java \
+	org/thestaticvoid/iriverter/ManualSplit.java
 
 iriverter_icons = \
-	net/sourceforge/iriverter/icons/iriverter.png \
-	net/sourceforge/iriverter/icons/convert-24.png \
-	net/sourceforge/iriverter/icons/dvd-24.png \
-	net/sourceforge/iriverter/icons/dvd-16.png \
-	net/sourceforge/iriverter/icons/directory-24.png \
-	net/sourceforge/iriverter/icons/directory-16.png \
-	net/sourceforge/iriverter/icons/singlevideo-24.png \
-	net/sourceforge/iriverter/icons/back-24.png \
-	net/sourceforge/iriverter/icons/home-24.png \
-	net/sourceforge/iriverter/icons/forward-24.png \
-	net/sourceforge/iriverter/icons/singlevideo-16.png
+	org/thestaticvoid/iriverter/icons/iriverter.png \
+	org/thestaticvoid/iriverter/icons/convert-24.png \
+	org/thestaticvoid/iriverter/icons/dvd-24.png \
+	org/thestaticvoid/iriverter/icons/dvd-16.png \
+	org/thestaticvoid/iriverter/icons/directory-24.png \
+	org/thestaticvoid/iriverter/icons/directory-16.png \
+	org/thestaticvoid/iriverter/icons/singlevideo-24.png \
+	org/thestaticvoid/iriverter/icons/back-24.png \
+	org/thestaticvoid/iriverter/icons/home-24.png \
+	org/thestaticvoid/iriverter/icons/forward-24.png \
+	org/thestaticvoid/iriverter/icons/singlevideo-16.png
 
 iriverter_resources = \
 	gnu/regexp/MessagesBundle_fr.properties \
@@ -127,10 +127,10 @@ resource.o: resource.rc
 if BUILD_GCJ
 iriverter_SOURCES = iriverter.jar
 if BUILD_WIN
-iriverter_LDFLAGS = -mwindows --main=net.sourceforge.iriverter.ConverterUI
+iriverter_LDFLAGS = -mwindows --main=org.thestaticvoid.iriverter.ConverterUI
 iriverter_LDADD = resource.o ../swt/libswt-iriverter.la
 else
-iriverter_LDFLAGS = --main=net.sourceforge.iriverter.ConverterUI
+iriverter_LDFLAGS = --main=org.thestaticvoid.iriverter.ConverterUI
 iriverter_LDADD = ../swt/libswt-iriverter.la
 endif
 iriverter_GCJFLAGS = --classpath=../swt/swt-iriverter.jar
