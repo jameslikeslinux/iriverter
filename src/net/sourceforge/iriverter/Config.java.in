@@ -1,0 +1,6 @@
+package net.sourceforge.iriverter;
+
+public class Config {
+	private static final String PREFIX = "@prefix@";
+	public static final String DATADIR = "@datadir@".replaceAll("${prefix}", PREFIX);
+}
