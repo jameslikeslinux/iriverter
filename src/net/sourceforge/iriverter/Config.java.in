@@ -3,8 +3,9 @@ package net.sourceforge.iriverter;
 import java.io.*;
 
 public class Config {
-	private static final String PREFIX = "@prefix@";
-	private static final String DATADIR = "@datadir@".replaceAll("\\$\\{prefix\\}", PREFIX);
+	public static final String PREFIX = "@prefix@";
+	public static final String DATADIR = "@datadir@".replaceAll("\\$\\{prefix\\}", PREFIX);
+	public static final String VERSION = "@VERSION@";
 
 	public static String getPackageDataDir() {
 		if (new File(DATADIR + "/iriverter").exists())

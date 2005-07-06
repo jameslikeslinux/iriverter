@@ -26,7 +26,7 @@ public class AboutDialog extends Dialog implements SelectionListener {
 		shell.setLayout(gridLayout);
 		
 		Label appName = new Label(shell, SWT.NONE);
-		appName.setText("iriverter 0.13");
+		appName.setText("iriverter " + Config.VERSION);
 		FontData[] fontData = appName.getFont().getFontData();
 		fontData[0].setStyle(SWT.BOLD);
 		fontData[0].setHeight(fontData[0].getHeight() + 7);
