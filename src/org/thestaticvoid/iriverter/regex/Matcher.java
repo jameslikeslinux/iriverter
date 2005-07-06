@@ -38,7 +38,7 @@ exception statement from your version. */
 
 package org.thestaticvoid.iriverter.regex;
 
-import net.sourceforge.iriverter.regexp.REMatch;
+import org.thestaticvoid.iriverter.regexp.REMatch;
 
 /**
  * Instance of a regular expression applied to a char sequence.

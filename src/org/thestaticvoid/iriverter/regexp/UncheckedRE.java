@@ -51,7 +51,7 @@ package org.thestaticvoid.iriverter.regexp;
  * regular expressions for the syntax specified.
  *
  * @author <A HREF="mailto:wes@cacas.org">Wes Biggs</A>
- * @see net.sourceforge.iriverter.regexp.RE 
+ * @see org.thestaticvoid.iriverter.regexp.RE 
  * @since gnu.regexp 1.1.4
  */
 

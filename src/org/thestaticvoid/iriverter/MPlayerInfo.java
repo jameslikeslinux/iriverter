@@ -3,7 +3,7 @@ package org.thestaticvoid.iriverter;
 import java.io.*;
 import java.util.*;
 
-import net.sourceforge.iriverter.regex.*;
+import org.thestaticvoid.iriverter.regex.*;
 
 public class MPlayerInfo {
 	private Process proc;

@@ -1,6 +1,6 @@
 package org.thestaticvoid.iriverter;
 
-import net.sourceforge.iriverter.regex.*;
+import org.thestaticvoid.iriverter.regex.*;
 
 import java.io.*;
 

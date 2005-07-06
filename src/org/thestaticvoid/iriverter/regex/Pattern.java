@@ -41,9 +41,9 @@ package org.thestaticvoid.iriverter.regex;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import net.sourceforge.iriverter.regexp.RE;
-import net.sourceforge.iriverter.regexp.REException;
-import net.sourceforge.iriverter.regexp.RESyntax;
+import org.thestaticvoid.iriverter.regexp.RE;
+import org.thestaticvoid.iriverter.regexp.REException;
+import org.thestaticvoid.iriverter.regexp.RESyntax;
 
 
 /**
