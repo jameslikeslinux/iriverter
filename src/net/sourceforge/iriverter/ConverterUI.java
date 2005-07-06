@@ -32,8 +32,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		
 		shell = new Shell(display);
 		shell.setText("iriverter");
-		// InputStream is = getClass().getResourceAsStream("icons/iriver-16.gif");
-		// shell.setImage(new Image(display, is));
+		InputStream is = getClass().getResourceAsStream("icons/iriverter.png");
+		shell.setImage(new Image(display, is));
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 0;
 		gridLayout.marginHeight = 0;

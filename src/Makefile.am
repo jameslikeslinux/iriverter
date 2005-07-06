@@ -6,7 +6,7 @@ endif
 
 if !BUILD_WIN
 icondir = $(datadir)/pixmaps
-icon_DATA = iriverter.png
+icon_DATA = net/sourceforge/iriverter/icons/iriverter.png
 
 launcherdir = $(datadir)/applications
 launcher_DATA = iriverter.desktop
@@ -85,6 +85,7 @@ iriverter_source_files = \
 	net/sourceforge/iriverter/ManualSplit.java
 
 iriverter_icons = \
+	net/sourceforge/iriverter/icons/iriverter.png \
 	net/sourceforge/iriverter/icons/convert-24.png \
 	net/sourceforge/iriverter/icons/dvd-24.png \
 	net/sourceforge/iriverter/icons/dvd-16.png \

@@ -6,6 +6,8 @@ import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.graphics.*;
 
+import java.io.*;
+
 public class AboutDialog extends Dialog implements SelectionListener {
 	private Shell shell;
 	private Button credits, dismiss;
@@ -24,6 +26,15 @@ public class AboutDialog extends Dialog implements SelectionListener {
 		gridLayout.marginWidth = 12;
 		gridLayout.numColumns = 2;
 		shell.setLayout(gridLayout);
+
+		InputStream is = getClass().getResourceAsStream("icons/iriverter.png");
+		Image image = new Image(Display.getDefault(), is);
+
+		Label imageLabel = new Label(shell, SWT.NONE);
+		imageLabel.setImage(image);
+		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
+		gridData.horizontalSpan = 2;
+		imageLabel.setLayoutData(gridData);
 		
 		Label appName = new Label(shell, SWT.NONE);
 		appName.setText("iriverter " + Config.VERSION);
@@ -31,7 +42,7 @@ public class AboutDialog extends Dialog implements SelectionListener {
 		fontData[0].setStyle(SWT.BOLD);
 		fontData[0].setHeight(fontData[0].getHeight() + 7);
 		appName.setFont(new Font(getParent().getDisplay(), fontData));
-		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
+		gridData = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gridData.horizontalSpan = 2;
 		appName.setLayoutData(gridData);
 		
@@ -49,13 +60,17 @@ public class AboutDialog extends Dialog implements SelectionListener {
 		gridData = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 		gridData.horizontalSpan = 2;
 		appCopyright.setLayoutData(gridData);
-		
+	
+		// Just to fill the space of the old button
+		new Label(shell, SWT.NONE);		
+
+		/* There are no credits for now
 		credits = new Button(shell, SWT.PUSH);
 		credits.setText("Credits");
 		gridData = new GridData();
 		gridData.widthHint = 75;
 		credits.setLayoutData(gridData);
-		credits.addSelectionListener(this);
+		credits.addSelectionListener(this); */
 		
 		dismiss = new Button(shell, SWT.PUSH);
 		dismiss.setText("Close");
