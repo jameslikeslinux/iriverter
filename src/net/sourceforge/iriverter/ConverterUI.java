@@ -17,8 +17,9 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	private Shell shell;
 	private ToolItem convertTool, newSingleVideoTool, newDirectoryTool, newDVDTool;
 	private CTabFolder tabFolder;
-	private Map profileMenuItems;
+	private Map profileMenuItems, dimensionsMenuItems;
 	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, frameRate, normalizeVolume, panAndScan, advancedOptions, audioSync, automaticallySplit, contents, about;
+	private Menu videoSizeMenu;
 	private DropTarget target;
 	private String fileName;
 	private Process proc;
@@ -173,7 +174,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		for (int i = 0; i < profiles.length; i++) {
 			MenuItem profileMenuItem = new MenuItem(deviceMenu, SWT.CHECK);
 			profileMenuItem.setText("&" + (i + 1) + " " + profiles[i].getDevice());
-			profileMenuItem.setSelection(profiles[i].equals(currentProfile));
+			profileMenuItem.setSelection(profiles[i].getProfileName().equals(currentProfile.getProfileName()));
 			profileMenuItem.addSelectionListener(this);
 			
 			profileMenuItems.put(profileMenuItem, profiles[i].getProfileName());
@@ -191,8 +192,11 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		videoSize = new MenuItem(optionsMenu, SWT.CASCADE);
 		videoSize.setText("Video &Size");
 		
-		Menu videoSizeMenu = new Menu(shell, SWT.DROP_DOWN);
+		videoSizeMenu = new Menu(shell, SWT.DROP_DOWN);
 		videoSize.setMenu(videoSizeMenu);
+		
+		dimensionsMenuItems = new HashMap();
+		profileChanged();
 		
 		frameRate = new MenuItem(optionsMenu, SWT.PUSH);
 		frameRate.setText("&Frame Rate...");
@@ -395,18 +399,36 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		
 		if (e.getSource() == quit)
 			shell.dispose();
+	
+		// Consider putting the actual profile in the map
+		if (profileMenuItems.containsKey(e.getSource())) {
+			MenuItem selectedMenuItem = (MenuItem) e.getSource();
+			String selectedProfileName = (String) profileMenuItems.get(selectedMenuItem);
+			
+			if (selectedProfileName.equals(converterOptions.getCurrentProfile().getProfileName()))
+				return;
+			
+			for (Iterator i = profileMenuItems.keySet().iterator(); i.hasNext();)
+				((MenuItem) i.next()).setSelection(false);
+			selectedMenuItem.setSelection(true);
+			
+			converterOptions.setCurrentProfile(Profile.getProfile(selectedProfileName));
+			profileChanged();
+		}
 		
 		if (e.getSource() == bitrate) {
-			int maxVideoBitrate = 0;
-			
-			BitrateDialog bitrateDialog = new BitrateDialog(shell, SWT.NONE, new Bitrate(maxVideoBitrate, 1000), new Bitrate(converterOptions.getVideoBitrate(), converterOptions.getAudioBitrate()));
+			BitrateDialog bitrateDialog = new BitrateDialog(shell, SWT.NONE, new Bitrate(converterOptions.getCurrentProfile().getMaxVideoBitrate(), converterOptions.getCurrentProfile().getMaxAudioBitrate()), new Bitrate(converterOptions.getVideoBitrate(), converterOptions.getAudioBitrate()));
 			Bitrate newBitrate = bitrateDialog.open();
 			converterOptions.writeOption("videoBitrate", "" + newBitrate.getVideo());
 			converterOptions.writeOption("audioBitrate", "" + newBitrate.getAudio());
 		}
+
+		if (dimensionsMenuItems.containsKey(e.getSource())) {
+
+		}
 		
 		if (e.getSource() == frameRate) {
-			FrameRateDialog frameRateDialog = new FrameRateDialog(shell, SWT.NONE, 40, 10);
+			FrameRateDialog frameRateDialog = new FrameRateDialog(shell, SWT.NONE, converterOptions.getCurrentProfile().getMaxFrameRate(), converterOptions.getFrameRate());
 			converterOptions.writeOption("frameRate", "" + frameRateDialog.open());
 		}
 		
@@ -429,23 +451,41 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		}
 		
 		if (e.getSource() == automaticallySplit) {
-			int splitTime = new AutomaticallySplitDialog(shell, SWT.NONE, (converterOptions.getAutoSplit()) ? converterOptions.getSplitTime() : AutomaticallySplitDialog.NO_SPLIT).open();
+			int splitTime = new AutomaticallySplitDialog(shell, SWT.NONE, converterOptions.getAutoSplit(), converterOptions.getSplitTime()).open();
 			
-			if (splitTime == AutomaticallySplitDialog.NO_SPLIT) {
+			if (splitTime == AutomaticallySplitDialog.NO_SPLIT)
 				converterOptions.writeOption("autoSplit", "false");
-				converterOptions.writeOption("splitTime", "0");
-			} else {
+			else {
 				converterOptions.writeOption("autoSplit", "true");
 				converterOptions.writeOption("splitTime", "" + splitTime);
 			}
 		}
 		
 		if (e.getSource() == contents) {
-			HelpBrowser helpBrowser = new HelpBrowser("file://" + new File(".").getAbsolutePath() + "/doc/HTML/index.html");
+			HelpBrowser helpBrowser = new HelpBrowser("file://" + Config.getPackageDataDir() + "/doc/html/index.html");
 		}
 		
 		if (e.getSource() == about)
 			new AboutDialog(shell, SWT.NONE).open();
+	}
+
+	public void profileChanged() {
+		for (Iterator i = dimensionsMenuItems.keySet().iterator(); i.hasNext();)
+			((MenuItem) i.next()).dispose();
+
+		dimensionsMenuItems.clear();
+		
+		Dimensions[] dimensions = converterOptions.getCurrentProfile().getDimensions();
+		Dimensions currentDimensions = converterOptions.getDimensions();
+
+		for (int i = 0; i < dimensions.length; i++) {
+			MenuItem dimensionsMenuItem = new MenuItem(videoSizeMenu, SWT.CHECK);
+			dimensionsMenuItem.setText("&" + (i + 1) + " " + dimensions[i].toString());
+			dimensionsMenuItem.setSelection(dimensions[i].toString().equals(currentDimensions.toString()));
+			dimensionsMenuItem.addSelectionListener(this);
+
+			dimensionsMenuItems.put(dimensionsMenuItem, dimensions[i]);
+		}
 	}
 	
 	public void close(CTabFolderEvent event) {

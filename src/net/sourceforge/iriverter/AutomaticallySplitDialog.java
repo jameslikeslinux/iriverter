@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.*;
 
 public class AutomaticallySplitDialog extends Dialog implements SelectionListener {
 	private Shell shell;
+	private boolean autoSplit;
 	private int splitTime;
 	private Label splitVideoEveryLabel, minutesLabel;
 	private Spinner splitTimeInput;
@@ -15,8 +16,9 @@ public class AutomaticallySplitDialog extends Dialog implements SelectionListene
 	
 	public static final int NO_SPLIT = Integer.MAX_VALUE;
 	
-	public AutomaticallySplitDialog(Shell parent, int style, int delay) {
+	public AutomaticallySplitDialog(Shell parent, int style, boolean autoSplit, int delay) {
 		super(parent, style);
+		this.autoSplit = autoSplit;
 		this.splitTime = delay;
 	}
 	
@@ -42,7 +44,7 @@ public class AutomaticallySplitDialog extends Dialog implements SelectionListene
 		
 		automaticallySplit = new Button(shell, SWT.CHECK);
 		automaticallySplit.setText("Automatically Split");
-		automaticallySplit.setSelection(splitTime != NO_SPLIT);
+		automaticallySplit.setSelection(autoSplit);
 		gridData = new GridData();
 		gridData.horizontalSpan = 3;
 		automaticallySplit.setLayoutData(gridData);
@@ -67,10 +69,8 @@ public class AutomaticallySplitDialog extends Dialog implements SelectionListene
 		dismiss.setLayoutData(gridData);
 		dismiss.addSelectionListener(this);
 		
-		if (!automaticallySplit.getSelection()) {
+		if (!automaticallySplit.getSelection())
 			toggleSelection();
-			splitTimeInput.setSelection(0);
-		}
 		
 		shell.pack();		
 		shell.open();

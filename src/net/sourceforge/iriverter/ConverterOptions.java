@@ -4,7 +4,6 @@ import java.io.*;
 
 public class ConverterOptions {
 	private File optionsFile;
-	private Profile profile;
 
 	public ConverterOptions(File optionsFile) {
 		this.optionsFile = optionsFile;
