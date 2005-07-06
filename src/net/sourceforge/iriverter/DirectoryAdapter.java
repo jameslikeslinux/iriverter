@@ -1,4 +1,4 @@
-package net.sourceforge.iriverter;
+package org.thestaticvoid.iriverter;
 
 public class DirectoryAdapter implements DirectoryInfo {
 	private String inputDirectory, outputDirectory;

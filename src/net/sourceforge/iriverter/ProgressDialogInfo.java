@@ -1,4 +1,4 @@
-package net.sourceforge.iriverter;
+package org.thestaticvoid.iriverter;
 
 public interface ProgressDialogInfo {
 	public void complete(boolean success);

@@ -1,4 +1,4 @@
-package net.sourceforge.iriverter;
+package org.thestaticvoid.iriverter;
 
 public class DVDAdapter implements DVDInfo {
 	private String drive, outputVideo;

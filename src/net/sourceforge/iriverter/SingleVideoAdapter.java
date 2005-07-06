@@ -1,4 +1,4 @@
-package net.sourceforge.iriverter;
+package org.thestaticvoid.iriverter;
 
 public class SingleVideoAdapter implements SingleVideoInfo {
 	private String inputVideo, outputVideo;

@@ -36,7 +36,7 @@ obligated to do so.  If you do not wish to do so, delete this
 exception statement from your version. */
 
 
-package net.sourceforge.iriverter.regexp;
+package org.thestaticvoid.iriverter.regexp;
 
 final class RETokenBackRef extends REToken {
   private int num;

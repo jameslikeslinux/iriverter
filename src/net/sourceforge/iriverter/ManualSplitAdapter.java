@@ -1,4 +1,4 @@
-package net.sourceforge.iriverter;
+package org.thestaticvoid.iriverter;
 
 public class ManualSplitAdapter implements ManualSplitInfo {
 	private String video;

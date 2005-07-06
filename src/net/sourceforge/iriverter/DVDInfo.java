@@ -1,4 +1,4 @@
-package net.sourceforge.iriverter;
+package org.thestaticvoid.iriverter;
 
 public interface DVDInfo extends OutputVideoInfo {
 	public String getDrive();

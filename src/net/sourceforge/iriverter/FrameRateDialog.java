@@ -1,4 +1,4 @@
-package net.sourceforge.iriverter;
+package org.thestaticvoid.iriverter;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
@@ -21,7 +21,7 @@ public class FrameRateDialog extends Dialog implements SelectionListener {
 	
 	public int open() {
 		shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-		shell.setText("FrameRate");
+		shell.setText("Frame Rate");
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
 		gridLayout.verticalSpacing = 6;

@@ -1,4 +1,4 @@
-package net.sourceforge.iriverter;
+package org.thestaticvoid.iriverter;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.events.*;
