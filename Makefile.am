@@ -1,1 +1,1 @@
-SUBDIRS = swt src profiles doc
+SUBDIRS = swt src doc
