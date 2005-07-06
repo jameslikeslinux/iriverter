@@ -4,6 +4,14 @@ if BUILD_GCJ
 bin_PROGRAMS = iriverter
 endif
 
+if !BUILD_WIN
+icondir = $(datadir)/pixmaps
+icon_DATA = iriverter.png
+
+launcherdir = $(datadir)/applications
+launcher_DATA = iriverter.desktop
+endif
+
 iriverter_source_files = \
 	net/sourceforge/iriverter/FrameRateDialog.java \
 	net/sourceforge/iriverter/DVD.java \
@@ -79,12 +87,10 @@ iriverter_icons = \
 	net/sourceforge/iriverter/icons/convert-24.png \
 	net/sourceforge/iriverter/icons/dvd-24.png \
 	net/sourceforge/iriverter/icons/dvd-16.png \
-	net/sourceforge/iriverter/icons/iriver.gif \
 	net/sourceforge/iriverter/icons/directory-24.png \
 	net/sourceforge/iriverter/icons/directory-16.png \
 	net/sourceforge/iriverter/icons/singlevideo-24.png \
 	net/sourceforge/iriverter/icons/back-24.png \
-	net/sourceforge/iriverter/icons/iriver-16.gif \
 	net/sourceforge/iriverter/icons/home-24.png \
 	net/sourceforge/iriverter/icons/forward-24.png \
 	net/sourceforge/iriverter/icons/singlevideo-16.png
