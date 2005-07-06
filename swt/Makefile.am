@@ -7,7 +7,7 @@ swt_iriverter_jardir = $(pkgdatadir)/lib
 swt_iriverter_jar_DATA = swt-iriverter.jar
 endif
 
-.extract_zip_files:
+.extract_zip_files: swt*.zip
 	unzip -u swt*.zip src.zip "*swt*" -x swt.jar 
 	unzip -u src.zip "org/*"
 	touch .extract_zip_files
