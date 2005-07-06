@@ -174,11 +174,12 @@ public class Converter extends Thread {
 			scaledHeight = converterOptions.getDimensions().getHeight();
 		}
 		
-		String vf = "harddup";
+		String vf = "filmdint=io=" + ((int) (info.getFrameRate() * 100)) + ":" + (converterOptions.getFrameRate() * 100);
 		if (converterOptions.getPanAndScan())
-			vf = "scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight() + "," + vf;
+			vf += ",scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		else
-			vf = "scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight() + "," + vf;
+			vf += ",scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
+		vf += ",harddup";
 		
 		String af = "resample=44100";
 		if (converterOptions.getNormalizeVolume())
@@ -218,6 +219,9 @@ public class Converter extends Thread {
 			commandList.add("-mc");
 			commandList.add("0");
 		}
+		
+		commandList.add("-ffourcc");
+		commandList.add("XVID");
 		
 		String[] command = new String[commandList.size()];
 		for (int i = 0; i < command.length; i++)
@@ -317,6 +321,9 @@ public class Converter extends Thread {
 			commandList.add("-mc");
 			commandList.add("0");
 		}
+		
+		commandList.add("-ffourcc");
+		commandList.add("XVID");
 		
 		String[] command = new String[commandList.size()];
 		for (int i = 0; i < command.length; i++)
