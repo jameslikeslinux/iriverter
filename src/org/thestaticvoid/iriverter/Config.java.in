@@ -14,6 +14,6 @@ public class Config {
 		if (new File("../share/iriverter").exists())
 			return "../share/iriverter";
 
-		return "";
+		return ".";
 	}
 }
