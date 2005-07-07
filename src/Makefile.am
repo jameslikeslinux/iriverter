@@ -138,8 +138,19 @@ endif
 iriverter_GCJFLAGS = -fjni --classpath=$(SWT_JAR)
 endif
 
+EXTRA_DIST = \
+	$(iriverter_source_files) \
+	$(iriverter_icons) \
+	$(iriverter_resources) \
+	iriverter.desktop \
+	iriverter.ico \
+	manifest.xml \
+	resource.rc
+
+DISTFILES = $(DIST_COMMON) $(EXTRA_DIST)
+
 CLEANFILES = \
 	$(all_iriverter_jar_class_files) \
-	iriverter.jar
-	swt.jar
+	iriverter.jar \
+	swt.jar \
 	resource.o
