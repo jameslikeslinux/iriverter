@@ -96,11 +96,11 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 		titleCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		titleCombo.addSelectionListener(this);
 		
-		new Label(locations, SWT.NONE);
-		
 		chapterSelection = new Button(locations, SWT.PUSH);
 		chapterSelection.setText("Chapters");
-		chapterSelection.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		chapterSelection.setLayoutData(gridData);
 		chapterSelection.addSelectionListener(this);
 		
 		Group languages = new Group(groupsComp, SWT.NONE);
@@ -124,11 +124,11 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 		subtitlesCombo = new Combo(languages, SWT.DROP_DOWN | SWT.READ_ONLY);
 		subtitlesCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		new Label(languages, SWT.NONE);
-		
 		previewButton = new Button(languages, SWT.PUSH);
 		previewButton.setText("Preview");
-		previewButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		previewButton.setLayoutData(gridData);
 		previewButton.addSelectionListener(this);
 		
 		Composite output = new Composite(dvdComp, SWT.NONE);
