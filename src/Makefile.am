@@ -121,24 +121,25 @@ all_iriverter_jar_class_files = $(shell find . -iname '*.class' | sed 's/\$$/\\\
 iriverter.jar: $(iriverter_jar_class_files)
 	$(JAR) cf $@ $(all_iriverter_jar_class_files) $(iriverter_icons) $(iriverter_resources)
 
-swt.o: $(SWT_JAR)
-	$(GCJ) -fjni -c $<
+swt.jar: $(SWT_JAR)
+	cp -f $< $@
 
 resource.o: resource.rc
 	$(WINDRES) -o $@ $<
 
 if BUILD_GCJ
-iriverter_SOURCES = iriverter.jar
+iriverter_SOURCES = iriverter.jar swt.jar
 if BUILD_WIN
 iriverter_LDFLAGS = -mwindows --main=org.thestaticvoid.iriverter.ConverterUI -Djava.library.path=../lib
-iriverter_LDADD = swt.o resource.o
+iriverter_LDADD = resource.o
 else
 iriverter_LDFLAGS = --main=org.thestaticvoid.iriverter.ConverterUI
-iriverter_LDADD = swt.o
 endif
-iriverter_GCJFLAGS = --classpath=$(SWT_JAR)
+iriverter_GCJFLAGS = -fjni --classpath=$(SWT_JAR)
 endif
 
 CLEANFILES = \
 	$(all_iriverter_jar_class_files) \
 	iriverter.jar
+	swt.jar
+	resource.o
