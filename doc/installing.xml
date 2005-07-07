@@ -48,44 +48,17 @@
 				<note><para>If you want to be able to manually sync the audio to the video, you must manually compile MPlayer and apply <filename>MPlayer-VER_iriverter.patch</filename>, where VER is MPlayer's version number, available from the the <ulink url="http://sourceforge.net/project/showfiles.php?group_id=129582">iriverter downloads page</ulink>.</para></note>
 			</listitem>
 			<listitem><para>Install a Java runtime environment 1.4 or higher.  Check to see if your distribution has packages for this.</para></listitem>
+			<listitem><para>Install <ulink url="http://www.eclipse.org/swt">SWT</ulink>.  Use your distribution's utilities if possible.</para></listitem>
 			<listitem>
 				<para>Open a terminal and run</para>
-				<screen>
-					<prompt>$</prompt> <command>tar -xvjf <replaceable>iriverter-VER_linux.tar.bz2</replaceable></command>
-					<prompt>$</prompt> <command>cd <replaceable>iriverter-VER</replaceable></command>
-					<prompt>$</prompt> <command>java -Djava.library.path=. -jar iriverter.jar</command>
-				</screen>
+				<screen><prompt>$</prompt> <command>tar -xvjf <replaceable>iriverter-VER.tar.bz2</replaceable></command>
+<prompt>$</prompt> <command>cd <replaceable>iriverter-VER</replaceable></command>
+<prompt>$</prompt> <command>./configure --with-swt=<replaceable>/path/to/swt.jar</replaceable></command>
+<prompt>$</prompt> <command>make</command>
+<prompt>#</prompt> <command>make install</command></screen>
 			</listitem>
+			<listitem><para>Start iriverter by clicking the menu item in your Sound &amp; Video menu or by running <command>iriverter</command> on the command line.</para></listitem>
 		</orderedlist>
-		
-		<example id="launcher">
-			<title>A Launcher Script</title>
-			<para>If you want to create a launcher to start iriverter, you need to write a quick script:</para>
-			<para>Create a file called <filename>iriverter</filename> with contents:</para>
-			
-			<programlisting>
-				#!/bin/sh
-				cd <replaceable>/path/to/iriverter</replaceable>
-				java -Djava.library.path=. -jar iriverter.jar
-			</programlisting>
-			
-			<para>Finally, run <command>chmod +x iriverter.sh</command> and tell your GUI launcher to use the new shell script.</para>
-		</example>
-
-		<example id="gcj">
-			<title>Compiling with GCJ</title>
-			<para>If you do not want to install a Java runtime environment to run iriverter, you can make a native binary using <ulink url="http://gcc.gnu.org/java/">GCJ</ulink> from the <ulink url="http://gcc.gnu.org">GCC project</ulink>.</para>
-			
-			<screen>
-					<prompt>$</prompt> <command>tar -xvjf <replaceable>iriverter-VER_linux.tar.bz2</replaceable></command>
-					<prompt>$</prompt> <command>cd <replaceable>iriverter-VER</replaceable></command>
-					<prompt>$</prompt> <command>gcj --classpath=swt.jar -c iriverter.jar</command>
-					<prompt>$</prompt> <command>gcj -fjni --main=net.sourceforge.iriverter.ConverterUI --classpath=swt.jar -o iriverter iriverter.o swt.jar</command>
-					<prompt>$</prompt> <command>rm iriverter.jar iriverter.o swt.jar</command>
-					<prompt>$</prompt> <command>LD_LIBRARY_PATH=. ./iriverter</command>
-			</screen>
-
-			<para>If you do not want to have to specify the LD_LIBRARY_PATH every time, move the <filename>*.so</filename> files to <filename class="directory">/usr/lib</filename>.  From then on you could just run <command>/path/to/iriverter</command> to run iriverter!</para>
-		</example>
+		<para>If you'd rather use GCJ than Java to build iriverter, append <option>--with-gcj</option> to your configure command.  The rest of the instructions are the same.</para>
 	</sect1>
 </chapter>

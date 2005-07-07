@@ -129,10 +129,18 @@ TARGET="_top"
 ></LI
 ><LI
 ><P
+>Install <A
+HREF="http://www.eclipse.org/swt"
+TARGET="_top"
+>SWT</A
+>.  Use your distribution's utilities if possible.</P
+></LI
+><LI
+><P
 >Open a terminal and run</P
 ><PRE
 CLASS="screen"
->&#13;					<SAMP
+><SAMP
 CLASS="prompt"
 >$</SAMP
 > <B
@@ -140,11 +148,11 @@ CLASS="command"
 >tar -xvjf <TT
 CLASS="replaceable"
 ><I
->iriverter-VER_linux.tar.bz2</I
+>iriverter-VER.tar.bz2</I
 ></TT
 ></B
 >
-					<SAMP
+<SAMP
 CLASS="prompt"
 >$</SAMP
 > <B
@@ -156,135 +164,46 @@ CLASS="replaceable"
 ></TT
 ></B
 >
-					<SAMP
+<SAMP
 CLASS="prompt"
 >$</SAMP
 > <B
 CLASS="command"
->java -Djava.library.path=. -jar iriverter.jar</B
+>./configure --with-swt=<TT
+CLASS="replaceable"
+><I
+>/path/to/swt.jar</I
+></TT
+></B
 >
-				</PRE
+<SAMP
+CLASS="prompt"
+>$</SAMP
+> <B
+CLASS="command"
+>make</B
+>
+<SAMP
+CLASS="prompt"
+>#</SAMP
+> <B
+CLASS="command"
+>make install</B
+></PRE
+></LI
+><LI
+><P
+>Start iriverter by clicking the menu item in your Sound &#38; Video menu or by running <B
+CLASS="command"
+>iriverter</B
+> on the command line.</P
 ></LI
 ></OL
-><DIV
-CLASS="example"
-><A
-NAME="launcher"
-></A
 ><P
-><B
->Example 2-1. A Launcher Script</B
-></P
-><P
->If you want to create a launcher to start iriverter, you need to write a quick script:</P
-><P
->Create a file called <TT
-CLASS="filename"
->iriverter</TT
-> with contents:</P
-><PRE
-CLASS="programlisting"
->&#13;				#!/bin/sh
-				cd <TT
-CLASS="replaceable"
-><I
->/path/to/iriverter</I
-></TT
->
-				java -Djava.library.path=. -jar iriverter.jar
-			</PRE
-><P
->Finally, run <B
-CLASS="command"
->chmod +x iriverter.sh</B
-> and tell your GUI launcher to use the new shell script.</P
-></DIV
-><DIV
-CLASS="example"
-><A
-NAME="gcj"
-></A
-><P
-><B
->Example 2-2. Compiling with GCJ</B
-></P
-><P
->If you do not want to install a Java runtime environment to run iriverter, you can make a native binary using <A
-HREF="http://gcc.gnu.org/java/"
-TARGET="_top"
->GCJ</A
-> from the <A
-HREF="http://gcc.gnu.org"
-TARGET="_top"
->GCC project</A
->.</P
-><PRE
-CLASS="screen"
->&#13;					<SAMP
-CLASS="prompt"
->$</SAMP
-> <B
-CLASS="command"
->tar -xvjf <TT
-CLASS="replaceable"
-><I
->iriverter-VER_linux.tar.bz2</I
-></TT
-></B
->
-					<SAMP
-CLASS="prompt"
->$</SAMP
-> <B
-CLASS="command"
->cd <TT
-CLASS="replaceable"
-><I
->iriverter-VER</I
-></TT
-></B
->
-					<SAMP
-CLASS="prompt"
->$</SAMP
-> <B
-CLASS="command"
->gcj --classpath=swt.jar -c iriverter.jar</B
->
-					<SAMP
-CLASS="prompt"
->$</SAMP
-> <B
-CLASS="command"
->gcj -fjni --main=net.sourceforge.iriverter.ConverterUI --classpath=swt.jar -o iriverter iriverter.o swt.jar</B
->
-					<SAMP
-CLASS="prompt"
->$</SAMP
-> <B
-CLASS="command"
->rm iriverter.jar iriverter.o swt.jar</B
->
-					<SAMP
-CLASS="prompt"
->$</SAMP
-> <B
-CLASS="command"
->LD_LIBRARY_PATH=. ./iriverter</B
->
-			</PRE
-><P
->If you do not want to have to specify the LD_LIBRARY_PATH every time, move the <TT
-CLASS="filename"
->*.so</TT
-> files to <TT
-CLASS="filename"
->/usr/lib</TT
->.  From then on you could just run <B
-CLASS="command"
->/path/to/iriverter</B
-> to run iriverter!</P
-></DIV
+>If you'd rather use GCJ than Java to build iriverter, append <CODE
+CLASS="option"
+>--with-gcj</CODE
+> to your configure command.  The rest of the instructions are the same.</P
 ></DIV
 ><DIV
 CLASS="NAVFOOTER"

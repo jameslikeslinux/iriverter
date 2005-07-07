@@ -238,5 +238,18 @@
 				</menuchoice>.</para>
 			<note><para>If you are using Linux and do not have the MPlayer patch applied, you cannot bring the audio ahead of the video.  See <xref linkend="linux" /> for more information.</para></note>
 		</sect2>
+
+		<sect2 id="profiles">
+			<title>Profiles</title>
+			<para>iriverter has limited conversion profiling support.  If you have a new video-playing device, it is possible to write a profile for iriverter to convert videos for it.  Profiles can be found in the <filename class="directory">profiles</filename> directory in iriverter's data directory, usually <filename class="directory">/usr/share/iriverter</filename> or <filename class="directory">/usr/local/share/iriverter</filename> if you are using Linux.  A simple profile looks like the following and should be self-explanitory:</para>
+			<example>
+				<title>pmp.profile</title>
+				<programlisting>device=PMP Series
+maxVideoBitrate=1500
+maxAudioBitrate=192
+dimensions=320x240 512x384 640x480
+maxFrameRate=30</programlisting>
+			</example>
+		</sect2>
 	</sect1>
 </chapter>
