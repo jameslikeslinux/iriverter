@@ -1,0 +1,4 @@
+#!/bin/sh
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+java -Djava.library.path=@libdir@ -classpath $CLASSPATH:@datadir@/iriverter/lib/iriverter.jar:@SWT_JAR@ org.thestaticvoid.iriverter.ConverterUI $*
