@@ -52,4 +52,13 @@ if test "$JAR" = ""; then
 	AC_MSG_ERROR([Can't find "fastjar", "gcj-jar", or "jar" in your PATH])
 fi
 
-AC_OUTPUT([Makefile doc/Makefile doc/html/Makefile doc/images/Makefile src/Makefile src/org/thestaticvoid/iriverter/Config.java src/profiles/Makefile swt/Makefile])
+AC_ARG_WITH(swt, [  --with-swt=JAR          the jar contating the SWT library], swt="$withval", swt="no")
+
+if test "$swt" = "no"; then
+	AC_MSG_ERROR([Can't find "swt.jar"])
+else
+	SWT_JAR="$swt"
+	AC_SUBST(SWT_JAR)
+fi
+
+AC_OUTPUT([Makefile doc/Makefile doc/html/Makefile doc/images/Makefile src/Makefile src/org/thestaticvoid/iriverter/Config.java src/profiles/Makefile])
