@@ -15,12 +15,13 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 	private ConverterOptions converterOptions;
 	private Combo dvdCombo, titleCombo, audioStreamCombo, subtitlesCombo;
 	private Map titleInfo, audioStreams, subtitles;
-	private Button chapterSelection, outputVideoSelect;
+	private Button chapterSelection, previewButton, outputVideoSelect;
 	private Text outputVideoInput;
 	private Chapters[] chapters;
 	private String syncDrive, syncOutputVideo;
 	private DVDProgressDialog progressDialog;
 	private int syncTitle, syncAudioStream, syncSubtitles;
+	private Process proc;
 	
 	public DVD(Composite parent, int style, CTabItem tabItem, ConverterOptions converterOptions) {
 		super(parent, style);
@@ -95,7 +96,7 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 		titleCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		titleCombo.addSelectionListener(this);
 		
-		Label emptyLabel = new Label(locations, SWT.NONE);
+		new Label(locations, SWT.NONE);
 		
 		chapterSelection = new Button(locations, SWT.PUSH);
 		chapterSelection.setText("Chapters");
@@ -122,6 +123,13 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 		
 		subtitlesCombo = new Combo(languages, SWT.DROP_DOWN | SWT.READ_ONLY);
 		subtitlesCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		new Label(languages, SWT.NONE);
+		
+		previewButton = new Button(languages, SWT.PUSH);
+		previewButton.setText("Preview");
+		previewButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		previewButton.addSelectionListener(this);
 		
 		Composite output = new Composite(dvdComp, SWT.NONE);
 		output.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));		
@@ -185,7 +193,37 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 			
 			chapters = chapterDialog.open();
 		}
-		
+
+		if (e.getSource() == previewButton) {
+			if (!getDrive().equals("")) {
+				try {
+					java.util.List commandList = new ArrayList();
+					commandList.add(MPlayerInfo.getMPlayerPath() + "mplayer");
+					commandList.add("-dvd-device");
+					commandList.add(getDrive());
+					commandList.add("dvd://" + getTitle());
+					
+					if (getAudioStream() > -1) {
+						commandList.add("-aid");
+						commandList.add("" + getAudioStream());
+					}
+
+					if (getSubtitles() > -1) {
+						commandList.add("-sid");
+						commandList.add("" + getSubtitles());
+					}
+			
+					String[] command = new String[commandList.size()];
+					for (int i = 0; i < command.length; i++)
+						command[i] = (String) commandList.get(i);
+					
+					proc = Runtime.getRuntime().exec(command);
+				} catch (IOException io) {
+					io.printStackTrace();
+				}
+			}
+		}
+	
 		if (e.getSource() == outputVideoSelect) {
 			FileDialog fileDialog = new FileDialog(getShell(), SWT.SAVE);
 			fileDialog.setText("Output Video");

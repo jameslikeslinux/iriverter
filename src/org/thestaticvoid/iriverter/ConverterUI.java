@@ -303,36 +303,13 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			fileDialog.setFilterExtensions(new String[]{"*.avi;*.vob;*.mkv;*.mpg;*.mpeg;*.ogm;*.mov;*.rm;*.ram;*.wmv;*.asf", "*.avi", "*.vob", "*.mkv", "*.mpg;*.mpeg", "*.ogm", "*.mov", "*.rm;*.ram", "*.wmv;*.asf"});
 			fileDialog.setFilterNames(new String[]{"All Video Files", "AVI Video (*.avi)", "DVD Video Object (*.vob)", "Matroska Video (*.mkv)", "MPEG Video (*.mpg, *.mpeg)", "Ogg Video (*.ogm)", "Quicktime Movie (*.mov)", "Real Video (*.rm, *.ram)", "Windows Media Video (*.wmv, *.asf)"});
 			String file = fileDialog.open();
+	
 			if (file != null) {
 				try {
 					proc = Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + "mplayer", file});
 				} catch (IOException io) {
 					io.printStackTrace();
 				}
-				
-				new Thread() {
-					public void run() {
-						try {
-							BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-							String line;
-							while ((line = input.readLine()) != null);
-						} catch (IOException io) {
-							io.printStackTrace();
-						}
-					}
-				}.start();
-				
-				new Thread() {
-					public void run() {
-						try {
-							BufferedReader input = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-							String line;
-							while ((line = input.readLine()) != null);
-						} catch (IOException io) {
-							io.printStackTrace();
-						}
-					}
-				}.start();
 			}
 		}
 		
