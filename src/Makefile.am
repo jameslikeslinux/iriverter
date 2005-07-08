@@ -130,7 +130,7 @@ resource.o: resource.rc
 if BUILD_GCJ
 iriverter_SOURCES = iriverter.jar swt.jar
 if BUILD_WIN
-iriverter_LDFLAGS = -mwindows --main=org.thestaticvoid.iriverter.ConverterUI -Djava.library.path=../lib
+iriverter_LDFLAGS = -mwindows --main=org.thestaticvoid.iriverter.ConverterUI
 iriverter_LDADD = resource.o
 else
 iriverter_LDFLAGS = --main=org.thestaticvoid.iriverter.ConverterUI
