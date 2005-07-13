@@ -1,6 +1,7 @@
 package org.thestaticvoid.iriverter;
 
 import java.io.*;
+import java.util.*;
 
 public class Profile {
 	private File profileFile;
@@ -60,11 +61,11 @@ public class Profile {
 	}
 	
 	public Dimensions[] getDimensions() {
-		String[] dimensionsStrings = readOption("dimensions").split(" ");
-		Dimensions[] dimensions = new Dimensions[dimensionsStrings.length];
+		StringTokenizer dimensionsTokens = new StringTokenizer(readOption("dimensions"));
+		Dimensions[] dimensions = new Dimensions[dimensionsTokens.countTokens()];
 
 		for (int i = 0; i < dimensions.length; i++)
-			dimensions[i] = new Dimensions(dimensionsStrings[i]);
+			dimensions[i] = new Dimensions(dimensionsTokens.nextToken());
 
 		return dimensions;
 	}
