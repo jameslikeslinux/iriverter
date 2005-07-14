@@ -15,7 +15,7 @@ public class Profile {
 	}
 
 	public static Profile[] getAllProfiles() {
-		String[] profilesStrings = new File(Config.getPackageDataDir() + "/profiles/").list();
+		String[] profilesStrings = new File(Config.getPackageDataDir() + "/profiles/").list(new ProfileFilter());
 		Profile[] profiles = new Profile[profilesStrings.length];
 
 		for (int i = 0; i < profiles.length; i++)

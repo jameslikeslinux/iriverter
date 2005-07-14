@@ -447,7 +447,13 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		}
 		
 		if (e.getSource() == contents) {
-			new HelpBrowser("file://" + Config.getPackageDataDir() + "/doc/html/index.html");
+			String index;
+			if (Config.getPackageDataDir().equals("."))
+				index = "file://" + System.getProperty("user.dir") + "/doc/html/index.html";
+			else
+				index = "file://" + Config.getPackageDataDir() + "/doc/html/index.html";
+			
+			new HelpBrowser(index);
 		}
 		
 		if (e.getSource() == about)

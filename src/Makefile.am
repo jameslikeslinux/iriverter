@@ -43,6 +43,7 @@ iriverter_source_files = \
 	org/thestaticvoid/iriverter/ConverterOptions.java \
 	org/thestaticvoid/iriverter/Dimensions.java \
 	org/thestaticvoid/iriverter/VolumeFilter.java \
+	org/thestaticvoid/iriverter/ProfileFilter.java \
 	org/thestaticvoid/iriverter/OutputVideoInfo.java \
 	org/thestaticvoid/iriverter/JoinVideosInfo.java \
 	org/thestaticvoid/iriverter/Config.java \
