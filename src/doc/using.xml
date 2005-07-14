@@ -163,18 +163,6 @@
 					<term>
 						<menuchoice>
 							<shortcut>
-								<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
-							</shortcut>
-							<guimenu>Options</guimenu>
-							<guimenuitem>Normalize Volume</guimenuitem>
-						</menuchoice>
-					</term>
-					<listitem><para>Increases or decreases the volume of the video to a normal loudness.  Use this if your videos seem too quiet.</para></listitem>
-				</varlistentry>
-				<varlistentry>
-					<term>
-						<menuchoice>
-							<shortcut>
 								<keycombo><keycap>Shift</keycap><keycap>Ctrl</keycap><keycap>P</keycap></keycombo>
 							</shortcut>
 							<guimenu>Options</guimenu>
@@ -237,6 +225,18 @@
 					<guimenuitem>Audio Sync...</guimenuitem>
 				</menuchoice>.</para>
 			<note><para>If you are using Linux and do not have the MPlayer patch applied, you cannot bring the audio ahead of the video.  See <xref linkend="linux" /> for more information.</para></note>
+		</sect2>
+
+		<sect2 id="volume">
+			<title>Volume</title>
+			<para>If when you play converted videos on your device you find the volume to be too low, you have options.  These options reside in
+				<menuchoice>
+					<guimenu>Options</guimenu>
+					<guisubmenu>Advanced</guisubmenu>
+					<guimenuitem>Volume...</guimenuitem>
+				</menuchoice>.</para>
+			<para>First try volume normalization.  This will try to raise the volume to a normal level while minimizing audio distortion.  If the volume is still to low for your liking, try manually providing a gain level.  15 dB is a good place to start.</para>
+			<warning><para>Manual volume control can cause distortion and clipping in loud passages.</para></warning>
 		</sect2>
 
 		<sect2 id="profiles">

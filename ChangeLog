@@ -9,6 +9,8 @@ version 0.14 (7/7/2005):
 	* Added Gmini profile mostly as a proof-of-concept
 	* Package renamed to org.thestaticvoid.iriverter to reflect new
 	codebase
+	* Added ability to manually specify volume
+	* Allow floating-point frame rates
 
 version 0.13 (6/9/2005):
 	* Supports video conversion for iAudio X5
