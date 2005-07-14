@@ -70,8 +70,8 @@ public class Profile {
 		return dimensions;
 	}
 	
-	public int getMaxFrameRate() {
-		return Integer.parseInt(readOption("maxFrameRate"));
+	public double getMaxFrameRate() {
+		return Double.parseDouble(readOption("maxFrameRate"));
 	}
 	
 	public int getMaxLength() {

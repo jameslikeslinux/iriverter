@@ -8,18 +8,18 @@ import org.eclipse.swt.graphics.*;
 
 public class FrameRateDialog extends Dialog implements SelectionListener {
 	private Shell shell;
-	private int maxFrameRate, currentFrameRate;
+	private double maxFrameRate, currentFrameRate;
 	private Scale frameRateScale;
-	private Label currentFrameRateLabel;
+	private Spinner currentFrameRateSpinner;
 	private Button dismiss;
 	
-	public FrameRateDialog(Shell parent, int style, int maxFrameRate, int currentFrameRate) {
+	public FrameRateDialog(Shell parent, int style, double maxFrameRate, double currentFrameRate) {
 		super(parent, style);
 		this.maxFrameRate = maxFrameRate;
 		this.currentFrameRate = currentFrameRate;
 	}
 	
-	public int open() {
+	public double open() {
 		shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		shell.setText("Frame Rate");
 		GridLayout gridLayout = new GridLayout();
@@ -27,7 +27,7 @@ public class FrameRateDialog extends Dialog implements SelectionListener {
 		gridLayout.verticalSpacing = 6;
 		gridLayout.marginHeight = 12;
 		gridLayout.marginWidth = 12;
-		gridLayout.numColumns = 2;
+		gridLayout.numColumns = 3;
 		shell.setLayout(gridLayout);
 		
 		Label FrameRateLabel = new Label(shell, SWT.NONE);
@@ -36,25 +36,31 @@ public class FrameRateDialog extends Dialog implements SelectionListener {
 		fontData[0].setStyle(SWT.BOLD);
 		FrameRateLabel.setFont(new Font(getParent().getDisplay(), fontData));
 		GridData gridData = new GridData();
-		gridData.horizontalSpan = 2;
+		gridData.horizontalSpan = 3;
 		FrameRateLabel.setLayoutData(gridData);
 				
 		frameRateScale = new Scale(shell, SWT.HORIZONTAL);
 		frameRateScale.setMinimum(1);
-		frameRateScale.setMaximum(maxFrameRate);
-		frameRateScale.setSelection(currentFrameRate);
+		frameRateScale.setMaximum((int) Math.round(maxFrameRate));
+		frameRateScale.setSelection((int) Math.round(currentFrameRate));
 		frameRateScale.setPageIncrement(25);
 		frameRateScale.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		frameRateScale.addSelectionListener(this);
 		
-		currentFrameRateLabel = new Label(shell, SWT.NONE);
-		currentFrameRateLabel.setText(currentFrameRate + " Kbps");
+		currentFrameRateSpinner = new Spinner(shell, SWT.BORDER);
+		currentFrameRateSpinner.setMinimum(1);
+		currentFrameRateSpinner.setMaximum((int) Math.round(maxFrameRate * 1000));
+		currentFrameRateSpinner.setDigits(3);
+		currentFrameRateSpinner.setSelection((int) Math.round(currentFrameRate * 1000));
+		currentFrameRateSpinner.addSelectionListener(this);
+		
+		new Label(shell, SWT.NONE).setText("Kbps");
 		
 		dismiss = new Button(shell, SWT.PUSH);
 		dismiss.setText("Close");
 		gridData = new GridData();
 		gridData.widthHint = 75;
-		gridData.horizontalSpan = 2;
+		gridData.horizontalSpan = 3;
 		gridData.horizontalAlignment = SWT.RIGHT;
 		dismiss.setLayoutData(gridData);
 		dismiss.addSelectionListener(this);
@@ -77,8 +83,12 @@ public class FrameRateDialog extends Dialog implements SelectionListener {
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == frameRateScale) {
 			currentFrameRate = frameRateScale.getSelection();
-			currentFrameRateLabel.setText(currentFrameRate + " Kbps");
-			currentFrameRateLabel.pack();
+			currentFrameRateSpinner.setSelection((int) Math.round(currentFrameRate * 1000));
+		}
+		
+		if (e.getSource() == currentFrameRateSpinner) {
+			currentFrameRate = currentFrameRateSpinner.getSelection() / 1000.0;
+			frameRateScale.setSelection((int) Math.round(currentFrameRate));
 		}
 		
 		if (e.getSource() == dismiss)

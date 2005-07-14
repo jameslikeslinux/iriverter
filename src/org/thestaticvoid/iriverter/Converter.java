@@ -174,7 +174,7 @@ public class Converter extends Thread {
 			scaledHeight = converterOptions.getDimensions().getHeight();
 		}
 		
-		String vf = "filmdint=io=" + ((int) (info.getFrameRate() * 100)) + ":" + (converterOptions.getFrameRate() * 100);
+		String vf = "filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(converterOptions.getFrameRate() * 1000));
 		if (converterOptions.getPanAndScan())
 			vf += ",scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		else
@@ -261,7 +261,7 @@ public class Converter extends Thread {
 			scaledHeight = converterOptions.getDimensions().getHeight();
 		}
 		
-		String vf = "filmdint=io=" + ((int) (info.getFrameRate() * 100)) + ":" + (converterOptions.getFrameRate() * 100);
+		String vf = "filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(converterOptions.getFrameRate() * 1000));
 		if (converterOptions.getPanAndScan())
 			vf += ",scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		else

@@ -102,12 +102,12 @@ public class ConverterOptions {
 		return Integer.parseInt(audioBitrate);
 	}
 	
-	public int getFrameRate() {
+	public double getFrameRate() {
 		String frameRate = readOption("frameRate");
 		if (frameRate.equals(""))
 			return getCurrentProfile().getMaxFrameRate();
 		
-		return Integer.parseInt(frameRate);
+		return Double.parseDouble(frameRate);
 	}
 
 	public Dimensions getDimensions() {
