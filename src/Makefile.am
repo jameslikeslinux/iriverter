@@ -42,6 +42,7 @@ iriverter_source_files = \
 	org/thestaticvoid/iriverter/OverwriteDialog.java \
 	org/thestaticvoid/iriverter/ConverterOptions.java \
 	org/thestaticvoid/iriverter/Dimensions.java \
+	org/thestaticvoid/iriverter/VolumeFilter.java \
 	org/thestaticvoid/iriverter/OutputVideoInfo.java \
 	org/thestaticvoid/iriverter/JoinVideosInfo.java \
 	org/thestaticvoid/iriverter/Config.java \
@@ -55,6 +56,7 @@ iriverter_source_files = \
 	org/thestaticvoid/iriverter/DirectoryAdapter.java \
 	org/thestaticvoid/iriverter/VideoFileFilter.java \
 	org/thestaticvoid/iriverter/AutomaticallySplitDialog.java \
+	org/thestaticvoid/iriverter/VolumeDialog.java \
 	org/thestaticvoid/iriverter/regexp/REToken.java \
 	org/thestaticvoid/iriverter/regexp/RE.java \
 	org/thestaticvoid/iriverter/regexp/RETokenEndSub.java \

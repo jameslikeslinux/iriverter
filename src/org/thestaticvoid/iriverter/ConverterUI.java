@@ -18,7 +18,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	private ToolItem convertTool, newSingleVideoTool, newDirectoryTool, newDVDTool;
 	private CTabFolder tabFolder;
 	private Map profileMenuItems, dimensionsMenuItems;
-	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, frameRate, normalizeVolume, panAndScan, advancedOptions, audioSync, automaticallySplit, contents, about;
+	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, frameRate, panAndScan, advancedOptions, audioSync, automaticallySplit, volume, contents, about;
 	private Menu videoSizeMenu;
 	private DropTarget target;
 	private String fileName;
@@ -204,12 +204,6 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 
 		new MenuItem(optionsMenu, SWT.SEPARATOR);
 		
-		normalizeVolume = new MenuItem(optionsMenu, SWT.CHECK);
-		normalizeVolume.setText("&Normalize Volume\tShift+Ctrl+N");
-		normalizeVolume.setAccelerator(SWT.SHIFT + SWT.CTRL + 'N');
-		normalizeVolume.setSelection(converterOptions.getNormalizeVolume());
-		normalizeVolume.addSelectionListener(this);
-		
 		panAndScan = new MenuItem(optionsMenu, SWT.CHECK);
 		panAndScan.setText("&Pan and Scan\tShift+Ctrl+P");
 		panAndScan.setAccelerator(SWT.SHIFT + SWT.CTRL + 'P');
@@ -229,6 +223,10 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		automaticallySplit = new MenuItem(advancedOptionsMenu, SWT.PUSH);
 		automaticallySplit.setText("&Automatically Split...");
 		automaticallySplit.addSelectionListener(this);
+		
+		volume = new MenuItem(advancedOptionsMenu, SWT.PUSH);
+		volume.setText("&Volume...");
+		volume.addSelectionListener(this);
 
 		MenuItem help = new MenuItem(menu, SWT.CASCADE);
 		help.setText("&Help");
@@ -409,9 +407,6 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			converterOptions.writeOption("frameRate", "" + frameRateDialog.open());
 		}
 		
-		if (e.getSource() == normalizeVolume)
-			converterOptions.writeOption("normalizeVolume", "" + normalizeVolume.getSelection());
-		
 		if (e.getSource() == panAndScan)
 			converterOptions.writeOption("panAndScan", "" + panAndScan.getSelection());
 		
@@ -438,8 +433,21 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			}
 		}
 		
+		if (e.getSource() == volume) {
+			double volume = new VolumeDialog(shell, SWT.NONE, converterOptions.getVolumeFilter(), converterOptions.getGain()).open();
+			
+			if (volume == VolumeDialog.NONE)
+				converterOptions.writeOption("volumeFilter", "none");
+			else if (volume == VolumeDialog.VOLNORM)
+				converterOptions.writeOption("volumeFilter", "volnorm");
+			else {
+				converterOptions.writeOption("volumeFilter", "volume");
+				converterOptions.writeOption("gain", "" + volume);
+			}
+		}
+		
 		if (e.getSource() == contents) {
-			HelpBrowser helpBrowser = new HelpBrowser("file://" + Config.getPackageDataDir() + "/doc/html/index.html");
+			new HelpBrowser("file://" + Config.getPackageDataDir() + "/doc/html/index.html");
 		}
 		
 		if (e.getSource() == about)

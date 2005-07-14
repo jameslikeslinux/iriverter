@@ -86,14 +86,6 @@ public class ConverterOptions {
 		return panAndScan.equals("true");
 	}
 	
-	public boolean getNormalizeVolume() {
-		String normalizeVolume = readOption("normalizeVolume");
-		if (normalizeVolume.equals(""))
-			return false;
-			
-		return normalizeVolume.equals("true");
-	}
-	
 	public int getVideoBitrate() {
 		String videoBitrate = readOption("videoBitrate");
 		if (videoBitrate.equals(""))
@@ -156,5 +148,23 @@ public class ConverterOptions {
 			return getCurrentProfile().getMaxLength();
 		
 		return Integer.parseInt(splitTime);
+	}
+	
+	public int getVolumeFilter() {
+		String volumeFilter = readOption("volumeFilter");
+		if (volumeFilter.equals("") || volumeFilter.equals("none"))
+			return VolumeFilter.NONE;
+		else if (volumeFilter.equals("volnorm"))
+			return VolumeFilter.VOLNORM;
+		
+		return VolumeFilter.VOLUME;			
+	}
+	
+	public double getGain() {
+		String gain = readOption("gain");
+		if (gain.equals(""))
+			return 0.0;
+		
+		return Double.parseDouble(gain);
 	}
 }

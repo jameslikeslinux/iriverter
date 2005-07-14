@@ -182,8 +182,10 @@ public class Converter extends Thread {
 		vf += ",harddup";
 		
 		String af = "resample=44100";
-		if (converterOptions.getNormalizeVolume())
+		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLNORM)
 			af = "volnorm," + af;
+		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME)
+			af = "volume=" + converterOptions.getGain() + "," + af;
 		if (!converterOptions.getAutoSync()) {
 			int offset = converterOptions.getAudioDelay();
 			if (offset <= 0)
@@ -267,8 +269,10 @@ public class Converter extends Thread {
 		vf += ",harddup";
 		
 		String af = "resample=44100";
-		if (converterOptions.getNormalizeVolume())
+		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLNORM)
 			af = "volnorm," + af;
+		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME)
+			af = "volume=" + converterOptions.getGain() + "," + af;
 		if (!converterOptions.getAutoSync()) {
 			int offset = converterOptions.getAudioDelay();
 			if (offset <= 0)
