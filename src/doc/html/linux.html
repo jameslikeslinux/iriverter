@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Linux</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="iriverter Help"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Installing iriverter"
+HREF="installing.html"><LINK
+REL="PREVIOUS"
+TITLE="OSX"
+HREF="osx.html"><LINK
+REL="NEXT"
+TITLE="Using iriverter"
+HREF="using.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>iriverter Help</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="osx.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installing iriverter</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="using.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="linux"
+>2.3. Linux</A
+></H1
+><P
+>You should have a little bit of experience with Linux for this to be easy.</P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>Install MPlayer with MEncoder with XviD and DVD support.  If your distribution does not have a package for this then you will have to build it yourself.  Refer to the <A
+HREF="http://www.mplayerhq.hu/DOCS/HTML/en/index.html"
+TARGET="_top"
+>MPlayer documentation</A
+> for instructions on how to do that.</P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>If you want to be able to manually sync the audio to the video, you must manually compile MPlayer and apply <TT
+CLASS="filename"
+>MPlayer-VER_iriverter.patch</TT
+>, where VER is MPlayer's version number, available from the the <A
+HREF="http://sourceforge.net/project/showfiles.php?group_id=129582"
+TARGET="_top"
+>iriverter downloads page</A
+>.</P
+></TD
+></TR
+></TABLE
+></DIV
+></LI
+><LI
+><P
+>Install a Java runtime environment 1.4 or higher.  Check to see if your distribution has packages for this.</P
+></LI
+><LI
+><P
+>Install <A
+HREF="http://www.eclipse.org/swt"
+TARGET="_top"
+>SWT</A
+>.  Use your distribution's utilities if possible.</P
+></LI
+><LI
+><P
+>Open a terminal and run</P
+><PRE
+CLASS="screen"
+><SAMP
+CLASS="prompt"
+>$</SAMP
+> <B
+CLASS="command"
+>tar -xvjf <TT
+CLASS="replaceable"
+><I
+>iriverter-VER.tar.bz2</I
+></TT
+></B
+>
+<SAMP
+CLASS="prompt"
+>$</SAMP
+> <B
+CLASS="command"
+>cd <TT
+CLASS="replaceable"
+><I
+>iriverter-VER</I
+></TT
+></B
+>
+<SAMP
+CLASS="prompt"
+>$</SAMP
+> <B
+CLASS="command"
+>./configure --with-swt=<TT
+CLASS="replaceable"
+><I
+>/path/to/swt.jar</I
+></TT
+></B
+>
+<SAMP
+CLASS="prompt"
+>$</SAMP
+> <B
+CLASS="command"
+>make</B
+>
+<SAMP
+CLASS="prompt"
+>#</SAMP
+> <B
+CLASS="command"
+>make install</B
+></PRE
+></LI
+><LI
+><P
+>Start iriverter by clicking the menu item in your Sound &#38; Video menu or by running <B
+CLASS="command"
+>iriverter</B
+> on the command line.</P
+></LI
+></OL
+><P
+>If you'd rather use GCJ than Java to build iriverter, append <CODE
+CLASS="option"
+>--with-gcj</CODE
+> to your configure command.  The rest of the instructions are the same.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="osx.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="using.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>OSX</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="installing.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Using iriverter</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

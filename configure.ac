@@ -61,4 +61,4 @@ else
 	AC_SUBST(SWT_JAR)
 fi
 
-AC_OUTPUT([Makefile doc/Makefile doc/html/Makefile doc/images/Makefile src/Makefile src/org/thestaticvoid/iriverter/Config.java src/profiles/Makefile src/launcher/Makefile src/launcher/iriverter])
+AC_OUTPUT([Makefile src/Makefile src/doc/Makefile src/doc/html/Makefile src/doc/images/Makefile src/org/thestaticvoid/iriverter/Config.java src/profiles/Makefile src/launcher/Makefile src/launcher/iriverter])

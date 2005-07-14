@@ -1,4 +1,4 @@
-SUBDIRS = profiles launcher
+SUBDIRS = doc profiles launcher
 
 if BUILD_GCJ
 bin_PROGRAMS = iriverter

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter id="introduction">
+	<title>Introduction</title>
+
+	<sect1 id="supported">
+		<title>Supported players</title>
+		<para>The following multimedia players support video playback:</para>
+		<variablelist>
+			<varlistentry>
+				<term>H320</term>
+				<term>H340</term>
+				<listitem><para>Only the international versions of the H300 series supports video playback officially with a firmware upgrade.  Versions 1.20 and higher of the firmware are required.</para></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>PMP120</term>
+				<term>PMP140</term>
+				<listitem><para>The PMP series supports video right out of the box.</para></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>iAudio X5</term>
+				<listitem><para>The iAudio X5 can play converted videos right out of the box.</para></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Archos Gmini</term>
+				<listitem><para>The Gmini can also play converted videos right out of the box.</para></listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><replaceable>Your Player Here</replaceable></term>
+				<listitem><para>With <link linkend="profiles">profiles</link>, iriverter may work with your player.</para></listitem>
+			</varlistentry>
+		</variablelist>
+		<sect2 id="firmware">
+			<title>Firmware</title>
+			<para>If you are using an H300 series player, you may need to upgrade your firmware, which is the operating system on the player.  During the startup of your player, you should see the version of your firmware on the bottom of the screen.  If it is less than 1.20, you need to upgrade.  You can get the firmware for your respective country on <ulink url="http://www.iriver.com/html/support/download/sudw_view.asp?searchProductIdx=&amp;searchCategoryIdx=&amp;searchString=&amp;page=1&amp;idx=687&amp;tmpSearchProductIdx=&amp;tmpSearchCategoryIdx=&amp;tmpSearchString=">iriver's website</ulink>.  The newest version, 1.28, adds WAV playback and a clock among other things.</para>
+			
+			<sect3>
+				<title>Installing the New Firmware</title>
+				<para>The firmware is provided in a zip package.  To install it:</para>
+				<orderedlist numeration="arabic">
+					<listitem><para>Extract the firmware using an unzipping utility.</para></listitem>
+					<listitem><para>Run the exe file that was extracted from the package.</para></listitem>
+					<listitem><para>Put <filename>H300.hex</filename> that came from the exe onto the "ROOT" folder of the H300.</para></listitem>
+					<listitem><para>Ensure the H300 is plugged in and has a full battery to avoid problems.</para></listitem>
+					<listitem><para>Hold down "NAVI" and select <menuchoice><guimenu>General</guimenu><guimenuitem>Firmware Upgrade</guimenuitem></menuchoice>.</para></listitem>
+					<listitem><para>Confirm that you want to upgrade and wait a few minutes for the process to complete.  The H300 will turn off when it is done.</para></listitem>
+				</orderedlist>
+			</sect3>
+
+			<sect3>
+				<title>Korean Firmware on US Players</title>
+				<para>It is possible to use the Korean firmware on a US H300 series player, and in turn get video playback capability.  Unfortunetly, DRM music playback, which is used to play music purchased from subscription-based music services like Napster, will be lost forever.  Additionally, your warranty may be voided, although this has yet to be either confirmed or denied.</para>
+			</sect3>
+		</sect2>
+	</sect1>
+
+	<sect1 id="playing">
+		<title>Playing Videos</title>
+		<para>In order to play videos, they must be in a very specific format.</para>
+		
+		<variablelist>
+			<varlistentry>
+				<term>H320</term>
+				<term>H340</term>
+				<listitem>
+					<segmentedlist>
+						<segtitle>Video codec</segtitle>
+						<segtitle>Video size</segtitle>
+						<segtitle>Video framerate</segtitle>
+						<segtitle>Maximum video bitrate</segtitle>
+						<segtitle>Audio</segtitle>
+						
+						<seglistitem>
+							<seg>XviD 1.0.3</seg>
+							<seg>220x176</seg>
+							<seg>Up to 10 FPS</seg>
+							<seg>Up to 500 Kbps</seg>
+							<seg>MP3, up to 128 Kbps, 44100 Hz</seg>
+						</seglistitem>
+					</segmentedlist>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>PMP120</term>
+				<term>PMP140</term>
+				<listitem>
+					<segmentedlist>
+						<segtitle>Video codec</segtitle>
+						<segtitle>Video size</segtitle>
+						<segtitle>Video framerate</segtitle>
+						<segtitle>Maximum video bitrate</segtitle>
+						<segtitle>Audio</segtitle>
+						
+						<seglistitem>
+							<seg>Various MPEG 4 codecs</seg>
+							<seg>320x240, 512x384, 640x480</seg>
+							<seg>Up to 30 FPS</seg>
+							<seg>Up to 1500 Kbps</seg>
+							<seg>MP3, up to 192 Kbps, 44100 Hz</seg>
+						</seglistitem>
+					</segmentedlist>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>iAudio X5</term>
+				<listitem>
+					<segmentedlist>
+						<segtitle>Video codec</segtitle>
+						<segtitle>Video size</segtitle>
+						<segtitle>Video framerate</segtitle>
+						<segtitle>Maximum video bitrate</segtitle>
+						<segtitle>Audio</segtitle>
+
+						<seglistitem>
+							<seg>Various MPEG4 codecs</seg>
+							<seg>160x128</seg>
+							<seg>Up to 15 FPS</seg>
+							<seg>Up to 256 Kbps</seg>
+							<seg>MP3, up to 128 Kbps, 44100 Hz</seg>
+						</seglistitem>
+					</segmentedlist>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+
+		<para>iriverter was designed to convert nearly all videos to these formats to take the difficulty out of video playback.  If you already have videos in this format you can simply put them on your device.  On the H300 series, videos are played just like any other music file through music mode and the file tree.  If your video is not in the necessary format, pass it through iriverter as discussed in <xref linkend="installing" /> and <xref linkend="using" />.</para>
+	</sect1>
+</chapter>
