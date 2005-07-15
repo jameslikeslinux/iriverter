@@ -13,8 +13,8 @@ public class Config {
 		if (prefixIndex >= 0)
 			dataDir = PREFIX + dataDir.substring(prefixIndex + 1);
 		
-		if (new File(dataDir + "/iriverter").exists())
-			return dataDir + "/iriverter";
+		if (new File(dataDir + File.separator + "iriverter").exists())
+			return dataDir + File.separator + "iriverter";
 
 		return ".";
 	}
