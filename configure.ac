@@ -34,7 +34,10 @@ if test "$gcj" = "yes"; then
 	fi
 else
 	if test "$JAVAC" = ""; then
-		AC_MSG_ERROR([Can't find "javac" in your PATH])
+		AC_PATH_PROG(JAVAC, javac)
+		if test "$JAVAC" = ""; then
+			AC_MSG_ERROR([Can't find "javac" in your PATH])
+		fi
 	fi
 fi
 

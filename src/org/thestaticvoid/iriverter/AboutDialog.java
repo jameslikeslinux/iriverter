@@ -10,7 +10,7 @@ import java.io.*;
 
 public class AboutDialog extends Dialog implements SelectionListener {
 	private Shell shell;
-	private Button credits, dismiss;
+	private Button dismiss;
 	
 	public AboutDialog(Shell parent, int style) {
 		super(parent, style);
