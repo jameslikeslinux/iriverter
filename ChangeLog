@@ -1,5 +1,11 @@
 iriverter:
 
+version 0.15 (1/28/2006):
+	* Fixed Windows start-up issues (no longer need work-around)
+	* Added U10 profile
+	* Readded OSX packages (not tested though)
+	* Updated SWT in Windows and OSX
+
 version 0.14 (7/7/2005):
 	* Build process now uses GNU Autotools
 	* Added profiling system for easier support for other players
