@@ -26,23 +26,33 @@ public class Converter extends Thread {
 		List newJobs = new ArrayList();
 		
 		for (int i = 0; i < jobs.size(); i++) {
+			boolean validOutput = true;
 			if (jobs.get(i) instanceof OutputVideoInfo) {
 				OutputVideoInfo outputVideoInfo = (OutputVideoInfo) jobs.get(i);
 				if (!outputVideoInfo.getOutputVideo().endsWith(".avi") && !outputVideoInfo.getOutputVideo().equals(""))
 					outputVideoInfo.setOutputVideo(outputVideoInfo.getOutputVideo() + ".avi");
+				
+				if (!new File(outputVideoInfo.getOutputVideo()).getParentFile().exists())
+					validOutput = new File(outputVideoInfo.getOutputVideo()).getParentFile().mkdirs();
+				
+				validOutput = validOutput && new File(outputVideoInfo.getOutputVideo()).getParentFile().canWrite();
 			}
 			
 			if (jobs.get(i) instanceof SingleVideoInfo) {
 				SingleVideoInfo singleVideoInfo = (SingleVideoInfo) jobs.get(i);
-				if (new File(singleVideoInfo.getInputVideo()).exists() && !singleVideoInfo.getOutputVideo().equals(""))
+				if (new File(singleVideoInfo.getInputVideo()).exists() && !singleVideoInfo.getOutputVideo().equals("") && validOutput)
 					newJobs.add(singleVideoInfo);
 			} else if (jobs.get(i) instanceof DirectoryInfo) {
 				DirectoryInfo directoryInfo = (DirectoryInfo) jobs.get(i);
 				if (new File(directoryInfo.getInputDirectory()).exists() && !directoryInfo.getOutputDirectory().equals(""))
-					newJobs.add(directoryInfo);
+					if (!new File(directoryInfo.getOutputDirectory()).exists())
+						validOutput = new File(directoryInfo.getOutputDirectory()).mkdirs();
+				
+					if (validOutput)
+						newJobs.add(directoryInfo);
 			} else if (jobs.get(i) instanceof DVDInfo) {
 				DVDInfo dvdInfo = (DVDInfo) jobs.get(i);
-				if (!dvdInfo.getDrive().equals("") && !dvdInfo.getOutputVideo().equals(""))
+				if (!dvdInfo.getDrive().equals("") && !dvdInfo.getOutputVideo().equals("") && validOutput)
 					newJobs.add(dvdInfo);
 			} else if (jobs.get(i) instanceof ManualSplitInfo) {
 				ManualSplitInfo manualSplitInfo = (ManualSplitInfo) jobs.get(i);
@@ -50,7 +60,7 @@ public class Converter extends Thread {
 					newJobs.add(manualSplitInfo);
 			} else if (jobs.get(i) instanceof JoinVideosInfo) {
 				JoinVideosInfo joinVideosInfo = (JoinVideosInfo) jobs.get(i);
-				if (joinVideosInfo.getInputVideos().length > 0)
+				if (joinVideosInfo.getInputVideos().length > 0 && validOutput)
 					newJobs.add(joinVideosInfo);
 			}
 		}
@@ -186,13 +196,6 @@ public class Converter extends Thread {
 			af = "volnorm," + af;
 		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME)
 			af = "volume=" + converterOptions.getGain() + "," + af;
-		if (!converterOptions.getAutoSync()) {
-			int offset = converterOptions.getAudioDelay();
-			if (offset <= 0)
-				af = "advance=" + -offset + "," + af;
-			else
-				af = "delay=" + offset + ":" + offset + "," + af;
-		}
 		
 		List commandList = new ArrayList();
 		
@@ -220,6 +223,10 @@ public class Converter extends Thread {
 		if (!converterOptions.getAutoSync()) {
 			commandList.add("-mc");
 			commandList.add("0");
+			
+			int offset = converterOptions.getAudioDelay();
+			commandList.add("-delay");
+			commandList.add("" + (offset / 1000.0));
 		}
 		
 		commandList.add("-ffourcc");
@@ -273,13 +280,6 @@ public class Converter extends Thread {
 			af = "volnorm," + af;
 		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME)
 			af = "volume=" + converterOptions.getGain() + "," + af;
-		if (!converterOptions.getAutoSync()) {
-			int offset = converterOptions.getAudioDelay();
-			if (offset <= 0)
-				af = "advance=" + -offset + "," + af;
-			else
-				af = "delay=" + offset + ":" + offset + "," + af;
-		}
 		
 		List commandList = new ArrayList();
 		
@@ -324,6 +324,10 @@ public class Converter extends Thread {
 		if (!converterOptions.getAutoSync()) {
 			commandList.add("-mc");
 			commandList.add("0");
+			
+			int offset = converterOptions.getAudioDelay();
+			commandList.add("-delay");
+			commandList.add("" + (offset / 1000.0));
 		}
 		
 		commandList.add("-ffourcc");
