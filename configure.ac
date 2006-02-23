@@ -1,6 +1,6 @@
 AC_INIT(src/org/thestaticvoid/iriverter/ConverterUI.java)
 
-VERSION=0.15
+VERSION=0.16
 AC_SUBST(VERSION)
 
 AM_INIT_AUTOMAKE(iriverter, $VERSION)
