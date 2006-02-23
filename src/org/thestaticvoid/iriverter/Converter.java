@@ -12,7 +12,7 @@ public class Converter extends Thread {
 	private int exitCode;
 	
 	public Converter(List jobs, ProgressDialogInfo progressDialogInfo, ConverterOptions converterOptions) {
-		this.jobs = Converter.checkForOverwritingFiles(Converter.expandSingleJobsToMultiple(Converter.removeInvalidJobs(jobs), converterOptions));
+		this.jobs = Converter.checkForOverwritingFiles(Converter.expandSingleJobsToMultiple(Converter.removeInvalidJobs(jobs, converterOptions), converterOptions));
 		this.progressDialogInfo = progressDialogInfo;
 		this.converterOptions = converterOptions;
 		isCanceled = false;
@@ -22,15 +22,15 @@ public class Converter extends Thread {
 		progressDialogInfo.setTotalJobs(this.jobs.size());
 	}
 	
-	public static List removeInvalidJobs(List jobs) {
+	public static List removeInvalidJobs(List jobs, ConverterOptions converterOptions) {
 		List newJobs = new ArrayList();
 		
 		for (int i = 0; i < jobs.size(); i++) {
 			boolean validOutput = true;
 			if (jobs.get(i) instanceof OutputVideoInfo) {
 				OutputVideoInfo outputVideoInfo = (OutputVideoInfo) jobs.get(i);
-				if (!outputVideoInfo.getOutputVideo().endsWith(".avi") && !outputVideoInfo.getOutputVideo().equals(""))
-					outputVideoInfo.setOutputVideo(outputVideoInfo.getOutputVideo() + ".avi");
+				if (!outputVideoInfo.getOutputVideo().endsWith("." + converterOptions.getCurrentProfile().getWrapperFormat()) && !outputVideoInfo.getOutputVideo().equals(""))
+					outputVideoInfo.setOutputVideo(outputVideoInfo.getOutputVideo() + "." + converterOptions.getCurrentProfile().getWrapperFormat());
 				
 				if (!new File(outputVideoInfo.getOutputVideo()).getParentFile().exists())
 					validOutput = new File(outputVideoInfo.getOutputVideo()).getParentFile().mkdirs();
@@ -201,6 +201,14 @@ public class Converter extends Thread {
 		
 		commandList.add(MPlayerInfo.getMPlayerPath() + "mencoder");
 		commandList.add(singleVideoInfo.getInputVideo());
+		
+		if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
+			commandList.add("-of");
+			commandList.add("lavf");
+			commandList.add("-lavfopts");
+			commandList.add("format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames");
+		}
+		
 		commandList.add("-o");
 		commandList.add(singleVideoInfo.getOutputVideo());
 		commandList.add("-ovc");
@@ -208,9 +216,15 @@ public class Converter extends Thread {
 		commandList.add("-xvidencopts");
 		commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":max_bframes=0");
 		commandList.add("-oac");
-		commandList.add("mp3lame");
-		commandList.add("-lameopts");
-		commandList.add("mode=2:cbr:br=" + converterOptions.getAudioBitrate());
+		if (converterOptions.getCurrentProfile().getAudioFormat().equals("aac")) {
+			commandList.add("faac");
+			commandList.add("-faacopts");
+			commandList.add("br=" + converterOptions.getAudioBitrate());
+		} else {
+			commandList.add("mp3lame");
+			commandList.add("-lameopts");
+			commandList.add("mode=2:cbr:br=" + converterOptions.getAudioBitrate());
+		}
 		commandList.add("-vf");
 		commandList.add(vf);
 		commandList.add("-af");
@@ -228,9 +242,6 @@ public class Converter extends Thread {
 			commandList.add("-delay");
 			commandList.add("" + (offset / 1000.0));
 		}
-		
-		commandList.add("-ffourcc");
-		commandList.add("XVID");
 		
 		String[] command = new String[commandList.size()];
 		for (int i = 0; i < command.length; i++)
@@ -287,6 +298,14 @@ public class Converter extends Thread {
 		commandList.add("-dvd-device");
 		commandList.add(dvdInfo.getDrive());
 		commandList.add("dvd://" + dvdInfo.getTitle());
+		
+		if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
+			commandList.add("-of");
+			commandList.add("lavf");
+			commandList.add("-lavfopts");
+			commandList.add("format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames");
+		}
+		
 		commandList.add("-o");
 		commandList.add(dvdInfo.getOutputVideo());
 		commandList.add("-ovc");
@@ -294,9 +313,15 @@ public class Converter extends Thread {
 		commandList.add("-xvidencopts");
 		commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":max_bframes=0");
 		commandList.add("-oac");
-		commandList.add("mp3lame");
-		commandList.add("-lameopts");
-		commandList.add("mode=2:cbr:br=" + converterOptions.getAudioBitrate());
+		if (converterOptions.getCurrentProfile().getAudioFormat().equals("aac")) {
+			commandList.add("faac");
+			commandList.add("-faacopts");
+			commandList.add("br=" + converterOptions.getAudioBitrate());
+		} else {
+			commandList.add("mp3lame");
+			commandList.add("-lameopts");
+			commandList.add("mode=2:cbr:br=" + converterOptions.getAudioBitrate());
+		}
 		commandList.add("-vf");
 		commandList.add(vf);
 		commandList.add("-af");
@@ -329,9 +354,6 @@ public class Converter extends Thread {
 			commandList.add("-delay");
 			commandList.add("" + (offset / 1000.0));
 		}
-		
-		commandList.add("-ffourcc");
-		commandList.add("XVID");
 		
 		String[] command = new String[commandList.size()];
 		for (int i = 0; i < command.length; i++)

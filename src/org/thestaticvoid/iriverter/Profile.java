@@ -81,4 +81,20 @@ public class Profile {
 			return 0;
 		}
 	}
+	
+	public String getWrapperFormat() {
+		String wrapperFormat = readOption("wrapperFormat");
+		if (wrapperFormat.equals(""))
+			return "avi";
+		
+		return wrapperFormat;
+	}
+	
+	public String getAudioFormat() {
+		String audioFormat = readOption("audioFormat");
+		if (audioFormat.equals(""))
+			return "mp3";
+		
+		return audioFormat;
+	}
 }

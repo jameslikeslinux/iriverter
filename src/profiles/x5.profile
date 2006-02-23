@@ -3,3 +3,5 @@ maxVideoBitrate=256
 maxAudioBitrate=192
 dimensions=160x128
 maxFrameRate=15
+wrapperFormat=avi
+audioFormat=mp3
