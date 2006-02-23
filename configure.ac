@@ -27,9 +27,9 @@ if test "$gcj" = "yes"; then
 	fi
 
 	if test "$windows" = "yes"; then
-		AC_PATH_PROG(WINDRES, "$host_alias"-windres)
+		AC_PATH_PROG(WINDRES, "$build_alias"-windres)
 		if test "$WINDRES" = ""; then
-			AC_MSG_ERROR([Can't find "$host_alias-windres" in your PATH])
+			AC_MSG_ERROR([Can't find "$build_alias-windres" in your PATH])
 		fi
 	fi
 else
