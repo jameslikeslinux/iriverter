@@ -110,6 +110,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		
 		advancedJobs = new MenuItem(newJobMenu, SWT.CASCADE);
 		advancedJobs.setText("&Advanced");
+
+		advancedJobs.setEnabled(converterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
 		
 		Menu advancedJobsMenu = new Menu(shell, SWT.DROP_DOWN);
 		advancedJobs.setMenu(advancedJobsMenu);
@@ -195,9 +197,6 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		videoSizeMenu = new Menu(shell, SWT.DROP_DOWN);
 		videoSize.setMenu(videoSizeMenu);
 		
-		dimensionsMenuItems = new HashMap();
-		profileChanged();
-		
 		frameRate = new MenuItem(optionsMenu, SWT.PUSH);
 		frameRate.setText("&Frame Rate...");
 		frameRate.addSelectionListener(this);
@@ -224,6 +223,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		automaticallySplit.setText("&Automatically Split...");
 		automaticallySplit.addSelectionListener(this);
 		
+		automaticallySplit.setEnabled(converterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
+		
 		volume = new MenuItem(advancedOptionsMenu, SWT.PUSH);
 		volume.setText("&Volume...");
 		volume.addSelectionListener(this);
@@ -242,6 +243,9 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		about = new MenuItem(helpMenu, SWT.PUSH);
 		about.setText("&About");
 		about.addSelectionListener(this);
+		
+		dimensionsMenuItems = new HashMap();
+		profileChanged();
 	}
 	
 	public void setupToolBar() {		
@@ -477,6 +481,9 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 
 			dimensionsMenuItems.put(dimensionsMenuItem, dimensions[i]);
 		}
+		
+		advancedJobs.setEnabled(converterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
+		automaticallySplit.setEnabled(converterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
 	}
 	
 	public void close(CTabFolderEvent event) {

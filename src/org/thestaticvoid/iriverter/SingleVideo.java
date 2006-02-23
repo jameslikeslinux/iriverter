@@ -85,12 +85,12 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		if (e.getSource() == inputVideoSelect) {
 			FileDialog fileDialog = new FileDialog(getShell(), SWT.OPEN);
 			fileDialog.setText("Input Video");
-			fileDialog.setFilterExtensions(new String[]{"*.avi;*.vob;*.mkv;*.mpg;*.mpeg;*.ogm;*.mov;*.rm;*.ram;*.wmv;*.asf", "*.avi", "*.vob", "*.mkv", "*.mpg;*.mpeg", "*.ogm", "*.mov", "*.rm;*.ram", "*.wmv;*.asf", "*"});
-			fileDialog.setFilterNames(new String[]{"All Video Files", "AVI Video (*.avi)", "DVD Video Object (*.vob)", "Matroska Video (*.mkv)", "MPEG Video (*.mpg, *.mpeg)", "Ogg Video (*.ogm)", "Quicktime Movie (*.mov)", "Real Video (*.rm, *.ram)", "Windows Media Video (*.wmv, *.asf)", "All Files"});
+			fileDialog.setFilterExtensions(new String[]{"*.avi;*.vob;*.mkv;*.mpg;*.mpeg;*.ogm;*.mov;*.rm;*.ram;*.wmv;*.asf", "*.avi", "*.vob", "*.mkv", "*.mpg;*.mpeg;*.mp4", "*.ogm", "*.mov", "*.rm;*.ram", "*.wmv;*.asf", "*"});
+			fileDialog.setFilterNames(new String[]{"All Video Files", "AVI Video (*.avi)", "DVD Video Object (*.vob)", "Matroska Video (*.mkv)", "MPEG Video (*.mpg, *.mpeg, *.mp4)", "Ogg Video (*.ogm)", "Quicktime Movie (*.mov)", "Real Video (*.rm, *.ram)", "Windows Media Video (*.wmv, *.asf)", "All Files"});
 			String file = fileDialog.open();
 			if (file != null) {
 				inputVideoInput.setText(file);
-				outputVideoInput.setText(file.substring(0, file.lastIndexOf('.')) + "." + converterOptions.getCurrentProfile().getProfileName() + ".avi");
+				outputVideoInput.setText(file.substring(0, file.lastIndexOf('.')) + "." + converterOptions.getCurrentProfile().getProfileName() + "." + converterOptions.getCurrentProfile().getWrapperFormat());
 				tabItem.setText(new File(file).getName());
 			}
 		}
@@ -98,8 +98,13 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		if (e.getSource() == outputVideoSelect) {
 			FileDialog fileDialog = new FileDialog(getShell(), SWT.SAVE);
 			fileDialog.setText("Output Video");
-			fileDialog.setFilterExtensions(new String[]{"*.avi"});
-			fileDialog.setFilterNames(new String[]{"AVI Video (*.avi)"});
+			if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
+				fileDialog.setFilterExtensions(new String[]{"*.mp4"});
+				fileDialog.setFilterNames(new String[]{"MP4 Video (*.mp4)"});
+			} else {
+				fileDialog.setFilterExtensions(new String[]{"*.avi"});
+				fileDialog.setFilterNames(new String[]{"AVI Video (*.avi)"});
+			}
 			String file = fileDialog.open();
 			if (file != null)
 				outputVideoInput.setText(file);

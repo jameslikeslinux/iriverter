@@ -227,8 +227,13 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 		if (e.getSource() == outputVideoSelect) {
 			FileDialog fileDialog = new FileDialog(getShell(), SWT.SAVE);
 			fileDialog.setText("Output Video");
-			fileDialog.setFilterExtensions(new String[]{"*.avi"});
-			fileDialog.setFilterNames(new String[]{"AVI Video (*.avi)"});
+			if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
+				fileDialog.setFilterExtensions(new String[]{"*.mp4"});
+				fileDialog.setFilterNames(new String[]{"MP4 Video (*.mp4)"});
+			} else {
+				fileDialog.setFilterExtensions(new String[]{"*.avi"});
+				fileDialog.setFilterNames(new String[]{"AVI Video (*.avi)"});
+			}
 			String file = fileDialog.open();
 			if (file != null)
 				outputVideoInput.setText(file);
