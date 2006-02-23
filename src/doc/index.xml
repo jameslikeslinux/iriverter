@@ -17,11 +17,11 @@
 			</affiliation>
 		</author>
 		
-		<date>7/7/2005</date>
-		<releaseinfo>0.14</releaseinfo>
+		<date>2/23/2006</date>
+		<releaseinfo>0.16</releaseinfo>
 
 		<abstract>
-			<para>iriverter is a cross-platform frontend to mencoder designed to facilitate the conversion of almost any video format to one that is playable on iriver and iAudio multimedia players.</para>
+			<para>iriverter is a cross-platform frontend to mencoder designed to facilitate the conversion of almost any video format to one that is playable on iriver, iAudio, and iPod multimedia players.</para>
 		</abstract>
 	</bookinfo>
 

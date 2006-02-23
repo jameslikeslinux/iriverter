@@ -224,7 +224,6 @@
 					<guisubmenu>Advanced</guisubmenu>
 					<guimenuitem>Audio Sync...</guimenuitem>
 				</menuchoice>.</para>
-			<note><para>If you are using Linux and do not have the MPlayer patch applied, you cannot bring the audio ahead of the video.  See <xref linkend="linux" /> for more information.</para></note>
 		</sect2>
 
 		<sect2 id="volume">

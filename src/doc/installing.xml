@@ -44,8 +44,6 @@
 		<orderedlist numeration="arabic">
 			<listitem>
 				<para>Install MPlayer with MEncoder with XviD and DVD support.  If your distribution does not have a package for this then you will have to build it yourself.  Refer to the <ulink url="http://www.mplayerhq.hu/DOCS/HTML/en/index.html">MPlayer documentation</ulink> for instructions on how to do that.</para>
-
-				<note><para>If you want to be able to manually sync the audio to the video, you must manually compile MPlayer and apply <filename>MPlayer-VER_iriverter.patch</filename>, where VER is MPlayer's version number, available from the the <ulink url="http://sourceforge.net/project/showfiles.php?group_id=129582">iriverter downloads page</ulink>.</para></note>
 			</listitem>
 			<listitem><para>Install a Java runtime environment 1.4 or higher.  Check to see if your distribution has packages for this.</para></listitem>
 			<listitem><para>Install <ulink url="http://www.eclipse.org/swt">SWT</ulink>.  Use your distribution's utilities if possible.</para></listitem>
