@@ -54,7 +54,7 @@ public class FrameRateDialog extends Dialog implements SelectionListener {
 		currentFrameRateSpinner.setSelection((int) Math.round(currentFrameRate * 1000));
 		currentFrameRateSpinner.addSelectionListener(this);
 		
-		new Label(shell, SWT.NONE).setText("Kbps");
+		new Label(shell, SWT.NONE).setText("FPS");
 		
 		dismiss = new Button(shell, SWT.PUSH);
 		dismiss.setText("Close");
