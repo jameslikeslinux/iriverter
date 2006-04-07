@@ -46,7 +46,7 @@ public class BitrateDialog extends Dialog implements SelectionListener {
 		videoBitrateLabel.setText("Video:");
 				
 		videoBitrateScale = new Scale(shell, SWT.HORIZONTAL);
-		videoBitrateScale.setMinimum(0);
+		videoBitrateScale.setMinimum(50);
 		videoBitrateScale.setMaximum(maxBitrate.getVideo() / 2);
 		videoBitrateScale.setSelection(currentVideoBitrate / 2);
 		videoBitrateScale.setPageIncrement(25);
@@ -60,7 +60,7 @@ public class BitrateDialog extends Dialog implements SelectionListener {
 		audioBitrateLabel.setText("Audio:");
 		
 		audioBitrateScale = new Scale(shell, SWT.HORIZONTAL);
-		audioBitrateScale.setMinimum(0);
+		audioBitrateScale.setMinimum(2);
 		audioBitrateScale.setMaximum(maxBitrate.getAudio() / 16);
 		audioBitrateScale.setSelection(currentAudioBitrate / 16);
 		audioBitrateScale.setPageIncrement(1);
