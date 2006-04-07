@@ -18,7 +18,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	private ToolItem convertTool, newSingleVideoTool, newDirectoryTool, newDVDTool;
 	private CTabFolder tabFolder;
 	private Map profileMenuItems, dimensionsMenuItems;
-	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, frameRate, panAndScan, advancedOptions, audioSync, automaticallySplit, volume, contents, about;
+	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, panAndScan, advancedOptions, audioSync, automaticallySplit, volume, contents, about;
 	private Menu videoSizeMenu;
 	private DropTarget target;
 	private String fileName;
@@ -196,10 +196,6 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		
 		videoSizeMenu = new Menu(shell, SWT.DROP_DOWN);
 		videoSize.setMenu(videoSizeMenu);
-		
-		frameRate = new MenuItem(optionsMenu, SWT.PUSH);
-		frameRate.setText("&Frame Rate...");
-		frameRate.addSelectionListener(this);
 
 		new MenuItem(optionsMenu, SWT.SEPARATOR);
 		
@@ -404,11 +400,6 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 
 		if (dimensionsMenuItems.containsKey(e.getSource())) {
 
-		}
-		
-		if (e.getSource() == frameRate) {
-			FrameRateDialog frameRateDialog = new FrameRateDialog(shell, SWT.NONE, converterOptions.getCurrentProfile().getMaxFrameRate(), converterOptions.getFrameRate());
-			converterOptions.writeOption("frameRate", "" + frameRateDialog.open());
 		}
 		
 		if (e.getSource() == panAndScan)

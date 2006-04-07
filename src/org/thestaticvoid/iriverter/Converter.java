@@ -184,7 +184,9 @@ public class Converter extends Thread {
 			scaledHeight = converterOptions.getDimensions().getHeight();
 		}
 		
-		String vf = "filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(converterOptions.getFrameRate() * 1000));
+		double ofps = (info.getFrameRate() > converterOptions.getCurrentProfile().getMaxFrameRate() ? converterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
+		
+		String vf = "filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000));
 		if (converterOptions.getPanAndScan())
 			vf += ",scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		else
@@ -227,10 +229,14 @@ public class Converter extends Thread {
 		}
 		commandList.add("-vf");
 		commandList.add(vf);
-		commandList.add("-af");
-		commandList.add(af);
+		
+		if (!af.equals("")) {
+			commandList.add("-af");
+			commandList.add(af);
+		}
+		
 		commandList.add("-ofps");
-		commandList.add("" + converterOptions.getFrameRate());
+		commandList.add("" + ofps);
 		commandList.add("-srate");
 		commandList.add("44100");
 		
@@ -279,7 +285,9 @@ public class Converter extends Thread {
 			scaledHeight = converterOptions.getDimensions().getHeight();
 		}
 		
-		String vf = "filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(converterOptions.getFrameRate() * 1000));
+		double ofps = (info.getFrameRate() > converterOptions.getCurrentProfile().getMaxFrameRate() ? converterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
+		
+		String vf = "filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000));
 		if (converterOptions.getPanAndScan())
 			vf += ",scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		else
@@ -324,10 +332,14 @@ public class Converter extends Thread {
 		}
 		commandList.add("-vf");
 		commandList.add(vf);
-		commandList.add("-af");
-		commandList.add(af);
+		
+		if (!af.equals("")) {
+			commandList.add("-af");
+			commandList.add(af);
+		}
+		
 		commandList.add("-ofps");
-		commandList.add("" + converterOptions.getFrameRate());
+		commandList.add("" + ofps);
 		commandList.add("-srate");
 		commandList.add("44100");
 		

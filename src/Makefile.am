@@ -13,7 +13,6 @@ launcher_DATA = iriverter.desktop
 endif
 
 iriverter_source_files = \
-	org/thestaticvoid/iriverter/FrameRateDialog.java \
 	org/thestaticvoid/iriverter/DVD.java \
 	org/thestaticvoid/iriverter/SingleVideoAdapter.java \
 	org/thestaticvoid/iriverter/DVDProgressDialog.java \

@@ -101,14 +101,6 @@ public class ConverterOptions {
 		
 		return Integer.parseInt(audioBitrate);
 	}
-	
-	public double getFrameRate() {
-		String frameRate = readOption("frameRate");
-		if (frameRate.equals(""))
-			return getCurrentProfile().getMaxFrameRate();
-		
-		return Double.parseDouble(frameRate);
-	}
 
 	public Dimensions getDimensions() {
 		String dimensions = readOption("dimensions");
