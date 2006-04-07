@@ -101,7 +101,7 @@ public class MPlayerInfo {
 	}
 	
 	public int getNumberOfTitles() {
-		Matcher matcher = Pattern.compile("There are [0-9]* titles").matcher(mplayerOutput);
+		Matcher matcher = Pattern.compile("ID_DVD_TITLES=[0-9]*").matcher(mplayerOutput);
 		matcher.find();
 		String output = matcher.group();
 	
