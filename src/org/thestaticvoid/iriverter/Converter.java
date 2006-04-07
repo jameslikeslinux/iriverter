@@ -191,7 +191,7 @@ public class Converter extends Thread {
 			vf += ",scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		vf += ",harddup";
 		
-		String af = "resample=44100";
+		String af = "";
 		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLNORM)
 			af = "volnorm," + af;
 		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME)
@@ -286,7 +286,7 @@ public class Converter extends Thread {
 			vf += ",scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
 		vf += ",harddup";
 		
-		String af = "resample=44100";
+		String af = "";
 		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLNORM)
 			af = "volnorm," + af;
 		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME)
