@@ -169,13 +169,7 @@ public class Converter extends Thread {
 			proc.destroy();
 	}
 	
-	public void convertSingleVideo(SingleVideoInfo singleVideoInfo) {
-		progressDialogInfo.setInputVideo(new File(singleVideoInfo.getInputVideo()).getName());
-		progressDialogInfo.setOutputVideo(new File(singleVideoInfo.getOutputVideo()).getName());
-		progressDialogInfo.setStatus("Gathering information about the input video...");
-		
-		MPlayerInfo info = new MPlayerInfo(singleVideoInfo.getInputVideo());
-		
+	private List prepareBaseCommandList(String inputVideo, String outputVideo, MPlayerInfo info) {		
 		int scaledWidth = converterOptions.getDimensions().getWidth();
 		int scaledHeight = (info.getDimensions().getHeight() * converterOptions.getDimensions().getWidth()) / info.getDimensions().getWidth();
 		
@@ -202,7 +196,7 @@ public class Converter extends Thread {
 		List commandList = new ArrayList();
 		
 		commandList.add(MPlayerInfo.getMPlayerPath() + "mencoder");
-		commandList.add(singleVideoInfo.getInputVideo());
+		commandList.add(inputVideo);
 		
 		if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
 			commandList.add("-of");
@@ -212,7 +206,7 @@ public class Converter extends Thread {
 		}
 		
 		commandList.add("-o");
-		commandList.add(singleVideoInfo.getOutputVideo());
+		commandList.add(outputVideo);
 		commandList.add("-ovc");
 		commandList.add("xvid");
 		commandList.add("-xvidencopts");
@@ -248,6 +242,18 @@ public class Converter extends Thread {
 			commandList.add("-delay");
 			commandList.add("" + (offset / 1000.0));
 		}
+		
+		return commandList;
+	}
+	
+	public void convertSingleVideo(SingleVideoInfo singleVideoInfo) {
+		progressDialogInfo.setInputVideo(new File(singleVideoInfo.getInputVideo()).getName());
+		progressDialogInfo.setOutputVideo(new File(singleVideoInfo.getInputVideo()).getName());
+		progressDialogInfo.setStatus("Gathering information about the input video...");
+		
+		MPlayerInfo info = new MPlayerInfo(singleVideoInfo.getInputVideo());
+		
+		List commandList = prepareBaseCommandList(singleVideoInfo.getInputVideo(), singleVideoInfo.getOutputVideo(), info);
 		
 		String[] command = new String[commandList.size()];
 		for (int i = 0; i < command.length; i++)
@@ -277,72 +283,11 @@ public class Converter extends Thread {
 		
 		MPlayerInfo info = new MPlayerInfo("dvd://" + dvdInfo.getTitle(), dvdInfo.getDrive());
 		
-		int scaledWidth = converterOptions.getDimensions().getWidth();
-		int scaledHeight = (info.getDimensions().getHeight() * converterOptions.getDimensions().getWidth()) / info.getDimensions().getWidth();
+		List commandList = prepareBaseCommandList("dvd://" + dvdInfo.getTitle(), dvdInfo.getOutputVideo(), info);
 		
-		if (scaledHeight > converterOptions.getDimensions().getHeight()) {
-			scaledWidth = (scaledWidth * converterOptions.getDimensions().getHeight()) / scaledHeight;
-			scaledHeight = converterOptions.getDimensions().getHeight();
-		}
-		
-		double ofps = (info.getFrameRate() > converterOptions.getCurrentProfile().getMaxFrameRate() ? converterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
-		
-		String vf = "filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000));
-		if (converterOptions.getPanAndScan())
-			vf += ",scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
-		else
-			vf += ",scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
-		vf += ",harddup";
-		
-		String af = "";
-		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLNORM)
-			af = "volnorm," + af;
-		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME)
-			af = "volume=" + converterOptions.getGain() + "," + af;
-		
-		List commandList = new ArrayList();
-		
-		commandList.add(MPlayerInfo.getMPlayerPath() + "mencoder");
 		commandList.add("-dvd-device");
 		commandList.add(dvdInfo.getDrive());
-		commandList.add("dvd://" + dvdInfo.getTitle());
-		
-		if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
-			commandList.add("-of");
-			commandList.add("lavf");
-			commandList.add("-lavfopts");
-			commandList.add("format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames");
-		}
-		
-		commandList.add("-o");
-		commandList.add(dvdInfo.getOutputVideo());
-		commandList.add("-ovc");
-		commandList.add("xvid");
-		commandList.add("-xvidencopts");
-		commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":max_bframes=0");
-		commandList.add("-oac");
-		if (converterOptions.getCurrentProfile().getAudioFormat().equals("aac")) {
-			commandList.add("faac");
-			commandList.add("-faacopts");
-			commandList.add("br=" + converterOptions.getAudioBitrate());
-		} else {
-			commandList.add("mp3lame");
-			commandList.add("-lameopts");
-			commandList.add("mode=2:cbr:br=" + converterOptions.getAudioBitrate());
-		}
-		commandList.add("-vf");
-		commandList.add(vf);
-		
-		if (!af.equals("")) {
-			commandList.add("-af");
-			commandList.add(af);
-		}
-		
-		commandList.add("-ofps");
-		commandList.add("" + ofps);
-		commandList.add("-srate");
-		commandList.add("44100");
-		
+	
 		if (dvdInfo.getAudioStream() > -1) {
 			commandList.add("-aid");
 			commandList.add("" + dvdInfo.getAudioStream());
@@ -356,15 +301,6 @@ public class Converter extends Thread {
 		if (dvdInfo.getChapters() != null) {
 			commandList.add("-chapter");
 			commandList.add(dvdInfo.getChapters()[0].getFirstChapter() + "-" + dvdInfo.getChapters()[0].getLastChapter());
-		}
-		
-		if (!converterOptions.getAutoSync()) {
-			commandList.add("-mc");
-			commandList.add("0");
-			
-			int offset = converterOptions.getAudioDelay();
-			commandList.add("-delay");
-			commandList.add("" + (offset / 1000.0));
 		}
 		
 		String[] command = new String[commandList.size()];
