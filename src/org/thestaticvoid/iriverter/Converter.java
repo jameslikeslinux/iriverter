@@ -29,6 +29,10 @@ public class Converter extends Thread {
 			boolean validOutput = true;
 			if (jobs.get(i) instanceof OutputVideoInfo) {
 				OutputVideoInfo outputVideoInfo = (OutputVideoInfo) jobs.get(i);
+				
+				if (outputVideoInfo.getOutputVideo().equals(""))
+					continue;
+				
 				if (!outputVideoInfo.getOutputVideo().endsWith("." + converterOptions.getCurrentProfile().getWrapperFormat()) && !outputVideoInfo.getOutputVideo().equals(""))
 					outputVideoInfo.setOutputVideo(outputVideoInfo.getOutputVideo() + "." + converterOptions.getCurrentProfile().getWrapperFormat());
 				
@@ -40,7 +44,7 @@ public class Converter extends Thread {
 			
 			if (jobs.get(i) instanceof SingleVideoInfo) {
 				SingleVideoInfo singleVideoInfo = (SingleVideoInfo) jobs.get(i);
-				if (new File(singleVideoInfo.getInputVideo()).exists() && !singleVideoInfo.getOutputVideo().equals("") && validOutput)
+				if (new File(singleVideoInfo.getInputVideo()).exists() && validOutput)
 					newJobs.add(singleVideoInfo);
 			} else if (jobs.get(i) instanceof DirectoryInfo) {
 				DirectoryInfo directoryInfo = (DirectoryInfo) jobs.get(i);
@@ -52,7 +56,7 @@ public class Converter extends Thread {
 						newJobs.add(directoryInfo);
 			} else if (jobs.get(i) instanceof DVDInfo) {
 				DVDInfo dvdInfo = (DVDInfo) jobs.get(i);
-				if (!dvdInfo.getDrive().equals("") && !dvdInfo.getOutputVideo().equals("") && validOutput)
+				if (!dvdInfo.getDrive().equals("") && validOutput)
 					newJobs.add(dvdInfo);
 			} else if (jobs.get(i) instanceof ManualSplitInfo) {
 				ManualSplitInfo manualSplitInfo = (ManualSplitInfo) jobs.get(i);
