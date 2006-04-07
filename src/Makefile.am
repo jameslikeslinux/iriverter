@@ -116,7 +116,7 @@ $(iriverter_jar_class_files): %.class: %.java
 	$(GCJ) -C -classpath $(SWT_JAR):. $<
 else
 $(iriverter_jar_class_files): %.class: %.java
-	$(JAVAC) -classpath $(SWT_JAR):. $<
+	$(JAVAC) -source 1.4 -target 1.4 -classpath $(SWT_JAR):. $<
 endif
 
 all_iriverter_jar_class_files = $(shell find . -iname '*.class' | sed 's/\$$/\\\$$/g')
