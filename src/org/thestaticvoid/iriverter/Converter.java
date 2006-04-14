@@ -207,6 +207,9 @@ public class Converter extends Thread {
 			commandList.add("lavf");
 			commandList.add("-lavfopts");
 			commandList.add("format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames");
+		} else {
+			commandList.add("-ffourcc");
+			commandList.add("XVID");
 		}
 		
 		commandList.add("-o");
