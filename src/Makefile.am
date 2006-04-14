@@ -49,40 +49,12 @@ iriverter_source_files = \
 	org/thestaticvoid/iriverter/Config.java \
 	org/thestaticvoid/iriverter/Profile.java \
 	org/thestaticvoid/iriverter/Bitrate.java \
-	org/thestaticvoid/iriverter/regex/Pattern.java \
-	org/thestaticvoid/iriverter/regex/Matcher.java \
-	org/thestaticvoid/iriverter/regex/PatternSyntaxException.java \
 	org/thestaticvoid/iriverter/Mark.java \
 	org/thestaticvoid/iriverter/ChapterDialog.java \
 	org/thestaticvoid/iriverter/DirectoryAdapter.java \
 	org/thestaticvoid/iriverter/VideoFileFilter.java \
 	org/thestaticvoid/iriverter/AutomaticallySplitDialog.java \
 	org/thestaticvoid/iriverter/VolumeDialog.java \
-	org/thestaticvoid/iriverter/regexp/REToken.java \
-	org/thestaticvoid/iriverter/regexp/RE.java \
-	org/thestaticvoid/iriverter/regexp/RETokenEndSub.java \
-	org/thestaticvoid/iriverter/regexp/UncheckedRE.java \
-	org/thestaticvoid/iriverter/regexp/RESyntax.java \
-	org/thestaticvoid/iriverter/regexp/REMatchEnumeration.java \
-	org/thestaticvoid/iriverter/regexp/CharIndexedCharArray.java \
-	org/thestaticvoid/iriverter/regexp/CharIndexedString.java \
-	org/thestaticvoid/iriverter/regexp/RETokenChar.java \
-	org/thestaticvoid/iriverter/regexp/RETokenOneOf.java \
-	org/thestaticvoid/iriverter/regexp/RETokenWordBoundary.java \
-	org/thestaticvoid/iriverter/regexp/RETokenRepeated.java \
-	org/thestaticvoid/iriverter/regexp/RETokenLookAhead.java \
-	org/thestaticvoid/iriverter/regexp/REMatch.java \
-	org/thestaticvoid/iriverter/regexp/REException.java \
-	org/thestaticvoid/iriverter/regexp/CharIndexedInputStream.java \
-	org/thestaticvoid/iriverter/regexp/RETokenPOSIX.java \
-	org/thestaticvoid/iriverter/regexp/CharIndexedStringBuffer.java \
-	org/thestaticvoid/iriverter/regexp/RETokenEnd.java \
-	org/thestaticvoid/iriverter/regexp/RETokenStart.java \
-	org/thestaticvoid/iriverter/regexp/RETokenRange.java \
-	org/thestaticvoid/iriverter/regexp/REFilterInputStream.java \
-	org/thestaticvoid/iriverter/regexp/RETokenBackRef.java \
-	org/thestaticvoid/iriverter/regexp/RETokenAny.java \
-	org/thestaticvoid/iriverter/regexp/CharIndexed.java \
 	org/thestaticvoid/iriverter/ProgressDialogInfo.java \
 	org/thestaticvoid/iriverter/MencoderStreamParser.java \
 	org/thestaticvoid/iriverter/ManualSplit.java
@@ -99,10 +71,6 @@ iriverter_icons = \
 	org/thestaticvoid/iriverter/icons/home-24.png \
 	org/thestaticvoid/iriverter/icons/forward-24.png \
 	org/thestaticvoid/iriverter/icons/singlevideo-16.png
-
-iriverter_resources = \
-	gnu/regexp/MessagesBundle_fr.properties \
-	gnu/regexp/MessagesBundle.properties
 
 if !BUILD_GCJ
 iriverter_jardir = $(pkgdatadir)/lib
@@ -122,7 +90,7 @@ endif
 all_iriverter_jar_class_files = $(shell find . -iname '*.class' | sed 's/\$$/\\\$$/g')
 
 iriverter.jar: $(iriverter_jar_class_files)
-	$(JAR) cf $@ $(all_iriverter_jar_class_files) $(iriverter_icons) $(iriverter_resources)
+	$(JAR) cf $@ $(all_iriverter_jar_class_files) $(iriverter_icons)
 
 swt.jar: $(SWT_JAR)
 	cp -f $< $@
@@ -144,7 +112,6 @@ endif
 EXTRA_DIST = \
 	$(iriverter_source_files) \
 	$(iriverter_icons) \
-	$(iriverter_resources) \
 	iriverter.desktop \
 	iriverter.ico \
 	manifest.xml \
