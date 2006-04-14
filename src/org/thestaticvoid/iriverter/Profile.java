@@ -61,11 +61,11 @@ public class Profile {
 	}
 	
 	public Dimensions[] getDimensions() {
-		StringTokenizer dimensionsTokens = new StringTokenizer(readOption("dimensions"));
-		Dimensions[] dimensions = new Dimensions[dimensionsTokens.countTokens()];
+		String[] dimensionsTokens = readOption("dimensions").split(" ");
+		Dimensions[] dimensions = new Dimensions[dimensionsTokens.length];
 
-		for (int i = 0; i < dimensions.length; i++)
-			dimensions[i] = new Dimensions(dimensionsTokens.nextToken());
+		for (int i = 0; i < dimensionsTokens.length; i++)
+			dimensions[i] = new Dimensions(dimensionsTokens[i]);
 
 		return dimensions;
 	}

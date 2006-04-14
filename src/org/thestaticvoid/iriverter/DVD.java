@@ -261,11 +261,7 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 
 				while ((line = input.readLine()) != null)
 					if (line.substring(0, 4).equals("/dev")) {
-						// originally used String.split() not available in GCJ
-						StringTokenizer tokens = new StringTokenizer(line);
-						tokens.nextToken();
-						tokens.nextToken();
-						String mountPoint = tokens.nextToken();
+						String mountPoint = line.split(" ")[2];
 						
 						if (new File(mountPoint + File.separator + "VIDEO_TS").exists())
 							drives.add(mountPoint);

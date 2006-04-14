@@ -1,8 +1,7 @@
 package org.thestaticvoid.iriverter;
 
-import org.thestaticvoid.iriverter.regex.*;
-
 import java.io.*;
+import java.util.regex.*;
 
 public class MencoderStreamParser extends Thread {
 	private ProgressDialogInfo progressDialogInfo;
