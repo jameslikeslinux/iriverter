@@ -1,4 +1,5 @@
-device=U10
+brand=iriver
+device=clix / U10
 maxVideoBitrate=384
 maxAudioBitrate=128
 dimensions=320x240

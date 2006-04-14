@@ -48,6 +48,10 @@ public class Profile {
 		return profileFileName.substring(0, profileFileName.indexOf('.'));
 	}
 	
+	public String getBrand() {
+		return readOption("brand");
+	}
+	
 	public String getDevice() {
 		return readOption("device");
 	}

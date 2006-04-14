@@ -1,3 +1,4 @@
+brand=iriver
 device=H300 Series
 maxVideoBitrate=500
 maxAudioBitrate=128

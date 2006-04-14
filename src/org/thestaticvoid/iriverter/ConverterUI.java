@@ -172,14 +172,42 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		profileMenuItems = new HashMap();
 		Profile[] profiles = Profile.getAllProfiles();
 		Profile currentProfile = converterOptions.getCurrentProfile();
-
+		
+		Map deviceToProfile = new HashMap();
+		Map brandToDevices = new TreeMap();
 		for (int i = 0; i < profiles.length; i++) {
-			MenuItem profileMenuItem = new MenuItem(deviceMenu, SWT.CHECK);
-			profileMenuItem.setText("&" + (i + 1) + " " + profiles[i].getDevice());
-			profileMenuItem.setSelection(profiles[i].getProfileName().equals(currentProfile.getProfileName()));
-			profileMenuItem.addSelectionListener(this);
+			Set devices = (Set) brandToDevices.get(profiles[i].getBrand());
+			if (devices == null) {
+				devices = new TreeSet();
+				brandToDevices.put(profiles[i].getBrand(), devices);
+			}
 			
-			profileMenuItems.put(profileMenuItem, profiles[i].getProfileName());
+			devices.add(profiles[i].getDevice());
+			deviceToProfile.put(profiles[i].getDevice(), profiles[i]);
+		}
+		
+		Iterator brandItr = brandToDevices.keySet().iterator();
+		while (brandItr.hasNext()) {
+			String brand = (String) brandItr.next();
+			
+			MenuItem brandMenuItem = new MenuItem(deviceMenu, SWT.CASCADE);
+			brandMenuItem.setText(brand);
+			
+			Menu brandMenu = new Menu(shell, SWT.DROP_DOWN);
+			brandMenuItem.setMenu(brandMenu);
+			
+			Iterator deviceItr = ((Set) brandToDevices.get(brand)).iterator();
+			while (deviceItr.hasNext()) {
+				String deviceStr = (String) deviceItr.next();
+				Profile profile = (Profile) deviceToProfile.get(deviceStr);
+				
+				MenuItem profileMenuItem = new MenuItem(brandMenu, SWT.CHECK);
+				profileMenuItem.setText(deviceStr);
+				profileMenuItem.setSelection(profile.getProfileName().equals(currentProfile.getProfileName()));
+				profileMenuItem.addSelectionListener(this);
+				
+				profileMenuItems.put(profileMenuItem, profile.getProfileName());
+			}
 		}
 		
 		new MenuItem(optionsMenu, SWT.SEPARATOR);

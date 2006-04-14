@@ -1,4 +1,5 @@
-device=iAudio X5
+brand=iAUDIO
+device=X5 Series
 maxVideoBitrate=256
 maxAudioBitrate=192
 dimensions=160x128

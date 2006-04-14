@@ -1,3 +1,4 @@
+brand=iriver
 device=PMP Series
 maxVideoBitrate=1500
 maxAudioBitrate=192
