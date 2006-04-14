@@ -201,7 +201,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				String deviceStr = (String) deviceItr.next();
 				Profile profile = (Profile) deviceToProfile.get(deviceStr);
 				
-				MenuItem profileMenuItem = new MenuItem(brandMenu, SWT.CHECK);
+				MenuItem profileMenuItem = new MenuItem(brandMenu, SWT.RADIO);
 				profileMenuItem.setText("&" + (j + 1) + " " + deviceStr);
 				profileMenuItem.setSelection(profile.getProfileName().equals(currentProfile.getProfileName()));
 				profileMenuItem.addSelectionListener(this);
@@ -493,7 +493,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		Dimensions currentDimensions = converterOptions.getDimensions();
 
 		for (int i = 0; i < dimensions.length; i++) {
-			MenuItem dimensionsMenuItem = new MenuItem(videoSizeMenu, SWT.CHECK);
+			MenuItem dimensionsMenuItem = new MenuItem(videoSizeMenu, SWT.RADIO);
 			dimensionsMenuItem.setText("&" + (i + 1) + " " + dimensions[i].toString());
 			dimensionsMenuItem.setSelection(dimensions[i].toString().equals(currentDimensions.toString()));
 			dimensionsMenuItem.addSelectionListener(this);
