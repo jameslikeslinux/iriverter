@@ -187,22 +187,22 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		}
 		
 		Iterator brandItr = brandToDevices.keySet().iterator();
-		while (brandItr.hasNext()) {
+		for (int i = 0; brandItr.hasNext(); i++) {
 			String brand = (String) brandItr.next();
 			
 			MenuItem brandMenuItem = new MenuItem(deviceMenu, SWT.CASCADE);
-			brandMenuItem.setText(brand);
+			brandMenuItem.setText("&" + (i + 1) + " " + brand);
 			
 			Menu brandMenu = new Menu(shell, SWT.DROP_DOWN);
 			brandMenuItem.setMenu(brandMenu);
 			
 			Iterator deviceItr = ((Set) brandToDevices.get(brand)).iterator();
-			while (deviceItr.hasNext()) {
+			for (int j = 0; deviceItr.hasNext(); j++) {
 				String deviceStr = (String) deviceItr.next();
 				Profile profile = (Profile) deviceToProfile.get(deviceStr);
 				
 				MenuItem profileMenuItem = new MenuItem(brandMenu, SWT.CHECK);
-				profileMenuItem.setText(deviceStr);
+				profileMenuItem.setText("&" + (j + 1) + " " + deviceStr);
 				profileMenuItem.setSelection(profile.getProfileName().equals(currentProfile.getProfileName()));
 				profileMenuItem.addSelectionListener(this);
 				
