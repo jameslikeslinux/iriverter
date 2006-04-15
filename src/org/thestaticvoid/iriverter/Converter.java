@@ -174,6 +174,49 @@ public class Converter extends Thread {
 	}
 	
 	private List prepareBaseCommandList(String inputVideo, String outputVideo, MPlayerInfo info) {		
+		List commandList = new ArrayList();
+		
+		commandList.add(MPlayerInfo.getMPlayerPath() + "mencoder");
+		
+		commandList.add(inputVideo);
+		commandList.add("-o");
+		commandList.add(outputVideo);
+		
+		if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
+			commandList.add("-of");
+			commandList.add("lavf");
+			commandList.add("-lavfopts");
+			commandList.add("format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames");
+		}
+		
+		commandList.add("-ovc");
+		if (converterOptions.getCurrentProfile().getVideoFormat().equals("h264")) {
+			commandList.add("x264");
+			commandList.add("-x264encopts");
+			commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":bframes=0:level_idc=13:nocabac");
+		} else {
+			commandList.add("xvid");
+			commandList.add("-xvidencopts");
+			commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":max_bframes=0:profile=sp0");
+			commandList.add("-ffourcc");
+			commandList.add("DX50");
+		}
+		
+		commandList.add("-oac");
+		if (converterOptions.getCurrentProfile().getAudioFormat().equals("aac")) {
+			commandList.add("faac");
+			commandList.add("-faacopts");
+			commandList.add("br=" + converterOptions.getAudioBitrate() + ":object=1");
+		} else {
+			commandList.add("mp3lame");
+			commandList.add("-lameopts");
+			commandList.add("mode=2:cbr:br=" + converterOptions.getAudioBitrate());
+		}
+		
+		double ofps = (info.getFrameRate() > converterOptions.getCurrentProfile().getMaxFrameRate() ? converterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
+		commandList.add("-vf");
+		commandList.add("filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000)));
+		
 		int scaledWidth = converterOptions.getDimensions().getWidth();
 		int scaledHeight = (info.getDimensions().getHeight() * converterOptions.getDimensions().getWidth()) / info.getDimensions().getWidth();
 		
@@ -182,58 +225,21 @@ public class Converter extends Thread {
 			scaledHeight = converterOptions.getDimensions().getHeight();
 		}
 		
-		double ofps = (info.getFrameRate() > converterOptions.getCurrentProfile().getMaxFrameRate() ? converterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
-		
-		String vf = "filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000));
+		commandList.add("-vf-add");
 		if (converterOptions.getPanAndScan())
-			vf += ",scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
+			commandList.add("scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight());
 		else
-			vf += ",scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight();
-		vf += ",harddup";
+			commandList.add("scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight());
 		
-		String af = "";
-		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLNORM)
-			af = "volnorm," + af;
-		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME)
-			af = "volume=" + converterOptions.getGain() + "," + af;
+		commandList.add("-vf-add");
+		commandList.add("harddup");
 		
-		List commandList = new ArrayList();
-		
-		commandList.add(MPlayerInfo.getMPlayerPath() + "mencoder");
-		commandList.add(inputVideo);
-		
-		if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
-			commandList.add("-of");
-			commandList.add("lavf");
-			commandList.add("-lavfopts");
-			commandList.add("format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames");
-		} else {
-			commandList.add("-ffourcc");
-			commandList.add("XVID");
-		}
-		
-		commandList.add("-o");
-		commandList.add(outputVideo);
-		commandList.add("-ovc");
-		commandList.add("xvid");
-		commandList.add("-xvidencopts");
-		commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":max_bframes=0");
-		commandList.add("-oac");
-		if (converterOptions.getCurrentProfile().getAudioFormat().equals("aac")) {
-			commandList.add("faac");
-			commandList.add("-faacopts");
-			commandList.add("br=" + converterOptions.getAudioBitrate());
-		} else {
-			commandList.add("mp3lame");
-			commandList.add("-lameopts");
-			commandList.add("mode=2:cbr:br=" + converterOptions.getAudioBitrate());
-		}
-		commandList.add("-vf");
-		commandList.add(vf);
-		
-		if (!af.equals("")) {
+		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLNORM) {
 			commandList.add("-af");
-			commandList.add(af);
+			commandList.add("volnorm");
+		} else if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME) {
+			commandList.add("-af");
+			commandList.add("volume=" + converterOptions.getGain());
 		}
 		
 		commandList.add("-ofps");
@@ -242,12 +248,8 @@ public class Converter extends Thread {
 		commandList.add("44100");
 		
 		if (!converterOptions.getAutoSync()) {
-			commandList.add("-mc");
-			commandList.add("0");
-			
-			int offset = converterOptions.getAudioDelay();
 			commandList.add("-delay");
-			commandList.add("" + (offset / 1000.0));
+			commandList.add("" + (converterOptions.getAudioDelay() / 1000.0));
 		}
 		
 		return commandList;

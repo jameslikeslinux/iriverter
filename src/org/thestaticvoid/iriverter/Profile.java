@@ -94,6 +94,14 @@ public class Profile {
 		return wrapperFormat;
 	}
 	
+	public String getVideoFormat() {
+		String videoFormat = readOption("videoFormat");
+		if (videoFormat.equals(""))
+			return "mpeg4";
+		
+		return videoFormat;
+	}
+	
 	public String getAudioFormat() {
 		String audioFormat = readOption("audioFormat");
 		if (audioFormat.equals(""))

@@ -72,6 +72,9 @@ iriverter_icons = \
 	org/thestaticvoid/iriverter/icons/forward-24.png \
 	org/thestaticvoid/iriverter/icons/singlevideo-16.png
 
+iriverter_resources = \
+	gnu/regexp/MessagesBundle.properties
+
 if !BUILD_GCJ
 iriverter_jardir = $(pkgdatadir)/lib
 iriverter_jar_DATA = iriverter.jar
@@ -90,7 +93,7 @@ endif
 all_iriverter_jar_class_files = $(shell find . -iname '*.class' | sed 's/\$$/\\\$$/g')
 
 iriverter.jar: $(iriverter_jar_class_files)
-	$(JAR) cf $@ $(all_iriverter_jar_class_files) $(iriverter_icons)
+	$(JAR) cf $@ $(all_iriverter_jar_class_files) $(iriverter_icons) $(iriverter_resources)
 
 swt.jar: $(SWT_JAR)
 	cp -f $< $@
