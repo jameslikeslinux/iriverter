@@ -53,9 +53,8 @@ public class LogViewer {
 	
 	public void logMessage(final String message) {
 		Display.getDefault().syncExec(new Runnable() {
-			public void run() {				
+			public void run() {
 				text.append(message + "\n");
-				text.setCaretOffset(text.getCharCount());
 				
 				if (message.charAt(0) == Logger.PREFIX[Logger.INFO].charAt(0))
 					lineColors.add(new Color(Display.getDefault(), 240, 255, 126));	// light yellow
@@ -68,6 +67,8 @@ public class LogViewer {
 				
 				for (int i = 0; i < lineColors.size(); i++)
 					text.setLineBackground(i, 1, (Color) lineColors.get(i));
+				
+				text.setSelection(text.getCharCount());
 			}
 		});
 	}
