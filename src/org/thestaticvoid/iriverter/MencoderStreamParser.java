@@ -25,9 +25,13 @@ public class MencoderStreamParser extends Thread {
 		progressUpdater.start();
 		
 		try {			
-			while ((inputLine = input.readLine()) != null)
+			while ((inputLine = input.readLine()) != null) {
+				if (inputLine.indexOf("Pos:") == -1)
+					Logger.logMessage(inputLine);
+				
 				if (inputLine.indexOf("Video stream:") > -1)
 					lengthLine = inputLine;
+			}
 			
 			input.close();
 		} catch (Exception e) {

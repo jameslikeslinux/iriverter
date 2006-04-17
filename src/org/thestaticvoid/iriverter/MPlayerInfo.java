@@ -104,8 +104,7 @@ public class MPlayerInfo {
 		matcher.find();
 		String output = matcher.group();
 	
-		// originally used String.split() not available in GCJ
-		return Integer.parseInt(output.substring(10, output.indexOf(" titles")));
+		return Integer.parseInt(output.substring(14));
 	}
 	
 	public int getNumberOfChapters() {

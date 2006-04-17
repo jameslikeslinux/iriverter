@@ -197,9 +197,7 @@ public class Converter extends Thread {
 		} else {
 			commandList.add("xvid");
 			commandList.add("-xvidencopts");
-			commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":max_bframes=0:profile=sp0");
-			commandList.add("-ffourcc");
-			commandList.add("DX50");
+			commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":max_bframes=0");
 		}
 		
 		commandList.add("-oac");
@@ -388,10 +386,10 @@ public class Converter extends Thread {
 		MencoderStreamParser inputStream = null;
 		MencoderStreamParser errorStream = null;
 		
-		System.out.print("DEBUG--- Running: ");
+		String commandStr = "";
 		for (int i = 0; i < command.length; i++)
-			System.out.print(command[i] + " ");
-		System.out.println();
+			commandStr += command[i] + " ";
+		Logger.logMessage(commandStr);
 		
 		try {
 			proc = Runtime.getRuntime().exec(command);

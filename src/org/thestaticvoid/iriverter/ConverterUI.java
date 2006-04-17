@@ -18,7 +18,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	private ToolItem convertTool, newSingleVideoTool, newDirectoryTool, newDVDTool;
 	private CTabFolder tabFolder;
 	private Map profileMenuItems, dimensionsMenuItems;
-	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, panAndScan, advancedOptions, audioSync, automaticallySplit, volume, contents, about;
+	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, panAndScan, advancedOptions, audioSync, automaticallySplit, volume, contents, logViewer, about;
 	private Menu videoSizeMenu;
 	private DropTarget target;
 	private String fileName;
@@ -264,6 +264,12 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		contents.setAccelerator(SWT.F1);
 		contents.addSelectionListener(this);
 		
+		logViewer = new MenuItem(helpMenu, SWT.PUSH);
+		logViewer.setText("&Log Viewer");
+		logViewer.addSelectionListener(this);
+		
+		new MenuItem(helpMenu, SWT.SEPARATOR);
+		
 		about = new MenuItem(helpMenu, SWT.PUSH);
 		about.setText("&About");
 		about.addSelectionListener(this);
@@ -479,6 +485,13 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			new HelpBrowser(index);
 		}
 		
+		if (e.getSource() == logViewer) {
+			if (LogViewer.getSingleton() == null)
+				new LogViewer();
+			else
+				LogViewer.getSingleton().getShell().setActive();
+		}
+		
 		if (e.getSource() == about)
 			new AboutDialog(shell, SWT.NONE).open();
 	}
@@ -652,6 +665,18 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	}
 	
 	public static void main(String[] args) {
-		ConverterUI ui = new ConverterUI();
+		try {
+			ConverterUI ui = new ConverterUI();
+		} catch (Exception e) {
+			String message = "An unhandled exception occured: " + e.getMessage() + "\n\n";
+			StackTraceElement[] st = e.getStackTrace();
+			for (int i = 0; i < st.length; i++)
+				message += st[i] + "\n";
+			
+			MessageBox messageBox = new MessageBox(new Shell(Display.getDefault()), SWT.ICON_ERROR | SWT.OK);
+			messageBox.setText("Error");
+			messageBox.setMessage(message);
+			messageBox.open();
+		}
 	}
 }
