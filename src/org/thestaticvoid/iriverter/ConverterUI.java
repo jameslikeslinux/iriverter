@@ -667,9 +667,9 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	public static void main(String[] args) {
 		try {
 			ConverterUI ui = new ConverterUI();
-		} catch (Throwable e) {
-			String message = "An unhandled exception occured: " + e.getMessage() + "\n\n";
-			StackTraceElement[] st = e.getStackTrace();
+		} catch (Throwable t) {
+			String message = "An unhandled exception occured: " + t.getMessage() + "\n\n";
+			StackTraceElement[] st = t.getStackTrace();
 			for (int i = 0; i < st.length; i++)
 				message += st[i] + "\n";
 			
@@ -677,7 +677,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			
 			MessageBox messageBox = new MessageBox(new Shell(Display.getDefault()), SWT.ICON_ERROR | SWT.OK);
 			messageBox.setText("Error");
-			messageBox.setMessage(message);
+			messageBox.setMessage("An unhandled exception occured.  Please see the log for details.");
 			messageBox.open();
 		}
 	}
