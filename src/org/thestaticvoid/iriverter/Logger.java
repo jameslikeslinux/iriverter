@@ -3,6 +3,9 @@ package org.thestaticvoid.iriverter;
 import java.io.*;
 
 public class Logger {
+	public static final int INFO = 0, ERROR = 1, MPLAYER = 2;
+	public static final String[] PREFIX = {"--- ", "!!! ", ">>> "};
+	                      
 	private static PrintWriter output;
 	
 	private static void openLogFile() {
@@ -16,7 +19,12 @@ public class Logger {
 		}
 	}
 	
-	public static void logMessage(String message) {
+	public static void logMessage(String message, int type) {
+		String[] messageLines = message.split("\n");
+		message = "";
+		for (int i = 0; i < messageLines.length; i++)
+			message += PREFIX[type] + messageLines[i] + (i == messageLines.length - 1 ? "" : "\n");
+		
 		System.out.println(message);
 		
 		if (output == null)

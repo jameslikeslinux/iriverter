@@ -35,7 +35,7 @@ public class MPlayerInfo {
 					String line;
 					while ((line = input.readLine()) != null) {
 						mplayerOutput.append(line + "\n");
-						Logger.logMessage(line);
+						Logger.logMessage(line, Logger.MPLAYER);
 					}
 					
 					input.close();
@@ -51,7 +51,7 @@ public class MPlayerInfo {
 					BufferedReader input = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 					String line;
 					while ((line = input.readLine()) != null)
-						Logger.logMessage(line);
+						Logger.logMessage(line, Logger.MPLAYER);
 					
 					input.close();
 				} catch (IOException io) {

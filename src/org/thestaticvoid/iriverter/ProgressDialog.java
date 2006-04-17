@@ -12,7 +12,6 @@ public class ProgressDialog extends Dialog implements SelectionListener, Progres
 	private ProgressBar progressBar;
 	private String syncInputVideo, syncOutputVideo, syncStatus;
 	private int currentJob, totalJobs, syncPercentComplete;
-	private boolean syncSuccess;
 	
 	public ProgressDialog(Shell parent, int style) {
 		super(parent, style);
@@ -100,12 +99,10 @@ public class ProgressDialog extends Dialog implements SelectionListener, Progres
 		close();
 	}
 	
-	public synchronized void complete(boolean success) {
-		syncSuccess = success;
-		
+	public synchronized void complete(final boolean success) {		
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				if (!syncSuccess) {
+				if (!success) {
 					MessageBox dialog = new MessageBox(getParent().getShell(), SWT.ICON_ERROR);
 					dialog.setText("There Was an Error While Converting");
 					dialog.setMessage("An error occurred while converting " + inputVideo.getText());

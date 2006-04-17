@@ -667,11 +667,13 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	public static void main(String[] args) {
 		try {
 			ConverterUI ui = new ConverterUI();
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			String message = "An unhandled exception occured: " + e.getMessage() + "\n\n";
 			StackTraceElement[] st = e.getStackTrace();
 			for (int i = 0; i < st.length; i++)
 				message += st[i] + "\n";
+			
+			Logger.logMessage(message, Logger.ERROR);
 			
 			MessageBox messageBox = new MessageBox(new Shell(Display.getDefault()), SWT.ICON_ERROR | SWT.OK);
 			messageBox.setText("Error");

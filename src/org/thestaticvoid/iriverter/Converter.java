@@ -254,11 +254,17 @@ public class Converter extends Thread {
 	}
 	
 	public void convertSingleVideo(SingleVideoInfo singleVideoInfo) {
+		Logger.logMessage("Single Video: " + singleVideoInfo.getInputVideo(), Logger.INFO);
+		
 		progressDialogInfo.setInputVideo(new File(singleVideoInfo.getInputVideo()).getName());
-		progressDialogInfo.setOutputVideo(new File(singleVideoInfo.getInputVideo()).getName());
+		progressDialogInfo.setOutputVideo(new File(singleVideoInfo.getOutputVideo()).getName());
 		progressDialogInfo.setStatus("Gathering information about the input video...");
 		
 		MPlayerInfo info = new MPlayerInfo(singleVideoInfo.getInputVideo());
+		if (!info.videoSupported()) {
+			Logger.logMessage("Unsupported video", Logger.ERROR);
+			return;
+		}
 		
 		List commandList = prepareBaseCommandList(singleVideoInfo.getInputVideo(), singleVideoInfo.getOutputVideo(), info);
 		
@@ -273,7 +279,7 @@ public class Converter extends Thread {
 		}
 	}
 	
-	public void convertDVD(DVDInfo dvdInfo) {
+	public void convertDVD(DVDInfo dvdInfo) {		
 		String inputVideo = "Title " + dvdInfo.getTitle() + " of the DVD at " + dvdInfo.getDrive();
 		
 		Chapters[] chapters = dvdInfo.getChapters();
@@ -283,6 +289,8 @@ public class Converter extends Thread {
 			else 
 				inputVideo = "Chapters " + chapters[0].getFirstChapter() + "-" + chapters[0].getLastChapter() + " of " + inputVideo;
 		}
+		
+		Logger.logMessage("DVD: " + inputVideo, Logger.INFO);
 		
 		progressDialogInfo.setInputVideo(inputVideo);
 		progressDialogInfo.setOutputVideo(new File(dvdInfo.getOutputVideo()).getName());
@@ -322,6 +330,8 @@ public class Converter extends Thread {
 	}
 	
 	public void manuallySplitVideo(ManualSplitInfo manualSplitInfo) {
+		Logger.logMessage("Manual Split: " + manualSplitInfo.getVideo(), Logger.INFO);
+		
 		String outputVideo = manualSplitInfo.getVideo().substring(0, manualSplitInfo.getVideo().lastIndexOf('.')) + ".part" + manualSplitInfo.getPart() + ".avi";
 		
 		progressDialogInfo.setInputVideo(manualSplitInfo.getVideo());
@@ -357,6 +367,8 @@ public class Converter extends Thread {
 			File tempFile = File.createTempFile("iriverter-", ".avi");
 			tempFile.deleteOnExit();
 			
+			Logger.logMessage("Join Videos: " + tempFile, Logger.INFO);
+			
 			progressDialogInfo.setOutputVideo(tempFile.getName());
 			progressDialogInfo.setStatus("Concatenating videos to a temporary file...");
 			
@@ -372,6 +384,8 @@ public class Converter extends Thread {
 			progressDialogInfo.setPercentComplete(100);
 			
 			if (!isCanceled) {
+				Logger.logMessage("Writing header...", Logger.INFO);
+				
 				progressDialogInfo.setInputVideo(tempFile.getName());
 				progressDialogInfo.setOutputVideo(new File(joinVideosInfo.getOutputVideo()).getName());
 				progressDialogInfo.setStatus("Writing header");
@@ -389,7 +403,7 @@ public class Converter extends Thread {
 		String commandStr = "";
 		for (int i = 0; i < command.length; i++)
 			commandStr += command[i] + " ";
-		Logger.logMessage(commandStr);
+		Logger.logMessage(commandStr, Logger.INFO);
 		
 		try {
 			proc = Runtime.getRuntime().exec(command);

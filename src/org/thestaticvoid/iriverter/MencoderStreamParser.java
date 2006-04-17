@@ -27,7 +27,7 @@ public class MencoderStreamParser extends Thread {
 		try {			
 			while ((inputLine = input.readLine()) != null) {
 				if (inputLine.indexOf("Pos:") == -1)
-					Logger.logMessage(inputLine);
+					Logger.logMessage(inputLine, Logger.MPLAYER);
 				
 				if (inputLine.indexOf("Video stream:") > -1)
 					lengthLine = inputLine;
