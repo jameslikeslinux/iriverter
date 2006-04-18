@@ -94,8 +94,11 @@ public class LogViewer implements SelectionListener {
 	}
 	
 	public void logMessage(final String message) {
+		if (message.equals(""))
+			return;
+		
 		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
+			public void run() {				
 				text.append(message + "\n");
 				
 				if (message.charAt(0) == Logger.PREFIX[Logger.INFO].charAt(0))
