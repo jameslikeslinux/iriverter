@@ -53,7 +53,7 @@ public class AboutDialog extends Dialog implements SelectionListener {
 		appDesc.setLayoutData(gridData);
 		
 		Label appCopyright = new Label(shell, SWT.NONE);
-		appCopyright.setText("Copyright \u00a9 2005 James Lee\n");
+		appCopyright.setText("Copyright © 2005-2006 James Lee\n");
 		fontData = appCopyright.getFont().getFontData();
 		fontData[0].setHeight(fontData[0].getHeight() - 2);
 		appCopyright.setFont(new Font(getParent().getDisplay(), fontData));
