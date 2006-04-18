@@ -2,6 +2,7 @@ package org.thestaticvoid.iriverter;
 
 import java.io.*;
 import java.util.*;
+import java.text.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
@@ -42,7 +43,7 @@ public class LogViewer implements SelectionListener {
 		
 		String[] lines = Logger.getLogText().split("\n");
 		for (int i = 0; i < lines.length; i++)
-			logMessage(lines[i]);
+			logMessage(lines[i]);		
 
 		shell.open();
 		
@@ -66,6 +67,7 @@ public class LogViewer implements SelectionListener {
 			fileDialog.setText("Output Video");
 			fileDialog.setFilterExtensions(new String[]{"*.txt"});
 			fileDialog.setFilterNames(new String[]{"Text Files (*.txt)"});
+			fileDialog.setFileName("iriverter-" + new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) + ".txt");
 			String file = fileDialog.open();
 			if (file != null)
 				try {

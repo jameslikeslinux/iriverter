@@ -46,9 +46,9 @@ public class Logger {
 	}
 	
 	public static String getLogText() {
-		BufferedReader input = null;
+		InputStream input = null;
 		try {
-			input = new BufferedReader(new FileReader(new File(System.getProperty("user.home") + File.separator + ".iriverter.log")));
+			input = new FileInputStream(new File(System.getProperty("user.home") + File.separator + ".iriverter.log"));
 		} catch (IOException e) {
 			// empty
 		}
@@ -56,9 +56,10 @@ public class Logger {
 		String text = "";
 		if (input != null) {
 			try {
-				String line;
-				while ((line = input.readLine()) != null)
-					text += line + "\n";
+				int read;
+				byte[] buffer = new byte[4096];
+				while ((read = input.read(buffer)) > 0)
+					text += new String(buffer, 0, read);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
