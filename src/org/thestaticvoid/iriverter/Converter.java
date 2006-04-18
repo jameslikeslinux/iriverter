@@ -210,8 +210,10 @@ public class Converter extends Thread {
 		}
 		
 		double ofps = (info.getFrameRate() > ConverterOptions.getCurrentProfile().getMaxFrameRate() ? ConverterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
-		commandList.add("-vf");
-		commandList.add("filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000)));
+		if (info.getFrameRate() != ofps && info.getFrameRate() < 1000) {	// HACK: wmv always shows 1000 fps
+			commandList.add("-vf-add");
+			commandList.add("filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000)));
+		}
 		
 		int scaledWidth = ConverterOptions.getDimensions().getWidth();
 		int scaledHeight = (info.getDimensions().getHeight() * ConverterOptions.getDimensions().getWidth()) / info.getDimensions().getWidth();
