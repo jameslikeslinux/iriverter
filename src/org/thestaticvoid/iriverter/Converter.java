@@ -6,15 +6,13 @@ import java.util.*;
 public class Converter extends Thread {
 	private List jobs, notSplitVideos;
 	private ProgressDialogInfo progressDialogInfo;
-	private ConverterOptions converterOptions;
 	private Process proc;
 	private boolean isCanceled;
 	private int exitCode;
 	
-	public Converter(List jobs, ProgressDialogInfo progressDialogInfo, ConverterOptions converterOptions) {
-		this.jobs = Converter.checkForOverwritingFiles(Converter.expandSingleJobsToMultiple(Converter.removeInvalidJobs(jobs, converterOptions), converterOptions));
+	public Converter(List jobs, ProgressDialogInfo progressDialogInfo) {
+		this.jobs = Converter.checkForOverwritingFiles(Converter.expandSingleJobsToMultiple(Converter.removeInvalidJobs(jobs)));
 		this.progressDialogInfo = progressDialogInfo;
-		this.converterOptions = converterOptions;
 		isCanceled = false;
 		
 		notSplitVideos = new ArrayList();
@@ -22,7 +20,7 @@ public class Converter extends Thread {
 		progressDialogInfo.setTotalJobs(this.jobs.size());
 	}
 	
-	public static List removeInvalidJobs(List jobs, ConverterOptions converterOptions) {
+	public static List removeInvalidJobs(List jobs) {
 		List newJobs = new ArrayList();
 		
 		for (int i = 0; i < jobs.size(); i++) {
@@ -33,8 +31,8 @@ public class Converter extends Thread {
 				if (outputVideoInfo.getOutputVideo().equals(""))
 					continue;
 				
-				if (!outputVideoInfo.getOutputVideo().endsWith("." + converterOptions.getCurrentProfile().getWrapperFormat()) && !outputVideoInfo.getOutputVideo().equals(""))
-					outputVideoInfo.setOutputVideo(outputVideoInfo.getOutputVideo() + "." + converterOptions.getCurrentProfile().getWrapperFormat());
+				if (!outputVideoInfo.getOutputVideo().endsWith("." + ConverterOptions.getCurrentProfile().getWrapperFormat()) && !outputVideoInfo.getOutputVideo().equals(""))
+					outputVideoInfo.setOutputVideo(outputVideoInfo.getOutputVideo() + "." + ConverterOptions.getCurrentProfile().getWrapperFormat());
 				
 				if (!new File(outputVideoInfo.getOutputVideo()).getParentFile().exists())
 					validOutput = new File(outputVideoInfo.getOutputVideo()).getParentFile().mkdirs();
@@ -72,12 +70,12 @@ public class Converter extends Thread {
 		return newJobs;
 	}
 	
-	public static List expandSingleJobsToMultiple(List jobs, ConverterOptions converterOptions) {
+	public static List expandSingleJobsToMultiple(List jobs) {
 		List newJobs = new ArrayList();
 		
 		for (int i = 0; i < jobs.size(); i++)	
 			if (jobs.get(i) instanceof DirectoryInfo)
-				newJobs.addAll(convertDirectoryToSingleVideos((DirectoryInfo) jobs.get(i), converterOptions));
+				newJobs.addAll(convertDirectoryToSingleVideos((DirectoryInfo) jobs.get(i)));
 			else if (jobs.get(i) instanceof DVDInfo)
 				newJobs.addAll(separateDVDChaptersToSingleDVDJobs((DVDInfo) jobs.get(i)));
 			else if (jobs.get(i) instanceof ManualSplitInfo)
@@ -88,16 +86,16 @@ public class Converter extends Thread {
 		return newJobs;
 	}
 	
-	public static List convertDirectoryToSingleVideos(DirectoryInfo directoryInfo, ConverterOptions converterOptions) {
+	public static List convertDirectoryToSingleVideos(DirectoryInfo directoryInfo) {
 		List newJobs = new ArrayList();
 		
 		String[] directory = new File(directoryInfo.getInputDirectory()).list(new VideoFileFilter());
 		
 		for (int i = 0; i < directory.length; i++)
 			if (new File(directoryInfo.getInputDirectory() + File.separator + directory[i]).isDirectory() && directoryInfo.getConvertSubdirectories())
-				newJobs.addAll(convertDirectoryToSingleVideos(new DirectoryAdapter(directoryInfo.getInputDirectory() + File.separator + directory[i], directoryInfo.getOutputDirectory() + File.separator + directory[i], directoryInfo.getConvertSubdirectories()), converterOptions));
+				newJobs.addAll(convertDirectoryToSingleVideos(new DirectoryAdapter(directoryInfo.getInputDirectory() + File.separator + directory[i], directoryInfo.getOutputDirectory() + File.separator + directory[i], directoryInfo.getConvertSubdirectories())));
 			else if (new File(directoryInfo.getInputDirectory() + File.separator + directory[i]).isFile())
-				newJobs.add(new SingleVideoAdapter(directoryInfo.getInputDirectory() + File.separator + directory[i], directoryInfo.getOutputDirectory() + File.separator + directory[i].substring(0, directory[i].lastIndexOf('.')) + "." + converterOptions.getCurrentProfile().getProfileName() + ".avi"));
+				newJobs.add(new SingleVideoAdapter(directoryInfo.getInputDirectory() + File.separator + directory[i], directoryInfo.getOutputDirectory() + File.separator + directory[i].substring(0, directory[i].lastIndexOf('.')) + "." + ConverterOptions.getCurrentProfile().getProfileName() + ".avi"));
 			
 		return newJobs;
 	}
@@ -182,7 +180,7 @@ public class Converter extends Thread {
 		commandList.add("-o");
 		commandList.add(outputVideo);
 		
-		if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
+		if (ConverterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
 			commandList.add("-of");
 			commandList.add("lavf");
 			commandList.add("-lavfopts");
@@ -190,54 +188,54 @@ public class Converter extends Thread {
 		}
 		
 		commandList.add("-ovc");
-		if (converterOptions.getCurrentProfile().getVideoFormat().equals("h264")) {
+		if (ConverterOptions.getCurrentProfile().getVideoFormat().equals("h264")) {
 			commandList.add("x264");
 			commandList.add("-x264encopts");
-			commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":bframes=0:level_idc=13:nocabac");
+			commandList.add("bitrate=" + ConverterOptions.getVideoBitrate() + ":bframes=0:level_idc=13:nocabac");
 		} else {
 			commandList.add("xvid");
 			commandList.add("-xvidencopts");
-			commandList.add("bitrate=" + converterOptions.getVideoBitrate() + ":max_bframes=0");
+			commandList.add("bitrate=" + ConverterOptions.getVideoBitrate() + ":max_bframes=0");
 		}
 		
 		commandList.add("-oac");
-		if (converterOptions.getCurrentProfile().getAudioFormat().equals("aac")) {
+		if (ConverterOptions.getCurrentProfile().getAudioFormat().equals("aac")) {
 			commandList.add("faac");
 			commandList.add("-faacopts");
-			commandList.add("br=" + converterOptions.getAudioBitrate() + ":object=1");
+			commandList.add("br=" + ConverterOptions.getAudioBitrate() + ":object=1");
 		} else {
 			commandList.add("mp3lame");
 			commandList.add("-lameopts");
-			commandList.add("mode=2:cbr:br=" + converterOptions.getAudioBitrate());
+			commandList.add("mode=2:cbr:br=" + ConverterOptions.getAudioBitrate());
 		}
 		
-		double ofps = (info.getFrameRate() > converterOptions.getCurrentProfile().getMaxFrameRate() ? converterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
+		double ofps = (info.getFrameRate() > ConverterOptions.getCurrentProfile().getMaxFrameRate() ? ConverterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
 		commandList.add("-vf");
 		commandList.add("filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000)));
 		
-		int scaledWidth = converterOptions.getDimensions().getWidth();
-		int scaledHeight = (info.getDimensions().getHeight() * converterOptions.getDimensions().getWidth()) / info.getDimensions().getWidth();
+		int scaledWidth = ConverterOptions.getDimensions().getWidth();
+		int scaledHeight = (info.getDimensions().getHeight() * ConverterOptions.getDimensions().getWidth()) / info.getDimensions().getWidth();
 		
-		if (scaledHeight > converterOptions.getDimensions().getHeight()) {
-			scaledWidth = (scaledWidth * converterOptions.getDimensions().getHeight()) / scaledHeight;
-			scaledHeight = converterOptions.getDimensions().getHeight();
+		if (scaledHeight > ConverterOptions.getDimensions().getHeight()) {
+			scaledWidth = (scaledWidth * ConverterOptions.getDimensions().getHeight()) / scaledHeight;
+			scaledHeight = ConverterOptions.getDimensions().getHeight();
 		}
 		
 		commandList.add("-vf-add");
-		if (converterOptions.getPanAndScan())
-			commandList.add("scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) converterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + converterOptions.getDimensions().getHeight() + ",crop=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight());
+		if (ConverterOptions.getPanAndScan())
+			commandList.add("scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) ConverterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + ConverterOptions.getDimensions().getHeight() + ",crop=" + ConverterOptions.getDimensions().getWidth() + ":" + ConverterOptions.getDimensions().getHeight());
 		else
-			commandList.add("scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + converterOptions.getDimensions().getWidth() + ":" + converterOptions.getDimensions().getHeight());
+			commandList.add("scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + ConverterOptions.getDimensions().getWidth() + ":" + ConverterOptions.getDimensions().getHeight());
 		
 		commandList.add("-vf-add");
 		commandList.add("harddup");
 		
-		if (converterOptions.getVolumeFilter() == VolumeFilter.VOLNORM) {
+		if (ConverterOptions.getVolumeFilter() == VolumeFilter.VOLNORM) {
 			commandList.add("-af");
 			commandList.add("volnorm");
-		} else if (converterOptions.getVolumeFilter() == VolumeFilter.VOLUME) {
+		} else if (ConverterOptions.getVolumeFilter() == VolumeFilter.VOLUME) {
 			commandList.add("-af");
-			commandList.add("volume=" + converterOptions.getGain());
+			commandList.add("volume=" + ConverterOptions.getGain());
 		}
 		
 		commandList.add("-ofps");
@@ -245,9 +243,9 @@ public class Converter extends Thread {
 		commandList.add("-srate");
 		commandList.add("44100");
 		
-		if (!converterOptions.getAutoSync()) {
+		if (!ConverterOptions.getAutoSync()) {
 			commandList.add("-delay");
-			commandList.add("" + (converterOptions.getAudioDelay() / 1000.0));
+			commandList.add("" + (ConverterOptions.getAudioDelay() / 1000.0));
 		}
 		
 		return commandList;
@@ -426,15 +424,15 @@ public class Converter extends Thread {
 	}
 	
 	public void splitVideo(String inputVideo, int length) {
-		if (length < converterOptions.getSplitTime() * 60)
+		if (length < ConverterOptions.getSplitTime() * 60)
 			return;
 		
-		if (!converterOptions.getAutoSplit()) {
+		if (!ConverterOptions.getAutoSplit()) {
 			notSplitVideos.add(inputVideo);
 			return;
 		}
 		
-		int pieces = (length / (converterOptions.getSplitTime() * 60)) + 1;
+		int pieces = (length / (ConverterOptions.getSplitTime() * 60)) + 1;
 		for (int i = 0; i < pieces; i++) {
 			String outputVideo = inputVideo.substring(0, inputVideo.lastIndexOf('.')) + ".part" + (i + 1) + ".avi";
 			

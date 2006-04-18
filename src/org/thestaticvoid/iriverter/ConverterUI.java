@@ -12,7 +12,6 @@ import java.io.*;
 import java.util.*;
 
 public class ConverterUI implements SelectionListener, CTabFolder2Listener, DropTargetListener {
-	private ConverterOptions converterOptions;
 	private Display display;
 	private Shell shell;
 	private ToolItem convertTool, newSingleVideoTool, newDirectoryTool, newDVDTool;
@@ -25,9 +24,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	private Process proc;
 	private ProgressDialog progressDialog;
 	
-	public ConverterUI() {
-		converterOptions = new ConverterOptions(new File(System.getProperty("user.home") + File.separator + ".iriverter.conf"));
-		
+	public ConverterUI() {		
 		display = new Display();
 		
 		shell = new Shell(display);
@@ -111,7 +108,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		advancedJobs = new MenuItem(newJobMenu, SWT.CASCADE);
 		advancedJobs.setText("&Advanced");
 
-		advancedJobs.setEnabled(converterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
+		advancedJobs.setEnabled(ConverterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
 		
 		Menu advancedJobsMenu = new Menu(shell, SWT.DROP_DOWN);
 		advancedJobs.setMenu(advancedJobsMenu);
@@ -171,7 +168,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	
 		profileMenuItems = new HashMap();
 		Profile[] profiles = Profile.getAllProfiles();
-		Profile currentProfile = converterOptions.getCurrentProfile();
+		Profile currentProfile = ConverterOptions.getCurrentProfile();
 		
 		Map deviceToProfile = new HashMap();
 		Map brandToDevices = new TreeMap();
@@ -230,7 +227,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		panAndScan = new MenuItem(optionsMenu, SWT.CHECK);
 		panAndScan.setText("&Pan and Scan\tShift+Ctrl+P");
 		panAndScan.setAccelerator(SWT.SHIFT + SWT.CTRL + 'P');
-		panAndScan.setSelection(converterOptions.getPanAndScan());
+		panAndScan.setSelection(ConverterOptions.getPanAndScan());
 		panAndScan.addSelectionListener(this);
 		
 		advancedOptions = new MenuItem(optionsMenu, SWT.CASCADE);
@@ -247,7 +244,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		automaticallySplit.setText("&Automatically Split...");
 		automaticallySplit.addSelectionListener(this);
 		
-		automaticallySplit.setEnabled(converterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
+		automaticallySplit.setEnabled(ConverterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
 		
 		volume = new MenuItem(advancedOptionsMenu, SWT.PUSH);
 		volume.setText("&Volume...");
@@ -308,7 +305,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		newDVDTool.setToolTipText("DVD");
 		newDVDTool.addSelectionListener(this);
 	}
-	
+
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// empty
 	}
@@ -323,7 +320,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				jobs.add(tabFolder.getItem(i).getControl());
 			
 			progressDialog = new ProgressDialog(shell, SWT.NONE);
-			Converter converter = new Converter(jobs, progressDialog, converterOptions);
+			Converter converter = new Converter(jobs, progressDialog);
 			converter.start();
 			progressDialog.open();
 			converter.cancel();
@@ -414,22 +411,22 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			MenuItem selectedMenuItem = (MenuItem) e.getSource();
 			String selectedProfileName = (String) profileMenuItems.get(selectedMenuItem);
 			
-			if (selectedProfileName.equals(converterOptions.getCurrentProfile().getProfileName()))
+			if (selectedProfileName.equals(ConverterOptions.getCurrentProfile().getProfileName()))
 				return;
 			
 			for (Iterator i = profileMenuItems.keySet().iterator(); i.hasNext();)
 				((MenuItem) i.next()).setSelection(false);
 			selectedMenuItem.setSelection(true);
 			
-			converterOptions.setCurrentProfile(Profile.getProfile(selectedProfileName));
+			ConverterOptions.setCurrentProfile(Profile.getProfile(selectedProfileName));
 			profileChanged();
 		}
 		
 		if (e.getSource() == bitrate) {
-			BitrateDialog bitrateDialog = new BitrateDialog(shell, SWT.NONE, new Bitrate(converterOptions.getCurrentProfile().getMaxVideoBitrate(), converterOptions.getCurrentProfile().getMaxAudioBitrate()), new Bitrate(converterOptions.getVideoBitrate(), converterOptions.getAudioBitrate()));
+			BitrateDialog bitrateDialog = new BitrateDialog(shell, SWT.NONE, new Bitrate(ConverterOptions.getCurrentProfile().getMaxVideoBitrate(), ConverterOptions.getCurrentProfile().getMaxAudioBitrate()), new Bitrate(ConverterOptions.getVideoBitrate(), ConverterOptions.getAudioBitrate()));
 			Bitrate newBitrate = bitrateDialog.open();
-			converterOptions.writeOption("videoBitrate", "" + newBitrate.getVideo());
-			converterOptions.writeOption("audioBitrate", "" + newBitrate.getAudio());
+			ConverterOptions.writeOption("videoBitrate", "" + newBitrate.getVideo());
+			ConverterOptions.writeOption("audioBitrate", "" + newBitrate.getAudio());
 		}
 
 		if (dimensionsMenuItems.containsKey(e.getSource())) {
@@ -437,41 +434,41 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		}
 		
 		if (e.getSource() == panAndScan)
-			converterOptions.writeOption("panAndScan", "" + panAndScan.getSelection());
+			ConverterOptions.writeOption("panAndScan", "" + panAndScan.getSelection());
 		
 		if (e.getSource() == audioSync) {
-			int audioDelay = new AudioSyncDialog(shell, SWT.NONE, (converterOptions.getAutoSync()) ? AudioSyncDialog.AUTO_SYNC : converterOptions.getAudioDelay()).open();
+			int audioDelay = new AudioSyncDialog(shell, SWT.NONE, (ConverterOptions.getAutoSync()) ? AudioSyncDialog.AUTO_SYNC : ConverterOptions.getAudioDelay()).open();
 			
 			if (audioDelay == AudioSyncDialog.AUTO_SYNC) {
-				converterOptions.writeOption("autoSync", "true");
-				converterOptions.writeOption("audioDelay", "0");
+				ConverterOptions.writeOption("autoSync", "true");
+				ConverterOptions.writeOption("audioDelay", "0");
 			} else {
-				converterOptions.writeOption("autoSync", "false");
-				converterOptions.writeOption("audioDelay", "" + audioDelay);
+				ConverterOptions.writeOption("autoSync", "false");
+				ConverterOptions.writeOption("audioDelay", "" + audioDelay);
 			}
 		}
 		
 		if (e.getSource() == automaticallySplit) {
-			int splitTime = new AutomaticallySplitDialog(shell, SWT.NONE, converterOptions.getAutoSplit(), converterOptions.getSplitTime()).open();
+			int splitTime = new AutomaticallySplitDialog(shell, SWT.NONE, ConverterOptions.getAutoSplit(), ConverterOptions.getSplitTime()).open();
 			
 			if (splitTime == AutomaticallySplitDialog.NO_SPLIT)
-				converterOptions.writeOption("autoSplit", "false");
+				ConverterOptions.writeOption("autoSplit", "false");
 			else {
-				converterOptions.writeOption("autoSplit", "true");
-				converterOptions.writeOption("splitTime", "" + splitTime);
+				ConverterOptions.writeOption("autoSplit", "true");
+				ConverterOptions.writeOption("splitTime", "" + splitTime);
 			}
 		}
 		
 		if (e.getSource() == volume) {
-			double volume = new VolumeDialog(shell, SWT.NONE, converterOptions.getVolumeFilter(), converterOptions.getGain()).open();
+			double volume = new VolumeDialog(shell, SWT.NONE, ConverterOptions.getVolumeFilter(), ConverterOptions.getGain()).open();
 			
 			if (volume == VolumeDialog.NONE)
-				converterOptions.writeOption("volumeFilter", "none");
+				ConverterOptions.writeOption("volumeFilter", "none");
 			else if (volume == VolumeDialog.VOLNORM)
-				converterOptions.writeOption("volumeFilter", "volnorm");
+				ConverterOptions.writeOption("volumeFilter", "volnorm");
 			else {
-				converterOptions.writeOption("volumeFilter", "volume");
-				converterOptions.writeOption("gain", "" + volume);
+				ConverterOptions.writeOption("volumeFilter", "volume");
+				ConverterOptions.writeOption("gain", "" + volume);
 			}
 		}
 		
@@ -502,8 +499,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 
 		dimensionsMenuItems.clear();
 		
-		Dimensions[] dimensions = converterOptions.getCurrentProfile().getDimensions();
-		Dimensions currentDimensions = converterOptions.getDimensions();
+		Dimensions[] dimensions = ConverterOptions.getCurrentProfile().getDimensions();
+		Dimensions currentDimensions = ConverterOptions.getDimensions();
 
 		for (int i = 0; i < dimensions.length; i++) {
 			MenuItem dimensionsMenuItem = new MenuItem(videoSizeMenu, SWT.RADIO);
@@ -514,8 +511,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			dimensionsMenuItems.put(dimensionsMenuItem, dimensions[i]);
 		}
 		
-		advancedJobs.setEnabled(converterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
-		automaticallySplit.setEnabled(converterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
+		advancedJobs.setEnabled(ConverterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
+		automaticallySplit.setEnabled(ConverterOptions.getCurrentProfile().getWrapperFormat().equals("avi"));
 	}
 	
 	public void close(CTabFolderEvent event) {
@@ -605,7 +602,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	
 	private SingleVideo newSingleVideo() {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		SingleVideo singleVideo = new SingleVideo(tabFolder, SWT.NONE, tabItem, converterOptions);
+		SingleVideo singleVideo = new SingleVideo(tabFolder, SWT.NONE, tabItem);
 		tabItem.setControl(singleVideo);
 		tabFolder.setSelection(tabItem);
 		tabChanged(false);
@@ -615,7 +612,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	
 	private Directory newDirectory() {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		Directory directory = new Directory(tabFolder, SWT.NONE, tabItem, converterOptions);
+		Directory directory = new Directory(tabFolder, SWT.NONE, tabItem);
 		tabItem.setControl(directory);
 		tabFolder.setSelection(tabItem);
 		tabChanged(false);
@@ -630,7 +627,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				lastDVD = (DVD) tabFolder.getItem(i).getControl();
 		
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		DVD dvd = new DVD(tabFolder, SWT.NONE, tabItem, converterOptions);
+		DVD dvd = new DVD(tabFolder, SWT.NONE, tabItem);
 		tabItem.setControl(dvd);
 		tabFolder.setSelection(tabItem);
 		tabChanged(false);
@@ -646,7 +643,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	
 	private ManualSplit newManualSplit() {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		ManualSplit manualSplit = new ManualSplit(tabFolder, SWT.NONE, tabItem, converterOptions);
+		ManualSplit manualSplit = new ManualSplit(tabFolder, SWT.NONE, tabItem);
 		tabItem.setControl(manualSplit);
 		tabFolder.setSelection(tabItem);
 		tabChanged(false);
@@ -656,7 +653,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	
 	private JoinVideos newJoinVideos() {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		JoinVideos joinVideos = new JoinVideos(tabFolder, SWT.NONE, tabItem, converterOptions);
+		JoinVideos joinVideos = new JoinVideos(tabFolder, SWT.NONE, tabItem);
 		tabItem.setControl(joinVideos);
 		tabFolder.setSelection(tabItem);
 		tabChanged(false);
@@ -666,9 +663,9 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	
 	public static void main(String[] args) {
 		try {
-			ConverterUI ui = new ConverterUI();
+			new ConverterUI();
 		} catch (Throwable t) {
-			String message = "An unhandled exception occured: " + t.getMessage() + "\n\n";
+			String message = "An unhandled exception occured: " + t.getClass() + "\n" + t.getMessage() + "\n\n";
 			StackTraceElement[] st = t.getStackTrace();
 			for (int i = 0; i < st.length; i++)
 				message += st[i] + "\n";
@@ -677,7 +674,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			
 			MessageBox messageBox = new MessageBox(new Shell(Display.getDefault()), SWT.ICON_ERROR | SWT.OK);
 			messageBox.setText("Error");
-			messageBox.setMessage("An unhandled exception occured.  Please see the log for details.");
+			messageBox.setMessage("An unhandled exception occured.  The program will close.  Please see the log for details.");
 			messageBox.open();
 		}
 	}

@@ -14,18 +14,26 @@ public class Logger {
 			
 			if (LogViewer.getSingleton() != null)
 				LogViewer.getSingleton().clear();
+			
+			logMessage("iriverter " + Config.VERSION + "\n", Logger.INFO);
+			logMessage("Settings:\n" + ConverterOptions.getOptionsText().trim() + "\n", Logger.INFO);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public static void logMessage(String message, int type) {
-		String[] messageLines = message.split("\n");
-		message = "";
-		for (int i = 0; i < messageLines.length; i++)
-			message += PREFIX[type] + messageLines[i] + (i == messageLines.length - 1 ? "" : "\n");
+		String[] messageLines = message.split("\n", -1);
+		if (messageLines.length > 1) {
+			for (int i = 0; i < messageLines.length; i++)
+				logMessage(messageLines[i], type);
+			return;
+		}
+	
+		message = PREFIX[type] + messageLines[0];
 		
 		System.out.println(message);
+		System.out.flush();
 		
 		if (output == null)
 			openLogFile();
@@ -38,20 +46,19 @@ public class Logger {
 	}
 	
 	public static String getLogText() {
-		InputStream input = null;
+		BufferedReader input = null;
 		try {
-			input = new FileInputStream(new File(System.getProperty("user.home") + File.separator + ".iriverter.log"));
+			input = new BufferedReader(new FileReader(new File(System.getProperty("user.home") + File.separator + ".iriverter.log")));
 		} catch (IOException e) {
 			// empty
 		}
 		
 		String text = "";
 		if (input != null) {
-			int read;
-			byte[] buffer = new byte[4096];
 			try {
-				while ((read = input.read(buffer)) > -1)
-					text += new String(buffer, 0, read) + "\n";
+				String line;
+				while ((line = input.readLine()) != null)
+					text += line + "\n";
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

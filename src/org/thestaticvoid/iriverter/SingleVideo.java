@@ -11,15 +11,13 @@ import java.io.*;
 
 public class SingleVideo extends Composite implements SelectionListener, TabItemControl, SingleVideoInfo {
 	private CTabItem tabItem;
-	private ConverterOptions converterOptions;
 	private Text inputVideoInput, outputVideoInput;
 	private Button inputVideoSelect, outputVideoSelect;
 	private String syncInputVideo, syncOutputVideo;
 	
-	public SingleVideo(Composite parent, int style, CTabItem tabItem, ConverterOptions converterOptions) {
+	public SingleVideo(Composite parent, int style, CTabItem tabItem) {
 		super(parent, style);
 		this.tabItem = tabItem;
-		this.converterOptions = converterOptions;
 		
 		InputStream is = getClass().getResourceAsStream("icons/singlevideo-16.png");
 		tabItem.setImage(new Image(getDisplay(), is));
@@ -90,7 +88,7 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 			String file = fileDialog.open();
 			if (file != null) {
 				inputVideoInput.setText(file);
-				outputVideoInput.setText(file.substring(0, file.lastIndexOf('.')) + "." + converterOptions.getCurrentProfile().getProfileName() + "." + converterOptions.getCurrentProfile().getWrapperFormat());
+				outputVideoInput.setText(file.substring(0, file.lastIndexOf('.')) + "." + ConverterOptions.getCurrentProfile().getProfileName() + "." + ConverterOptions.getCurrentProfile().getWrapperFormat());
 				tabItem.setText(new File(file).getName());
 			}
 		}
@@ -98,7 +96,7 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		if (e.getSource() == outputVideoSelect) {
 			FileDialog fileDialog = new FileDialog(getShell(), SWT.SAVE);
 			fileDialog.setText("Output Video");
-			if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
+			if (ConverterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
 				fileDialog.setFilterExtensions(new String[]{"*.mp4"});
 				fileDialog.setFilterNames(new String[]{"MP4 Video (*.mp4)"});
 			} else {
@@ -119,7 +117,7 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		tabItem.setText(new File(inputVideo).getName());
 		
 		inputVideoInput.setText(inputVideo);
-		outputVideoInput.setText(inputVideo.substring(0, inputVideo.lastIndexOf('.')) + "." + converterOptions.getCurrentProfile().getProfileName() + ".avi");
+		outputVideoInput.setText(inputVideo.substring(0, inputVideo.lastIndexOf('.')) + "." + ConverterOptions.getCurrentProfile().getProfileName() + ".avi");
 	}
 	
 	public synchronized String getInputVideo() {		

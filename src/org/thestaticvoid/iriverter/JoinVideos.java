@@ -11,17 +11,15 @@ import org.eclipse.swt.layout.*;
 
 public class JoinVideos extends Composite implements SelectionListener, TabItemControl, JoinVideosInfo {	
 	private CTabItem tabItem;
-	private ConverterOptions converterOptions;
 	private java.util.List inputVideos;
 	private List videosList;
 	private Button up, add, remove, down, outputVideoSelect;
 	private Text outputVideoInput;
 	private String syncOutputVideo;
 	
-	public JoinVideos(Composite parent, int style, CTabItem tabItem, ConverterOptions converterOptions) {
+	public JoinVideos(Composite parent, int style, CTabItem tabItem) {
 		super(parent, style);
 		this.tabItem = tabItem;
-		this.converterOptions = converterOptions;
 		inputVideos = new java.util.ArrayList();
 		
 		tabItem.setText("New Join Videos");

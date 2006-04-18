@@ -11,16 +11,14 @@ import java.io.*;
 
 public class Directory extends Composite implements SelectionListener, TabItemControl, DirectoryInfo {
 	private CTabItem tabItem;
-	private ConverterOptions converterOptions;
 	private Text inputDirectoryInput, outputDirectoryInput;
 	private Button inputDirectorySelect, outputDirectorySelect, convertSubdirectories;
 	private String syncInputDirectory, syncOutputDirectory;
 	private boolean syncConvertSubdirectories;
 	
-	public Directory(Composite parent, int style, CTabItem tabItem, ConverterOptions converterOptions) {
+	public Directory(Composite parent, int style, CTabItem tabItem) {
 		super(parent, style);
 		this.tabItem = tabItem;
-		this.converterOptions = converterOptions;
 		
 		InputStream is = getClass().getResourceAsStream("icons/directory-16.png");
 		tabItem.setImage(new Image(getDisplay(), is));
@@ -80,7 +78,7 @@ public class Directory extends Composite implements SelectionListener, TabItemCo
 		/* tab = new Label(this, SWT.NONE);
 		tab.setText("\t"); */
 		
-		Label emptyLabel = new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
 		
 		convertSubdirectories = new Button(this, SWT.CHECK);
 		convertSubdirectories.setText("Convert Subdirectories");
@@ -100,7 +98,7 @@ public class Directory extends Composite implements SelectionListener, TabItemCo
 			String directory = directoryDialog.open();
 			if (directory != null) {
 				inputDirectoryInput.setText(directory);
-				outputDirectoryInput.setText(directory + "-" + converterOptions.getCurrentProfile().getProfileName());
+				outputDirectoryInput.setText(directory + "-" + ConverterOptions.getCurrentProfile().getProfileName());
 				tabItem.setText(new File(directory).getName());
 			}
 		}
@@ -122,7 +120,7 @@ public class Directory extends Composite implements SelectionListener, TabItemCo
 		tabItem.setText(new File(directory).getName());
 		
 		inputDirectoryInput.setText(directory);
-		outputDirectoryInput.setText(directory + "-" + converterOptions.getCurrentProfile().getProfileName());
+		outputDirectoryInput.setText(directory + "-" + ConverterOptions.getCurrentProfile().getProfileName());
 	}
 	
 	public synchronized String getInputDirectory() {

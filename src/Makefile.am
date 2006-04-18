@@ -14,6 +14,7 @@ endif
 
 iriverter_source_files = \
 	org/thestaticvoid/iriverter/Logger.java \
+	org/thestaticvoid/iriverter/LogViewer.java \
 	org/thestaticvoid/iriverter/DVD.java \
 	org/thestaticvoid/iriverter/SingleVideoAdapter.java \
 	org/thestaticvoid/iriverter/DVDProgressDialog.java \
@@ -70,7 +71,8 @@ iriverter_icons = \
 	org/thestaticvoid/iriverter/icons/back-24.png \
 	org/thestaticvoid/iriverter/icons/home-24.png \
 	org/thestaticvoid/iriverter/icons/forward-24.png \
-	org/thestaticvoid/iriverter/icons/singlevideo-16.png
+	org/thestaticvoid/iriverter/icons/singlevideo-16.png \
+	org/thestaticvoid/iriverter/icons/save-24.png
 
 iriverter_resources = \
 	gnu/regexp/MessagesBundle.properties
@@ -115,6 +117,7 @@ endif
 EXTRA_DIST = \
 	$(iriverter_source_files) \
 	$(iriverter_icons) \
+	$(iriverter_resources) \
 	iriverter.desktop \
 	iriverter.ico \
 	manifest.xml \

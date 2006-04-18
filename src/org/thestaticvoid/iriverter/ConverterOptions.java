@@ -3,14 +3,34 @@ package org.thestaticvoid.iriverter;
 import java.io.*;
 
 public class ConverterOptions {
-	private File optionsFile;
-
-	public ConverterOptions(File optionsFile) {
-		this.optionsFile = optionsFile;
+	private static File optionsFile = new File(System.getProperty("user.home") + File.separator + ".iriverter.conf");
+	
+	public static String getOptionsText() {
+		BufferedReader input = null;
+		try {
+			input = new BufferedReader(new FileReader(optionsFile));
+		} catch (IOException e) {
+			// empty
+		}
+		
+		String text = "";
+		if (input != null) {
+			try {
+				String line;
+				while ((line = input.readLine()) != null)
+					text += line + "\n";
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return text;
 	}
 
-	public void writeOption(String option, String setting) {
+	public static void writeOption(String option, String setting) {
 		try {
+			Logger.logMessage("Setting: " + option + "=" + setting, Logger.INFO);
+			
 			if (!optionsFile.exists())
 				optionsFile.createNewFile();
 
@@ -41,7 +61,7 @@ public class ConverterOptions {
 		}
 	}
 
-	public String readOption(String option) {
+	public static String readOption(String option) {
 		String returnSetting = "";
 
 		try {
@@ -60,7 +80,7 @@ public class ConverterOptions {
 		return returnSetting;
 	}
 
-	public void setCurrentProfile(Profile profile) {
+	public static void setCurrentProfile(Profile profile) {
 		writeOption("currentProfile", profile.getProfileName());
 		writeOption("videoBitrate", "");
 		writeOption("audioBitrate", "");
@@ -70,7 +90,7 @@ public class ConverterOptions {
 		writeOption("splitTime", "");
 	}
 
-	public Profile getCurrentProfile() {
+	public static Profile getCurrentProfile() {
 		String currentProfile = readOption("currentProfile");
 		if (currentProfile.equals(""))
 			return Profile.getProfile("h300");
@@ -78,7 +98,7 @@ public class ConverterOptions {
 		return Profile.getProfile(currentProfile);
 	}
 	
-	public boolean getPanAndScan() {
+	public static boolean getPanAndScan() {
 		String panAndScan = readOption("panAndScan");
 		if (panAndScan.equals(""))
 			return false;
@@ -86,7 +106,7 @@ public class ConverterOptions {
 		return panAndScan.equals("true");
 	}
 	
-	public int getVideoBitrate() {
+	public static int getVideoBitrate() {
 		String videoBitrate = readOption("videoBitrate");
 		if (videoBitrate.equals(""))
 			return getCurrentProfile().getMaxVideoBitrate();	
@@ -94,7 +114,7 @@ public class ConverterOptions {
 		return Integer.parseInt(videoBitrate);
 	}
 	
-	public int getAudioBitrate() {
+	public static int getAudioBitrate() {
 		String audioBitrate = readOption("audioBitrate");
 		if (audioBitrate.equals(""))
 			return getCurrentProfile().getMaxAudioBitrate();
@@ -102,7 +122,7 @@ public class ConverterOptions {
 		return Integer.parseInt(audioBitrate);
 	}
 
-	public Dimensions getDimensions() {
+	public static Dimensions getDimensions() {
 		String dimensions = readOption("dimensions");
 		if (dimensions.equals(""))
 			return getCurrentProfile().getDimensions()[0];
@@ -110,7 +130,7 @@ public class ConverterOptions {
 		return new Dimensions(dimensions);
 	}
 	
-	public boolean getAutoSync() {
+	public static boolean getAutoSync() {
 		String autoSync = readOption("autoSync");
 		if (autoSync.equals(""))
 			return true;
@@ -118,7 +138,7 @@ public class ConverterOptions {
 		return autoSync.equals("true");
 	}
 	
-	public int getAudioDelay() {
+	public static int getAudioDelay() {
 		String audioDelay = readOption("audioDelay");
 		if (audioDelay.equals(""))
 			return 0;
@@ -126,7 +146,7 @@ public class ConverterOptions {
 		return Integer.parseInt(audioDelay);
 	}
 	
-	public boolean getAutoSplit() {
+	public static boolean getAutoSplit() {
 		String autoSplit = readOption("autoSplit");
 		if (autoSplit.equals(""))
 			return getCurrentProfile().getMaxLength() > 0;
@@ -134,7 +154,7 @@ public class ConverterOptions {
 		return autoSplit.equals("true");
 	}
 	
-	public int getSplitTime() {
+	public static int getSplitTime() {
 		String splitTime = readOption("splitTime");
 		if (splitTime.equals(""))
 			return getCurrentProfile().getMaxLength();
@@ -142,7 +162,7 @@ public class ConverterOptions {
 		return Integer.parseInt(splitTime);
 	}
 	
-	public int getVolumeFilter() {
+	public static int getVolumeFilter() {
 		String volumeFilter = readOption("volumeFilter");
 		if (volumeFilter.equals("") || volumeFilter.equals("none"))
 			return VolumeFilter.NONE;
@@ -152,7 +172,7 @@ public class ConverterOptions {
 		return VolumeFilter.VOLUME;			
 	}
 	
-	public double getGain() {
+	public static double getGain() {
 		String gain = readOption("gain");
 		if (gain.equals(""))
 			return 0.0;

@@ -11,7 +11,6 @@ import org.eclipse.swt.layout.*;
 
 public class ManualSplit extends Composite implements SelectionListener, ManualSplitInfo {
 	private CTabItem tabItem;
-	private ConverterOptions converterOptions;
 	private Text videoInput, hr, min, sec;
 	private Button videoSelect, add, remove;
 	private Label length;
@@ -19,10 +18,9 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 	private String syncVideo;
 	private Mark[] syncMarks;
 	
-	public ManualSplit(Composite parent, int style, CTabItem tabItem, ConverterOptions converterOptions) {
+	public ManualSplit(Composite parent, int style, CTabItem tabItem) {
 		super(parent, style);
 		this.tabItem = tabItem;
-		this.converterOptions = converterOptions;
 		
 		tabItem.setText("New Manual Split");
 		

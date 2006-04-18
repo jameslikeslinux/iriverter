@@ -20,6 +20,11 @@ public class MPlayerInfo {
 		else
 			command = new String[]{MPlayerInfo.getMPlayerPath() + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", video.toString(), "-identify"};
 		
+		String commandStr = "";
+		for (int i = 0; i < command.length; i++)
+			commandStr += command[i] + " ";
+		Logger.logMessage(commandStr, Logger.INFO);
+		
 		try {
 			proc = Runtime.getRuntime().exec(command);
 		} catch (IOException io) {
@@ -28,42 +33,17 @@ public class MPlayerInfo {
 		
 		mplayerOutput = new StringBuffer();
 		
-		new Thread() {
-			public void run() {
-				try {
-					BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-					String line;
-					while ((line = input.readLine()) != null) {
-						mplayerOutput.append(line + "\n");
-						Logger.logMessage(line, Logger.MPLAYER);
-					}
-					
-					input.close();
-				} catch (IOException io) {
-					io.printStackTrace();
-				}
-			}
-		}.start();
-		
-		new Thread() {
-			public void run() {
-				try {
-					BufferedReader input = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-					String line;
-					while ((line = input.readLine()) != null)
-						Logger.logMessage(line, Logger.MPLAYER);
-					
-					input.close();
-				} catch (IOException io) {
-					io.printStackTrace();
-				}
-			}
-		}.start();
-		
 		try {
-			proc.waitFor();
-		} catch (InterruptedException ie) {
-			ie.printStackTrace();
+			BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			String line;
+			while ((line = input.readLine()) != null) {
+				mplayerOutput.append(line + "\n");
+				Logger.logMessage(line, Logger.MPLAYER);
+			}
+			
+			input.close();
+		} catch (IOException io) {
+			io.printStackTrace();
 		}
 	}
 	

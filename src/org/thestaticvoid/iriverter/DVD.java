@@ -12,7 +12,6 @@ import java.util.*;
 
 public class DVD extends Composite implements SelectionListener, TabItemControl, DVDInfo {
 	private CTabItem tabItem;
-	private ConverterOptions converterOptions;
 	private Combo dvdCombo, titleCombo, audioStreamCombo, subtitlesCombo;
 	private Map titleInfo, audioStreams, subtitles;
 	private Button chapterSelection, previewButton, outputVideoSelect;
@@ -23,10 +22,9 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 	private int syncTitle, syncAudioStream, syncSubtitles;
 	private Process proc;
 	
-	public DVD(Composite parent, int style, CTabItem tabItem, ConverterOptions converterOptions) {
+	public DVD(Composite parent, int style, CTabItem tabItem) {
 		super(parent, style);
 		this.tabItem = tabItem;
-		this.converterOptions = converterOptions;
 		
 		titleInfo = new LinkedHashMap();
 		
@@ -213,9 +211,13 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 						commandList.add("" + getSubtitles());
 					}
 			
+					String commandStr = "";
 					String[] command = new String[commandList.size()];
-					for (int i = 0; i < command.length; i++)
+					for (int i = 0; i < command.length; i++) {
 						command[i] = (String) commandList.get(i);
+						commandStr += command[i] + " ";
+					}
+					Logger.logMessage(commandStr, Logger.INFO);
 					
 					proc = Runtime.getRuntime().exec(command);
 				} catch (IOException io) {
@@ -227,7 +229,7 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 		if (e.getSource() == outputVideoSelect) {
 			FileDialog fileDialog = new FileDialog(getShell(), SWT.SAVE);
 			fileDialog.setText("Output Video");
-			if (converterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
+			if (ConverterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
 				fileDialog.setFilterExtensions(new String[]{"*.mp4"});
 				fileDialog.setFilterNames(new String[]{"MP4 Video (*.mp4)"});
 			} else {
