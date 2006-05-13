@@ -21,7 +21,7 @@
 		<releaseinfo>0.16</releaseinfo>
 
 		<abstract>
-			<para>iriverter is a cross-platform frontend to mencoder designed to facilitate the conversion of almost any video format to one that is playable on iriver, iAudio, and iPod multimedia players.</para>
+			<para>iriverter is a cross-platform frontend to mencoder designed to facilitate the conversion of almost any video format to one that is playable on various multimedia players.</para>
 		</abstract>
 	</bookinfo>
 

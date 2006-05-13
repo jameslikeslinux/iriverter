@@ -69,8 +69,6 @@
 				<title>Selecting the Title to Convert</title>
 
 				<para>If you are unfamiliar with DVDs, they are made up of titles, and those titles contain chapters.  Each title represents a different feature of the DVD.  For example, one could be the main movie, another could be the outtakes, and another could be a behind-the-scenes featurette.  There could be dozens of titles on a DVD, but the first one is usually the main movie.  If in doubt, play a little bit of it back in your DVD player.  It will tell you the currently playing title.</para>
-
-				<note><para>A preview function will be implemented in iriverter soon to make the selection easier</para></note>
 			</sect3>
 			
 			<sect3 id="chapters">
@@ -145,15 +143,6 @@
 					<guimenu>Options</guimenu>
 					<guimenuitem>Bitrate...</guimenuitem>
 				</menuchoice>.</para>
-		</sect2>
-
-		<sect2 id="pmpopts">
-			<title>Video Size and Frame Rate</title>
-			<para>If you are using a PMP then you can set the dimensions and frame rate of the converted videos.</para>
-			
-			<para>320x240 is the size of the PMP screen providing a small file size, but it might not look so good when outputted to a TV.  640x480 is the size of a standard TV so it will look nice on a TV, but the video's file size will be larger.  512x384 is a good compromise between the other two.</para>
-
-			<para>As far as the frame rate, the higher the frame rate, the smoother the video will appear, but the file size will increase as well.</para>
 		</sect2>
 
 		<sect2 id="otheroptions">

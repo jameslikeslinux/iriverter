@@ -7,11 +7,7 @@
 		<qandaset>
 			<qandaentry>
 				<question><para>iriverter jumps right to the "Complete" screen when I press convert.</para></question>
-				<answer><para>You probably don't have all the fields of the jobs filled in correctly.</para></answer>
-			</qandaentry>
-			<qandaentry>
-				<question><para>I get a "mencoder.exe has caused an error" popup.</para></question>
-				<answer><para>MEncoder, on which iriverter is based, is sort-of unstable on Windows, so some videos may cause it to crash.</para></answer>
+				<answer><para>You probably don't have all the fields of the jobs filled in correctly or another error occurred.  Please view the log from the Help menu for more information.</para></answer>
 			</qandaentry>
 			<qandaentry>
 				<question><para>I can't see the video on my H300!</para></question>
