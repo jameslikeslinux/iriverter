@@ -155,20 +155,20 @@ Section "iriverter" SEC01
   File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\profiles\u10.profile"
   SetOutPath "$INSTDIR"
   File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\COPYING"
-  File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\swt-win32-3229.dll"
+  File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\swt-win32-3231.dll"
   File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\mencoder.exe"
 SectionEnd
 
 Section "Extra Codecs" SEC02
   InetLoad::load \
-  "http://www.mplayerhq.hu/MPlayer/releases/codecs/windows-all-20050412.zip" \
-  "$TEMP\windows-all-20050412.zip"
+  "http://www.mplayerhq.hu/MPlayer/releases/codecs/windows-all-20060501.zip" \
+  "$TEMP\windows-all-20060501.zip"
     Pop $0
     StrCmp $0 "OK" dlok
     MessageBox MB_OK|MB_ICONEXCLAMATION "Download Error, click OK to abort installation" /SD IDOK
     Abort
   dlok:
-    !insertmacro ZIPDLL_EXTRACT "$TEMP\windows-all-20050412.zip" "$INSTDIR" "<ALL>"
+    !insertmacro ZIPDLL_EXTRACT "$TEMP\windows-all-20060501.zip" "$INSTDIR" "<ALL>"
     Rename "$INSTDIR\windows-all-20050412" "$INSTDIR\codecs"
 SectionEnd
 
