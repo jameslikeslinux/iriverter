@@ -1,5 +1,15 @@
 iriverter:
 
+version 0.16 (5/15/2006):
+	* Update clix / U10 profile
+	* Better defaults for X5
+	* Added Zen Vision:M profile (thanks Mat Sheehan)
+	* Added logging to diagnose problems easier (Help->Log Viewer)
+	* Simplified conversion code
+	* Fixed black and white wmv conversions
+	* Installer now optionally installs codecs like Real and Windows Media
+	* Support for iPod Video (not enabled yet)
+
 version 0.15 (1/28/2006):
 	* Fixed Windows start-up issues (no longer need work-around)
 	* Added U10 profile
