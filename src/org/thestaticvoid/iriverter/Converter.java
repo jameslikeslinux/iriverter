@@ -206,7 +206,7 @@ public class Converter extends Thread {
 		} else {
 			commandList.add("mp3lame");
 			commandList.add("-lameopts");
-			commandList.add("mode=2:cbr:br=" + ConverterOptions.getAudioBitrate());
+			commandList.add("mode=0:cbr:br=" + ConverterOptions.getAudioBitrate());
 		}
 		
 		double ofps = (info.getFrameRate() > ConverterOptions.getCurrentProfile().getMaxFrameRate() ? ConverterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());

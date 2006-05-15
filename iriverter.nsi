@@ -155,7 +155,7 @@ Section "iriverter" SEC01
   File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\profiles\u10.profile"
   SetOutPath "$INSTDIR"
   File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\COPYING"
-  File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\swt-win32-3224.dll"
+  File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\swt-win32-3229.dll"
   File "c:\windows\profiles\jlee\Desktop\iriverter-0.16\mencoder.exe"
 SectionEnd
 
