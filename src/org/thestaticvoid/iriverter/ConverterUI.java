@@ -17,7 +17,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	private ToolItem convertTool, newSingleVideoTool, newDirectoryTool, newDVDTool;
 	private CTabFolder tabFolder;
 	private Map profileMenuItems, dimensionsMenuItems;
-	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, panAndScan, advancedOptions, audioSync, automaticallySplit, volume, contents, logViewer, about;
+	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, panAndScan, advancedOptions, audioSync, automaticallySplit, volume, mplayerPath, contents, logViewer, about;
 	private Menu videoSizeMenu;
 	private DropTarget target;
 	private String fileName;
@@ -249,6 +249,10 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		volume = new MenuItem(advancedOptionsMenu, SWT.PUSH);
 		volume.setText("&Volume...");
 		volume.addSelectionListener(this);
+		
+		mplayerPath = new MenuItem(advancedOptionsMenu, SWT.PUSH);
+		mplayerPath.setText("&MPlayer Path...");
+		mplayerPath.addSelectionListener(this);
 
 		MenuItem help = new MenuItem(menu, SWT.CASCADE);
 		help.setText("&Help");
@@ -320,10 +324,17 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				jobs.add(tabFolder.getItem(i).getControl());
 			
 			progressDialog = new ProgressDialog(shell, SWT.NONE);
-			Converter converter = new Converter(jobs, progressDialog);
-			converter.start();
-			progressDialog.open();
-			converter.cancel();
+			
+			boolean canceled = false;
+			while (!canceled)
+				try {
+					Converter converter = new Converter(jobs, progressDialog, MPlayerInfo.getMPlayerPath());
+					converter.start();
+					progressDialog.open();
+					converter.cancel();
+				} catch (MPlayerNotFoundException mpe) {
+					canceled = new MPlayerPathDialog(shell, SWT.NONE).open();
+				}
 		}
 		
 		if (e.getSource() == playFile) {
@@ -338,6 +349,9 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 					proc = Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + "mplayer", file});
 				} catch (IOException io) {
 					io.printStackTrace();
+				} catch (MPlayerNotFoundException mpe) {
+					MPlayerPathDialog dialog = new MPlayerPathDialog(shell, SWT.NONE);
+					dialog.open();
 				}
 			}
 		}
@@ -422,54 +436,28 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			profileChanged();
 		}
 		
-		if (e.getSource() == bitrate) {
-			BitrateDialog bitrateDialog = new BitrateDialog(shell, SWT.NONE, new Bitrate(ConverterOptions.getCurrentProfile().getMaxVideoBitrate(), ConverterOptions.getCurrentProfile().getMaxAudioBitrate()), new Bitrate(ConverterOptions.getVideoBitrate(), ConverterOptions.getAudioBitrate()));
-			Bitrate newBitrate = bitrateDialog.open();
-			ConverterOptions.writeOption("videoBitrate", "" + newBitrate.getVideo());
-			ConverterOptions.writeOption("audioBitrate", "" + newBitrate.getAudio());
-		}
+		if (e.getSource() == bitrate)
+			new BitrateDialog(shell, SWT.NONE).open();
 
 		if (dimensionsMenuItems.containsKey(e.getSource())) {
 
 		}
 		
 		if (e.getSource() == panAndScan)
-			ConverterOptions.writeOption("panAndScan", "" + panAndScan.getSelection());
+			ConverterOptions.setPanAndScan(panAndScan.getSelection());
 		
-		if (e.getSource() == audioSync) {
-			int audioDelay = new AudioSyncDialog(shell, SWT.NONE, (ConverterOptions.getAutoSync()) ? AudioSyncDialog.AUTO_SYNC : ConverterOptions.getAudioDelay()).open();
-			
-			if (audioDelay == AudioSyncDialog.AUTO_SYNC) {
-				ConverterOptions.writeOption("autoSync", "true");
-				ConverterOptions.writeOption("audioDelay", "0");
-			} else {
-				ConverterOptions.writeOption("autoSync", "false");
-				ConverterOptions.writeOption("audioDelay", "" + audioDelay);
-			}
-		}
+		if (e.getSource() == audioSync)
+			new AudioSyncDialog(shell, SWT.NONE).open();
 		
-		if (e.getSource() == automaticallySplit) {
-			int splitTime = new AutomaticallySplitDialog(shell, SWT.NONE, ConverterOptions.getAutoSplit(), ConverterOptions.getSplitTime()).open();
-			
-			if (splitTime == AutomaticallySplitDialog.NO_SPLIT)
-				ConverterOptions.writeOption("autoSplit", "false");
-			else {
-				ConverterOptions.writeOption("autoSplit", "true");
-				ConverterOptions.writeOption("splitTime", "" + splitTime);
-			}
-		}
+		if (e.getSource() == automaticallySplit)
+			new AutomaticallySplitDialog(shell, SWT.NONE).open();
+
 		
-		if (e.getSource() == volume) {
-			double volume = new VolumeDialog(shell, SWT.NONE, ConverterOptions.getVolumeFilter(), ConverterOptions.getGain()).open();
-			
-			if (volume == VolumeDialog.NONE)
-				ConverterOptions.writeOption("volumeFilter", "none");
-			else if (volume == VolumeDialog.VOLNORM)
-				ConverterOptions.writeOption("volumeFilter", "volnorm");
-			else {
-				ConverterOptions.writeOption("volumeFilter", "volume");
-				ConverterOptions.writeOption("gain", "" + volume);
-			}
+		if (e.getSource() == volume)
+			new VolumeDialog(shell, SWT.NONE).open();
+		
+		if (e.getSource() == mplayerPath) {
+			new MPlayerPathDialog(shell, SWT.NONE).open();
 		}
 		
 		if (e.getSource() == contents) {

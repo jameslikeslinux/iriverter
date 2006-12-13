@@ -7,22 +7,15 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.graphics.*;
 
 public class VolumeDialog extends Dialog implements SelectionListener {
-	private int volumeFilter;
-	private double gain, volume;
 	private Shell shell;
-	private Button filterNone, filterVolnorm, filterVolume, dismiss;
+	private Button filterNone, filterVolnorm, filterVolume, cancel, ok;
 	private Text gainText;
 	
-	public static final double NONE = Double.MIN_VALUE;
-	public static final double VOLNORM = Double.MAX_VALUE;
-	
-	public VolumeDialog(Shell parent, int style, int volumeFilter, double gain) {
+	public VolumeDialog(Shell parent, int style) {
 		super(parent, style);
-		this.volumeFilter = volumeFilter;
-		this.gain = gain;
 	}
 	
-	public double open() {
+	public void open() {
 		shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		shell.setText("Volume");
 		GridLayout gridLayout = new GridLayout();
@@ -41,25 +34,25 @@ public class VolumeDialog extends Dialog implements SelectionListener {
 		Composite filterGroup = new Composite(shell, SWT.NONE);
 		gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
-		gridLayout.verticalSpacing = 6;
+		gridLayout.verticalSpacing = 0;
 		gridLayout.numColumns = 3;
 		filterGroup.setLayout(gridLayout);
 		
 		filterNone = new Button(filterGroup, SWT.RADIO);
 		filterNone.setText("Apply no volume filter");
-		filterNone.setSelection(volumeFilter == VolumeFilter.NONE);
+		filterNone.setSelection(ConverterOptions.getVolumeFilter().equals("none"));
 		GridData gridData = new GridData();
 		gridData.horizontalSpan = 3;
 		filterNone.setLayoutData(gridData);
 		
 		filterVolnorm = new Button(filterGroup, SWT.RADIO);
 		filterVolnorm.setText("Normalize the volume");
-		filterVolnorm.setSelection(volumeFilter == VolumeFilter.VOLNORM);
+		filterVolnorm.setSelection(ConverterOptions.getVolumeFilter().equals("volnorm"));
 		filterVolnorm.setLayoutData(gridData);
 		
 		filterVolume = new Button(filterGroup, SWT.RADIO);
 		filterVolume.setText("Manually specify gain:");
-		filterVolume.setSelection(volumeFilter == VolumeFilter.VOLUME);
+		filterVolume.setSelection(ConverterOptions.getVolumeFilter().equals("volume"));
 		
 		gainText = new Text(filterGroup, SWT.BORDER);
 		// forces width large width
@@ -67,42 +60,58 @@ public class VolumeDialog extends Dialog implements SelectionListener {
 		
 		new Label(filterGroup, SWT.NONE).setText("dB");
 		
-		dismiss = new Button(shell, SWT.PUSH);
-		dismiss.setText("Close");
+		Composite dismissComposite = new Composite(shell, SWT.NONE);
+		dismissComposite.setLayout(new RowLayout());
 		gridData = new GridData();
-		gridData.widthHint = 75;
 		gridData.horizontalAlignment = SWT.RIGHT;
-		dismiss.setLayoutData(gridData);
-		dismiss.addSelectionListener(this);
+		dismissComposite.setLayoutData(gridData);
+		
+		cancel = new Button(dismissComposite, SWT.PUSH);
+		cancel.setText("Cancel");
+		RowData rowData = new RowData();
+		rowData.width = 75;
+		cancel.setLayoutData(rowData);
+		cancel.addSelectionListener(this);
+		
+		ok = new Button(dismissComposite, SWT.PUSH);
+		ok.setText("OK");
+		rowData = new RowData();
+		rowData.width = 75;
+		ok.setLayoutData(rowData);
+		ok.addSelectionListener(this);
 		
 		shell.pack();
 		
 		// set actual gain after packing
-		gainText.setText("" + gain);
+		gainText.setText("" + ConverterOptions.getGain());
 		
 		shell.open();
 		while (!shell.isDisposed())
 			if (!getParent().getDisplay().readAndDispatch())
 				getParent().getDisplay().sleep();
-		
-		return volume;
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		
 	}
 	
-	public void widgetSelected(SelectionEvent e) {		
-		if (e.getSource() == dismiss) {
+	public void widgetSelected(SelectionEvent e) {
+		if (e.getSource() == cancel)
+			shell.dispose();
+		
+		if (e.getSource() == ok) {
 			if (filterNone.getSelection())
-				volume = NONE;
+				ConverterOptions.setVolumeFilter("none");
 			else if (filterVolnorm.getSelection())
-				volume = VOLNORM;
+				ConverterOptions.setVolumeFilter("volnorm");
 			else {
 				try {
-					volume = Double.parseDouble(gainText.getText());
+					double volume = Double.parseDouble(gainText.getText());
 					if (volume < -200.0 || volume > 60.0)
 						throw new Exception();
+					
+					ConverterOptions.setVolumeFilter("volume");
+					ConverterOptions.setGain(volume);
 				} catch (Exception exception) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 					messageBox.setText("Invalid Gain");

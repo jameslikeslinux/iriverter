@@ -27,7 +27,7 @@ public class ConverterOptions {
 		return text;
 	}
 
-	public static void writeOption(String option, String setting) {
+	private static void writeOption(String option, String setting) {
 		try {
 			Logger.logMessage("Setting: " + option + "=" + setting, Logger.INFO);
 			
@@ -61,7 +61,7 @@ public class ConverterOptions {
 		}
 	}
 
-	public static String readOption(String option) {
+	private static String readOption(String option) {
 		String returnSetting = "";
 
 		try {
@@ -106,6 +106,10 @@ public class ConverterOptions {
 		return panAndScan.equals("true");
 	}
 	
+	public static void setPanAndScan(boolean panAndScan) {
+		writeOption("panAndScan", "" + panAndScan);
+	}
+	
 	public static int getVideoBitrate() {
 		String videoBitrate = readOption("videoBitrate");
 		if (videoBitrate.equals(""))
@@ -114,12 +118,20 @@ public class ConverterOptions {
 		return Integer.parseInt(videoBitrate);
 	}
 	
+	public static void setVideoBitrate(int videoBitrate) {
+		writeOption("videoBitrate", "" + videoBitrate);
+	}
+	
 	public static int getAudioBitrate() {
 		String audioBitrate = readOption("audioBitrate");
 		if (audioBitrate.equals(""))
 			return getCurrentProfile().getMaxAudioBitrate();
 		
 		return Integer.parseInt(audioBitrate);
+	}
+	
+	public static void setAudioBitrate(int audioBitrate) {
+		writeOption("audioBitrate", "" + audioBitrate);
 	}
 
 	public static Dimensions getDimensions() {
@@ -130,12 +142,20 @@ public class ConverterOptions {
 		return new Dimensions(dimensions);
 	}
 	
+	public static void setDimensions(Dimensions dimensions) {
+		writeOption("dimensions", "" + dimensions);
+	}
+	
 	public static boolean getAutoSync() {
 		String autoSync = readOption("autoSync");
 		if (autoSync.equals(""))
 			return true;
 		
 		return autoSync.equals("true");
+	}
+	
+	public static void setAutoSync(boolean autoSync) {
+		writeOption("autoSync", "" + autoSync);
 	}
 	
 	public static int getAudioDelay() {
@@ -146,12 +166,20 @@ public class ConverterOptions {
 		return Integer.parseInt(audioDelay);
 	}
 	
+	public static void setAudioDelay(int audioDelay) {
+		writeOption("audioDelay", "" + audioDelay);
+	}
+	
 	public static boolean getAutoSplit() {
 		String autoSplit = readOption("autoSplit");
 		if (autoSplit.equals(""))
 			return getCurrentProfile().getMaxLength() > 0;
 		
 		return autoSplit.equals("true");
+	}
+	
+	public static void setAutoSplit(boolean autoSplit) {
+		writeOption("autoSplit", "" + autoSplit);
 	}
 	
 	public static int getSplitTime() {
@@ -162,14 +190,20 @@ public class ConverterOptions {
 		return Integer.parseInt(splitTime);
 	}
 	
-	public static int getVolumeFilter() {
+	public static void setSplitTime(int splitTime) {
+		writeOption("splitTime", "" + splitTime);
+	}
+	
+	public static String getVolumeFilter() {
 		String volumeFilter = readOption("volumeFilter");
-		if (volumeFilter.equals("") || volumeFilter.equals("none"))
-			return VolumeFilter.NONE;
-		else if (volumeFilter.equals("volnorm"))
-			return VolumeFilter.VOLNORM;
+		if (volumeFilter.equals(""))
+			return "none";
 		
-		return VolumeFilter.VOLUME;			
+		return volumeFilter;			
+	}
+	
+	public static void setVolumeFilter(String volumeFilter) {
+		writeOption("volumeFilter", volumeFilter);
 	}
 	
 	public static double getGain() {
@@ -178,5 +212,48 @@ public class ConverterOptions {
 			return 0.0;
 		
 		return Double.parseDouble(gain);
+	}
+	
+	public static void setGain(double gain) {
+		writeOption("gain", "" + gain);
+	}
+	
+	public static String getMPlayerSource() {
+		String mplayerSource = readOption("mplayerSource");
+		if (mplayerSource.equals(""))
+			if (System.getProperty("os.name").indexOf("Windows") >= 0)
+				return "download";
+			else
+				return "local";
+		
+		return mplayerSource;
+	}
+	
+	public static void setMPlayerSource(String mplayerSource) {
+		writeOption("mplayerSource", mplayerSource);
+	}
+	
+	public static boolean getDownloadExtraCodecs() {
+		String downloadExtraCodecs = readOption("downloadExtraCodecs");
+		if (downloadExtraCodecs.equals(""))
+			return false;
+		
+		return downloadExtraCodecs.equals("true");
+	}
+	
+	public static void setDownloadExtraCodecs(boolean downloadExtraCodecs) {
+		writeOption("downloadExtraCodecs", "" + downloadExtraCodecs);
+	}
+	
+	public static String getMPlayerPath() {
+		String mplayerPath = readOption("mplayerPath");
+		if (mplayerPath.equals("") || !new File(mplayerPath).isDirectory())
+			return ".";
+		
+		return mplayerPath;
+	}
+	
+	public static void setMPlayerPath(String mplayerPath) {
+		writeOption("mplayerPath", mplayerPath);
 	}
 }

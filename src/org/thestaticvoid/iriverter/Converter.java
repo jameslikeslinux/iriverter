@@ -6,13 +6,15 @@ import java.util.*;
 public class Converter extends Thread {
 	private List jobs, notSplitVideos;
 	private ProgressDialogInfo progressDialogInfo;
+	private String mplayerPath;
 	private Process proc;
 	private boolean isCanceled;
 	private int exitCode;
 	
-	public Converter(List jobs, ProgressDialogInfo progressDialogInfo) {
+	public Converter(List jobs, ProgressDialogInfo progressDialogInfo, String mplayerPath) {
 		this.jobs = Converter.checkForOverwritingFiles(Converter.expandSingleJobsToMultiple(Converter.removeInvalidJobs(jobs)));
 		this.progressDialogInfo = progressDialogInfo;
+		this.mplayerPath = mplayerPath;
 		isCanceled = false;
 		
 		notSplitVideos = new ArrayList();
@@ -174,7 +176,7 @@ public class Converter extends Thread {
 	private List prepareBaseCommandList(String inputVideo, String outputVideo, MPlayerInfo info) {		
 		List commandList = new ArrayList();
 		
-		commandList.add(MPlayerInfo.getMPlayerPath() + "mencoder");
+		commandList.add(mplayerPath + "mencoder");
 		
 		commandList.add(inputVideo);
 		commandList.add("-o");
@@ -232,10 +234,10 @@ public class Converter extends Thread {
 		commandList.add("-vf-add");
 		commandList.add("harddup");
 		
-		if (ConverterOptions.getVolumeFilter() == VolumeFilter.VOLNORM) {
+		if (ConverterOptions.getVolumeFilter().equals("volnorm")) {
 			commandList.add("-af");
 			commandList.add("volnorm");
-		} else if (ConverterOptions.getVolumeFilter() == VolumeFilter.VOLUME) {
+		} else if (ConverterOptions.getVolumeFilter().equals("volume")) {
 			commandList.add("-af");
 			commandList.add("volume=" + ConverterOptions.getGain());
 		}
@@ -260,7 +262,7 @@ public class Converter extends Thread {
 		progressDialogInfo.setOutputVideo(new File(singleVideoInfo.getOutputVideo()).getName());
 		progressDialogInfo.setStatus("Gathering information about the input video...");
 		
-		MPlayerInfo info = new MPlayerInfo(singleVideoInfo.getInputVideo());
+		MPlayerInfo info = new MPlayerInfo(singleVideoInfo.getInputVideo(), mplayerPath);
 		if (!info.videoSupported()) {
 			Logger.logMessage("Unsupported video", Logger.ERROR);
 			return;
@@ -339,11 +341,11 @@ public class Converter extends Thread {
 		progressDialogInfo.setStatus("Splitting");
 		
 		if (manualSplitInfo.getMarks()[0].getTime() == Mark.START_MARK)
-			runConversionCommand(new String[]{MPlayerInfo.getMPlayerPath() + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + manualSplitInfo.getMarks()[1].getTime()});
+			runConversionCommand(new String[]{mplayerPath + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + manualSplitInfo.getMarks()[1].getTime()});
 		else if (manualSplitInfo.getMarks()[1].getTime() == Mark.END_MARK)
-			runConversionCommand(new String[]{MPlayerInfo.getMPlayerPath() + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + manualSplitInfo.getMarks()[0].getTime()});
+			runConversionCommand(new String[]{mplayerPath + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + manualSplitInfo.getMarks()[0].getTime()});
 		else
-			runConversionCommand(new String[]{MPlayerInfo.getMPlayerPath() + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + manualSplitInfo.getMarks()[0].getTime(), "-endpos", "" + (manualSplitInfo.getMarks()[1].getTime() - manualSplitInfo.getMarks()[0].getTime())});
+			runConversionCommand(new String[]{mplayerPath + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + manualSplitInfo.getMarks()[0].getTime(), "-endpos", "" + (manualSplitInfo.getMarks()[1].getTime() - manualSplitInfo.getMarks()[0].getTime())});
 	}
 	
 	public void joinVideos(JoinVideosInfo joinVideosInfo) {
@@ -389,7 +391,7 @@ public class Converter extends Thread {
 				progressDialogInfo.setInputVideo(tempFile.getName());
 				progressDialogInfo.setOutputVideo(new File(joinVideosInfo.getOutputVideo()).getName());
 				progressDialogInfo.setStatus("Writing header");
-				splitVideo(joinVideosInfo.getOutputVideo(), runConversionCommand(new String[]{MPlayerInfo.getMPlayerPath() + "mencoder", "-forceidx", tempFile.toString(), "-o", joinVideosInfo.getOutputVideo(), "-ovc", "copy", "-oac", "copy"}));
+				splitVideo(joinVideosInfo.getOutputVideo(), runConversionCommand(new String[]{mplayerPath + "mencoder", "-forceidx", tempFile.toString(), "-o", joinVideosInfo.getOutputVideo(), "-ovc", "copy", "-oac", "copy"}));
 			}
 		} catch (IOException e) {
 			// empty
@@ -443,11 +445,11 @@ public class Converter extends Thread {
 			progressDialogInfo.setStatus("Splitting");
 			
 			if ((i + 1) == 1)
-				runConversionCommand(new String[]{MPlayerInfo.getMPlayerPath() + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + (length / pieces)});
+				runConversionCommand(new String[]{mplayerPath + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + (length / pieces)});
 			else if ((i + 1) == pieces)
-				runConversionCommand(new String[]{MPlayerInfo.getMPlayerPath() + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i});
+				runConversionCommand(new String[]{mplayerPath + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i});
 			else
-				runConversionCommand(new String[]{MPlayerInfo.getMPlayerPath() + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i, "-endpos", "" + (length / pieces)});
+				runConversionCommand(new String[]{mplayerPath + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i, "-endpos", "" + (length / pieces)});
 		}
 	}
 	

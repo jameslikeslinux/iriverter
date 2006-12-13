@@ -194,35 +194,40 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 
 		if (e.getSource() == previewButton) {
 			if (!getDrive().equals("")) {
-				try {
-					java.util.List commandList = new ArrayList();
-					commandList.add(MPlayerInfo.getMPlayerPath() + "mplayer");
-					commandList.add("-dvd-device");
-					commandList.add(getDrive());
-					commandList.add("dvd://" + getTitle());
-					
-					if (getAudioStream() > -1) {
-						commandList.add("-aid");
-						commandList.add("" + getAudioStream());
+				boolean canceled = false;
+				while (!canceled)
+					try {
+						java.util.List commandList = new ArrayList();
+						commandList.add(MPlayerInfo.getMPlayerPath() + "mplayer");
+						commandList.add("-dvd-device");
+						commandList.add(getDrive());
+						commandList.add("dvd://" + getTitle());
+						
+						if (getAudioStream() > -1) {
+							commandList.add("-aid");
+							commandList.add("" + getAudioStream());
+						}
+						
+						if (getSubtitles() > -1) {
+							commandList.add("-sid");
+							commandList.add("" + getSubtitles());
+						}
+						
+						String commandStr = "";
+						String[] command = new String[commandList.size()];
+						for (int i = 0; i < command.length; i++) {
+							command[i] = (String) commandList.get(i);
+							commandStr += command[i] + " ";
+						}
+						Logger.logMessage(commandStr, Logger.INFO);
+						
+						proc = Runtime.getRuntime().exec(command);
+					} catch (IOException io) {
+						io.printStackTrace();
+						canceled = true;
+					} catch (MPlayerNotFoundException mpe) {
+						canceled = new MPlayerPathDialog(getParent().getShell(), SWT.NONE).open();
 					}
-
-					if (getSubtitles() > -1) {
-						commandList.add("-sid");
-						commandList.add("" + getSubtitles());
-					}
-			
-					String commandStr = "";
-					String[] command = new String[commandList.size()];
-					for (int i = 0; i < command.length; i++) {
-						command[i] = (String) commandList.get(i);
-						commandStr += command[i] + " ";
-					}
-					Logger.logMessage(commandStr, Logger.INFO);
-					
-					proc = Runtime.getRuntime().exec(command);
-				} catch (IOException io) {
-					io.printStackTrace();
-				}
 			}
 		}
 	
@@ -295,21 +300,29 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 			return;
 		}
 
-		tabItem.setText(dvdCombo.getText());
-		progressDialog = new DVDProgressDialog(getShell(), SWT.NONE);
-		DVDInfoReader infoReader = new DVDInfoReader(progressDialog, dvdCombo.getText());
-		progressDialog.open();
-		
-		titleInfo = infoReader.getTitleInfo();
-		
-		titleCombo.removeAll();
-		for (int i = 0; i < titleInfo.keySet().toArray().length; i++)
-			titleCombo.add((String) titleInfo.keySet().toArray()[i]);
-		titleCombo.select(0);
-		
-		setLanguageCombos();
+		boolean canceled = false;
+		while (!canceled)
+			try {
+				tabItem.setText(dvdCombo.getText());
+				progressDialog = new DVDProgressDialog(getShell(), SWT.NONE);
+				DVDInfoReader infoReader = new DVDInfoReader(progressDialog, dvdCombo.getText(), MPlayerInfo.getMPlayerPath());
+				progressDialog.open();
+
+				titleInfo = infoReader.getTitleInfo();
+
+				titleCombo.removeAll();
+				for (int i = 0; i < titleInfo.keySet().toArray().length; i++)
+					titleCombo.add((String) titleInfo.keySet().toArray()[i]);
+				titleCombo.select(0);
+
+				setLanguageCombos();
+			} catch (MPlayerNotFoundException mpe) {
+				canceled = new MPlayerPathDialog(getParent().getShell(), SWT.NONE).open();
+				if (canceled)
+					progressDialog.close();
+			}
 	}
-	
+
 	private void setLanguageCombos() {
 		audioStreams = ((DVDTitleInfo) titleInfo.get(titleCombo.getText())).getAudioStreams();
 		subtitles = ((DVDTitleInfo) titleInfo.get(titleCombo.getText())).getSubtitles();

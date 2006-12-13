@@ -8,21 +8,15 @@ import org.eclipse.swt.widgets.*;
 
 public class AutomaticallySplitDialog extends Dialog implements SelectionListener {
 	private Shell shell;
-	private boolean autoSplit;
-	private int splitTime;
 	private Label splitVideoEveryLabel, minutesLabel;
 	private Spinner splitTimeInput;
-	private Button automaticallySplit, dismiss;
+	private Button automaticallySplit, cancel, ok;
 	
-	public static final int NO_SPLIT = Integer.MAX_VALUE;
-	
-	public AutomaticallySplitDialog(Shell parent, int style, boolean autoSplit, int delay) {
+	public AutomaticallySplitDialog(Shell parent, int style) {
 		super(parent, style);
-		this.autoSplit = autoSplit;
-		this.splitTime = delay;
 	}
 	
-	public int open() {
+	public void open() {
 		shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		shell.setText("Automatically Split");
 		GridLayout gridLayout = new GridLayout();
@@ -44,7 +38,7 @@ public class AutomaticallySplitDialog extends Dialog implements SelectionListene
 		
 		automaticallySplit = new Button(shell, SWT.CHECK);
 		automaticallySplit.setText("Automatically Split");
-		automaticallySplit.setSelection(autoSplit);
+		automaticallySplit.setSelection(ConverterOptions.getAutoSplit());
 		gridData = new GridData();
 		gridData.horizontalSpan = 3;
 		automaticallySplit.setLayoutData(gridData);
@@ -54,20 +48,32 @@ public class AutomaticallySplitDialog extends Dialog implements SelectionListene
 		splitVideoEveryLabel.setText("Split video every");
 		
 		splitTimeInput = new Spinner(shell, SWT.BORDER);
-		splitTimeInput.setSelection(Math.abs(splitTime));
+		splitTimeInput.setSelection(Math.abs(ConverterOptions.getSplitTime()));
 		splitTimeInput.setMinimum(0);
 		
 		minutesLabel = new Label(shell, SWT.NONE);
 		minutesLabel.setText("minutes");
 		
-		dismiss = new Button(shell, SWT.PUSH);
-		dismiss.setText("Close");
+		Composite dismissComposite = new Composite(shell, SWT.NONE);
+		dismissComposite.setLayout(new RowLayout());
 		gridData = new GridData();
-		gridData.widthHint = 75;
 		gridData.horizontalSpan = 3;
 		gridData.horizontalAlignment = SWT.RIGHT;
-		dismiss.setLayoutData(gridData);
-		dismiss.addSelectionListener(this);
+		dismissComposite.setLayoutData(gridData);
+		
+		cancel = new Button(dismissComposite, SWT.PUSH);
+		cancel.setText("Cancel");
+		RowData rowData = new RowData();
+		rowData.width = 75;
+		cancel.setLayoutData(rowData);
+		cancel.addSelectionListener(this);
+		
+		ok = new Button(dismissComposite, SWT.PUSH);
+		ok.setText("OK");
+		rowData = new RowData();
+		rowData.width = 75;
+		ok.setLayoutData(rowData);
+		ok.addSelectionListener(this);
 		
 		if (!automaticallySplit.getSelection())
 			toggleSelection();
@@ -76,27 +82,25 @@ public class AutomaticallySplitDialog extends Dialog implements SelectionListene
 		shell.open();
 		while (!shell.isDisposed())
 			if (!getParent().getDisplay().readAndDispatch())
-				getParent().getDisplay().sleep();	
-		
-		return splitTime;
+				getParent().getDisplay().sleep();
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		
 	}
 	
-	public void widgetSelected(SelectionEvent e) {		
-		if (e.getSource() == dismiss) {
-			if (!automaticallySplit.getSelection())
-				splitTime = NO_SPLIT;
-			else
-				splitTime = splitTimeInput.getSelection();
-			
-			shell.dispose();
-		}
-		
+	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == automaticallySplit)
 			toggleSelection();
+		
+		if (e.getSource() == cancel)
+			shell.dispose();
+		
+		if (e.getSource() == ok) {			
+			ConverterOptions.setAutoSplit(automaticallySplit.getSelection());
+			ConverterOptions.setSplitTime(splitTimeInput.getSelection());
+			shell.dispose();
+		}
 	}
 	
 	public void toggleSelection() {

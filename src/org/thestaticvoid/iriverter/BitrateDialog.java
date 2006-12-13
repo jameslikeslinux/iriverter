@@ -8,21 +8,18 @@ import org.eclipse.swt.graphics.*;
 
 public class BitrateDialog extends Dialog implements SelectionListener {
 	private Shell shell;
-	private Bitrate maxBitrate, currentBitrate;
 	private int currentVideoBitrate, currentAudioBitrate;
 	private Scale videoBitrateScale, audioBitrateScale;
 	private Label currentVideoBitrateLabel, currentAudioBitrateLabel;
-	private Button dismiss;
+	private Button cancel, ok;
 	
-	public BitrateDialog(Shell parent, int style, Bitrate maxBitrate, Bitrate currentBitrate) {
+	public BitrateDialog(Shell parent, int style) {
 		super(parent, style);
-		this.maxBitrate = maxBitrate;
-		this.currentBitrate = currentBitrate;
-		currentVideoBitrate = currentBitrate.getVideo();
-		currentAudioBitrate = currentBitrate.getAudio();
+		currentVideoBitrate = ConverterOptions.getVideoBitrate();
+		currentAudioBitrate = ConverterOptions.getAudioBitrate();
 	}
 	
-	public Bitrate open() {
+	public void open() {
 		shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		shell.setText("Bitrate");
 		GridLayout gridLayout = new GridLayout();
@@ -47,7 +44,7 @@ public class BitrateDialog extends Dialog implements SelectionListener {
 				
 		videoBitrateScale = new Scale(shell, SWT.HORIZONTAL);
 		videoBitrateScale.setMinimum(50);
-		videoBitrateScale.setMaximum(maxBitrate.getVideo() / 2);
+		videoBitrateScale.setMaximum(ConverterOptions.getCurrentProfile().getMaxVideoBitrate() / 2);
 		videoBitrateScale.setSelection(currentVideoBitrate / 2);
 		videoBitrateScale.setPageIncrement(25);
 		videoBitrateScale.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -61,7 +58,7 @@ public class BitrateDialog extends Dialog implements SelectionListener {
 		
 		audioBitrateScale = new Scale(shell, SWT.HORIZONTAL);
 		audioBitrateScale.setMinimum(2);
-		audioBitrateScale.setMaximum(maxBitrate.getAudio() / 16);
+		audioBitrateScale.setMaximum(ConverterOptions.getCurrentProfile().getMaxAudioBitrate() / 16);
 		audioBitrateScale.setSelection(currentAudioBitrate / 16);
 		audioBitrateScale.setPageIncrement(1);
 		audioBitrateScale.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -70,14 +67,26 @@ public class BitrateDialog extends Dialog implements SelectionListener {
 		currentAudioBitrateLabel = new Label(shell, SWT.NONE);
 		currentAudioBitrateLabel.setText(currentAudioBitrate + " Kbps");
 		
-		dismiss = new Button(shell, SWT.PUSH);
-		dismiss.setText("Close");
+		Composite dismissComposite = new Composite(shell, SWT.NONE);
+		dismissComposite.setLayout(new RowLayout());
 		gridData = new GridData();
-		gridData.widthHint = 75;
 		gridData.horizontalSpan = 3;
 		gridData.horizontalAlignment = SWT.RIGHT;
-		dismiss.setLayoutData(gridData);
-		dismiss.addSelectionListener(this);
+		dismissComposite.setLayoutData(gridData);
+		
+		cancel = new Button(dismissComposite, SWT.PUSH);
+		cancel.setText("Cancel");
+		RowData rowData = new RowData();
+		rowData.width = 75;
+		cancel.setLayoutData(rowData);
+		cancel.addSelectionListener(this);
+		
+		ok = new Button(dismissComposite, SWT.PUSH);
+		ok.setText("OK");
+		rowData = new RowData();
+		rowData.width = 75;
+		ok.setLayoutData(rowData);
+		ok.addSelectionListener(this);
 		
 		shell.pack();
 		shell.setSize(400, shell.getSize().y);
@@ -85,9 +94,7 @@ public class BitrateDialog extends Dialog implements SelectionListener {
 		shell.open();
 		while (!shell.isDisposed())
 			if (!getParent().getDisplay().readAndDispatch())
-				getParent().getDisplay().sleep();	
-		
-		return new Bitrate(currentVideoBitrate, currentAudioBitrate);
+				getParent().getDisplay().sleep();
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
@@ -107,7 +114,13 @@ public class BitrateDialog extends Dialog implements SelectionListener {
 			currentAudioBitrateLabel.pack();
 		}
 		
-		if (e.getSource() == dismiss)
+		if (e.getSource() == cancel)
 			shell.dispose();
+		
+		if (e.getSource() == ok) {
+			ConverterOptions.setVideoBitrate(currentVideoBitrate);
+			ConverterOptions.setAudioBitrate(currentAudioBitrate);
+			shell.dispose();
+		}
 	}
 }

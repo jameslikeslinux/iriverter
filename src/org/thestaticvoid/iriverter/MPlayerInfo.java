@@ -9,16 +9,20 @@ public class MPlayerInfo {
 	private StringBuffer mplayerOutput;
 	private boolean commandFound = true;
 	
-	public MPlayerInfo(String video) {
-		this(video, null);
+	public MPlayerInfo(String video) throws MPlayerNotFoundException {
+		this(video, MPlayerInfo.getMPlayerPath());
+	}
+	
+	public MPlayerInfo(String video, String mplayerPath) {
+		this(video, null, mplayerPath);
 	}
 
-	public MPlayerInfo(String video, String dvdDrive) {
+	public MPlayerInfo(String video, String dvdDrive, String mplayerPath) {
 		String[] command = null;
 		if (dvdDrive != null)
-			command = new String[]{MPlayerInfo.getMPlayerPath() + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", "-dvd-device", dvdDrive, video.toString(), "-v", "-identify"};
+			command = new String[]{mplayerPath + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", "-dvd-device", dvdDrive, video.toString(), "-v", "-identify"};
 		else
-			command = new String[]{MPlayerInfo.getMPlayerPath() + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", video.toString(), "-identify"};
+			command = new String[]{mplayerPath + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", video.toString(), "-identify"};
 		
 		String commandStr = "";
 		for (int i = 0; i < command.length; i++)
@@ -148,8 +152,8 @@ public class MPlayerInfo {
 		return new Dimensions(matcher.group().substring(matcher.group().indexOf(' ') + 1));
 	}
 	
-	public static String getMPlayerPath() {
-		File currentDirectory = new File(".");
+	public static String getMPlayerPath() throws MPlayerNotFoundException {
+		File currentDirectory = new File(ConverterOptions.getMPlayerPath());
 		String[] files = currentDirectory.list();
 		
 		boolean foundMplayer = false, foundMencoder = false;
@@ -160,11 +164,10 @@ public class MPlayerInfo {
 				foundMencoder = true;
 		}
 		
-		return (foundMplayer && foundMencoder) ? currentDirectory.getAbsolutePath() + File.separator : "";
-	}
-	
-	public boolean commandFound() {
-		return commandFound;
+		if (!foundMplayer || !foundMencoder)
+			throw new MPlayerNotFoundException();
+		
+		return currentDirectory.getAbsolutePath() + File.separator;
 	}
 	
 	public boolean videoSupported() {

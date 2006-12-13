@@ -11,16 +11,14 @@ public class AudioSyncDialog extends Dialog implements SelectionListener {
 	private int delay;
 	private Label bringAudioLabel, millisecondsLabel, videoLabel;
 	private Spinner delayInput;
-	private Button autoSync, before, after, dismiss;
+	private Button autoSync, before, after, cancel, ok;
 	
-	public static final int AUTO_SYNC = Integer.MAX_VALUE;
-	
-	public AudioSyncDialog(Shell parent, int style, int delay) {
+	public AudioSyncDialog(Shell parent, int style) {
 		super(parent, style);
-		this.delay = delay;
+		delay = ConverterOptions.getAudioDelay();
 	}
 	
-	public int open() {
+	public void open() {
 		shell = new Shell(getParent(), SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 		shell.setText("Audio Sync");
 		GridLayout gridLayout = new GridLayout();
@@ -42,7 +40,7 @@ public class AudioSyncDialog extends Dialog implements SelectionListener {
 		
 		autoSync = new Button(shell, SWT.CHECK);
 		autoSync.setText("Automatically Sync");
-		autoSync.setSelection(delay == AUTO_SYNC);
+		autoSync.setSelection(ConverterOptions.getAutoSync());
 		gridData = new GridData();
 		gridData.horizontalSpan = 5;
 		autoSync.setLayoutData(gridData);
@@ -73,14 +71,26 @@ public class AudioSyncDialog extends Dialog implements SelectionListener {
 		videoLabel = new Label(shell, SWT.NONE);
 		videoLabel.setText("video");
 		
-		dismiss = new Button(shell, SWT.PUSH);
-		dismiss.setText("Close");
+		Composite dismissComposite = new Composite(shell, SWT.NONE);
+		dismissComposite.setLayout(new RowLayout());
 		gridData = new GridData();
-		gridData.widthHint = 75;
 		gridData.horizontalSpan = 5;
 		gridData.horizontalAlignment = SWT.RIGHT;
-		dismiss.setLayoutData(gridData);
-		dismiss.addSelectionListener(this);
+		dismissComposite.setLayoutData(gridData);
+		
+		cancel = new Button(dismissComposite, SWT.PUSH);
+		cancel.setText("Cancel");
+		RowData rowData = new RowData();
+		rowData.width = 75;
+		cancel.setLayoutData(rowData);
+		cancel.addSelectionListener(this);
+		
+		ok = new Button(dismissComposite, SWT.PUSH);
+		ok.setText("OK");
+		rowData = new RowData();
+		rowData.width = 75;
+		ok.setLayoutData(rowData);
+		ok.addSelectionListener(this);
 		
 		if (autoSync.getSelection()) {
 			toggleSelection();
@@ -93,36 +103,35 @@ public class AudioSyncDialog extends Dialog implements SelectionListener {
 		shell.open();
 		while (!shell.isDisposed())
 			if (!getParent().getDisplay().readAndDispatch())
-				getParent().getDisplay().sleep();	
-		
-		return delay;
+				getParent().getDisplay().sleep();
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		
 	}
 	
-	public void widgetSelected(SelectionEvent e) {		
-		if (e.getSource() == dismiss) {
-			try {
-				if (autoSync.getSelection()) {
-					delay = AUTO_SYNC;
-					shell.dispose();
-				}
-				
+	public void widgetSelected(SelectionEvent e) {
+		if (e.getSource() == autoSync)
+			toggleSelection();
+		
+		if (e.getSource() == cancel)
+			shell.dispose();
+		
+		if (e.getSource() == ok) {
+			if (autoSync.getSelection()) {
+				ConverterOptions.setAutoSync(true);
+				ConverterOptions.setAudioDelay(0);
+			} else {
 				delay = delayInput.getSelection();
-				
 				if (before.getSelection())
 					delay = -delay;
-			} catch (Exception exception) {
-				return;
+				
+				ConverterOptions.setAutoSync(false);
+				ConverterOptions.setAudioDelay(delay);
 			}
 			
 			shell.dispose();
 		}
-		
-		if (e.getSource() == autoSync)
-			toggleSelection();
 	}
 	
 	public void toggleSelection() {

@@ -146,22 +146,28 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 			fileDialog.setFilterNames(new String[]{"AVI Video (*.avi)"});
 			String file = fileDialog.open();
 			if (file != null) {
-				videoInput.setText(file);
-				tabItem.setText(new File(file).getName());
-				
-				MPlayerInfo titleInfo = new MPlayerInfo(videoInput.getText());
-				
-				int length = titleInfo.getLength();
-				int seconds = length % 60;
-				int minutes = length / 60;
-				int hours = minutes / 60;
-				minutes = minutes - (hours * 60);
-				
-				this.length.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : "" + minutes) + ":" + ((seconds < 10) ? "0" + seconds : "" + seconds));
-				hr.setText("0");
-				min.setText("00");
-				sec.setText("00");
-				marksList.removeAll();
+				boolean canceled = false;
+				while (!canceled)
+					try {
+						videoInput.setText(file);
+						tabItem.setText(new File(file).getName());
+
+						MPlayerInfo titleInfo = new MPlayerInfo(videoInput.getText());
+
+						int length = titleInfo.getLength();
+						int seconds = length % 60;
+						int minutes = length / 60;
+						int hours = minutes / 60;
+						minutes = minutes - (hours * 60);
+
+						this.length.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : "" + minutes) + ":" + ((seconds < 10) ? "0" + seconds : "" + seconds));
+						hr.setText("0");
+						min.setText("00");
+						sec.setText("00");
+						marksList.removeAll();
+					} catch (MPlayerNotFoundException mpe) {
+						canceled = new MPlayerPathDialog(getParent().getShell(), SWT.NONE).open();
+					}
 			}
 		}
 		

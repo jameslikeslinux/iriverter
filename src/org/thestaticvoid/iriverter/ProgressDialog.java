@@ -11,6 +11,7 @@ public class ProgressDialog extends Dialog implements SelectionListener, Progres
 	private Label header, inputVideoLabel, inputVideo, outputVideoLabel, outputVideo, status;
 	private ProgressBar progressBar;
 	private String syncInputVideo, syncOutputVideo, syncStatus;
+	private Button dismiss;
 	private int currentJob, totalJobs, syncPercentComplete;
 	
 	public ProgressDialog(Shell parent, int style) {
@@ -69,8 +70,8 @@ public class ProgressDialog extends Dialog implements SelectionListener, Progres
 		fontData[0].setStyle(SWT.ITALIC);
 		status.setFont(new Font(getParent().getDisplay(), fontData));
 		
-		Button dismiss = new Button(shell, SWT.PUSH);
-		dismiss.setText("Close");
+		dismiss = new Button(shell, SWT.PUSH);
+		dismiss.setText("Cancel");
 		gridData = new GridData();
 		gridData.widthHint = 75;
 		gridData.horizontalSpan = 2;
@@ -117,6 +118,7 @@ public class ProgressDialog extends Dialog implements SelectionListener, Progres
 				outputVideo.setText("");
 				progressBar.setSelection(100);
 				status.setText("");
+				dismiss.setText("Close");
 			}
 		});
 	}
