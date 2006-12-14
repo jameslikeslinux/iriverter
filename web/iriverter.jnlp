@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+"
+	codebase="http://iriverter.thestaticvoid.org/"
+	href="iriverter.jnlp">
+	<information>
+  		<title>iriverter</title>
+  		<vendor>thestaticvoid.org</vendor>
+  		<homepage href="http://iriverter.thestaticvoid.org/" />
+  		<description>iriverter is a cross-platform frontend to mencoder designed to facilitate the conversion of almost any video format to one that is playable on various multimedia players.</description>
+  		<icon href="iriverter.gif" />
+		<offline-allowed />
+	</information>
+
+	<security>
+		<all-permissions />
+	</security>
+
+	<resources>
+		<j2se version="1.4+" />
+		<jar href="iriverter.jar" />
+	</resources>
+
+	<resources os="Windows" arch="x86">
+		<nativelib href="swt-native-win32-win32-x86.jar" />
+		<jar href="swt-win32-win32-x86.jar" />
+	</resources>
+
+	<resources os="Linux">
+		<nativelib href="swt-native-gtk-linux-x86.jar" />
+		<jar href="swt-gtk-linux-x86.jar" />
+	</resources>
+
+	<application-desc main-class="org.thestaticvoid.iriverter.ConverterUI" />
+</jnlp>
