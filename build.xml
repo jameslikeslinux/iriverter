@@ -33,7 +33,7 @@
 	</target>
 
 	<target name="doc" depends="compile">
-		<xslt basedir="${src.dir}" destdir="${build.dir}" includes="${doc.dir}/index.xml" style="${xslt.style}">
+		<xslt basedir="${src.dir}/${doc.dir}" destdir="${build.dir}/${doc.dir}" includes="index.xml" style="${xslt.style}">
 			<classpath location="${xslt.parser.classpath}" />
 			<param name="base.dir" expression="${build.dir}/${doc.dir}/" />
 			<param name="use.id.as.filename" expression="1" />
