@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <project name="iriverter" default="jar" basedir=".">
+	<property name="package" value="org/thestaticvoid/iriverter" />
+	<property name="main.class" value="${package}/ConverterUI" />
 	<property name="src.dir" value="src" />
 	<property name="web.dir" value="web" />
 	<property name="build.dir" value="build" />
@@ -7,9 +9,9 @@
 	<property name="dist.dir" value="dist" />
 	<property name="swt.linux.dir" value="lib/swt-M20060921-0945-gtk-linux-x86" />
 	<property name="swt.windows.dir" value="lib/swt-M20060921-0945-win32-win32-x86" />
-	<property name="icons.dir" value="org/thestaticvoid/iriverter/icons" />
-	<property name="profiles.dir" value="org/thestaticvoid/iriverter/profiles" />
-	<property name="doc.dir" value="org/thestaticvoid/iriverter/doc" />
+	<property name="icons.dir" value="${package}/icons" />
+	<property name="resources.zip.file" value="${build.dir}/${package}/resources.zip" />
+	<property name="doc.dir" value="doc" />
 	<property name="doc.images.dir" value="${doc.dir}/images" />
 	<property name="docbook.dir" value="lib/docbook-xsl-1.71.1" />
 	<property name="docbook.images.dir" value="${docbook.dir}/images" />
@@ -26,39 +28,41 @@
 	
 	<target name="compile">
 		<mkdir dir="${build.dir}" />
-
 		<javac srcdir="${src.dir}" destdir="${build.dir}" classpath="${swt.dir}/swt.jar" source="1.4" target="1.4" />
-
-		<copy todir="${build.dir}/${icons.dir}">
-			<fileset dir="${src.dir}/${icons.dir}" />
-		</copy>
-		
-		<copy todir="${build.dir}/${profiles.dir}">
-			<fileset dir="${src.dir}/${profiles.dir}" />
-		</copy>
 	</target>
 
-	<target name="doc" depends="compile">
-		<xslt basedir="${src.dir}/${doc.dir}" destdir="${build.dir}/${doc.dir}" includes="index.xml" style="${xslt.style}">
+	<target name="doc">
+		<mkdir dir="${doc.dir}" />
+
+		<xslt basedir="${src.dir}/${package}/${doc.dir}" destdir="${doc.dir}" includes="index.xml" style="${xslt.style}">
 			<classpath>
 				<fileset dir="${xalan.dir}" includes="*.jar" />
 			</classpath>
-			<param name="base.dir" expression="${build.dir}/${doc.dir}/" />
 			<param name="use.id.as.filename" expression="1" />
 			<param name="id.warnings" expression="0" />
 			<param name="chunk.quietly" expression="1" />
 			<param name="admon.graphics" expression="1" />
 		</xslt>
 		
-		<copy todir="${build.dir}/${doc.images.dir}">
-			<fileset dir="${src.dir}/${doc.images.dir}" />
+		<copy todir="${doc.images.dir}">
+			<fileset dir="${src.dir}/${package}/${doc.images.dir}" />
 			<fileset dir="${docbook.images.dir}" />
 		</copy>
 	</target>
 
-	<target name="jar" depends="doc">
+	<target name="resources" depends="doc">
+		<zip destfile="${resources.zip.file}">
+			<fileset dir="${src.dir}/${package}" includes="profiles/**" />
+			<fileset dir="${basedir}" includes="${doc.dir}/**" />
+		</zip>
+
+		<copy todir="${build.dir}/${icons.dir}">
+			<fileset dir="${src.dir}/${icons.dir}" />
+		</copy>
+	</target>
+
+	<target name="jar" depends="compile,resources">
 		<mkdir dir="${jar.dir}" />
-		
 		<jar destfile="${jar.dir}/iriverter.jar" basedir="${build.dir}" />
 	</target>
 
@@ -68,24 +72,24 @@
 		<copy file="${jar.dir}/iriverter.jar" todir="${dist.dir}" />
 		<copy file="${swt.linux.dir}/swt.jar" tofile="${dist.dir}/swt-gtk-linux-x86.jar" />
 		<copy file="${swt.windows.dir}/swt.jar" tofile="${dist.dir}/swt-win32-win32-x86.jar" />
-		
-		<copy todir="${dist.dir}">
-			<fileset dir="${web.dir}" />
-		</copy>
-
 		<jar destfile="${dist.dir}/swt-native-gtk-linux-x86.jar" basedir="${swt.linux.dir}" includes="*.so" />
 		<jar destfile="${dist.dir}/swt-native-win32-win32-x86.jar" basedir="${swt.windows.dir}" includes="*.dll" />
 		
 		<signjar keystore="keystore" alias="iriverter" storepass="iriverter">
 			<fileset dir="${dist.dir}" includes="*.jar" />
 		</signjar>
+		
+		<copy todir="${dist.dir}">
+			<fileset dir="${web.dir}" />
+			<fileset dir="${basedir}" includes="${doc.dir}/**" />
+		</copy>
 	</target>
 
-	<target name="run" depends="jar">
-		<java classname="org.thestaticvoid.iriverter.ConverterUI" fork="true">
+	<target name="run" depends="resources">
+		<java classname="${main.class}" fork="true">
 			<jvmarg value="-Djava.library.path=${swt.dir}" />
 			<classpath>
-				<pathelement location="${jar.dir}/iriverter.jar" />
+				<pathelement path="${build.dir}" />
 				<pathelement location="${swt.dir}/swt.jar" />
 			</classpath>
 		</java>
@@ -93,6 +97,7 @@
 
 	<target name="clean">
 		<delete dir="${build.dir}" />
+		<delete dir="${doc.dir}" />
 		<delete dir="${jar.dir}" />
 		<delete dir="${dist.dir}" />
 	</target>
