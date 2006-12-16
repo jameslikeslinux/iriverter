@@ -14,7 +14,7 @@
 	<property name="docbook.dir" value="lib/docbook-xsl-1.71.1" />
 	<property name="docbook.images.dir" value="${docbook.dir}/images" />
 	<property name="xslt.style" value="${docbook.dir}/html/chunk.xsl" />
-	<property name="xslt.parser.classpath" value="lib/saxon6-5-5-1/saxon.jar" />
+	<property name="xalan.dir" value="lib/xalan-j_2_7_0" />
 
 	<condition property="swt.dir" value="${swt.linux.dir}">
 		<os name="Linux" />
@@ -40,7 +40,9 @@
 
 	<target name="doc" depends="compile">
 		<xslt basedir="${src.dir}/${doc.dir}" destdir="${build.dir}/${doc.dir}" includes="index.xml" style="${xslt.style}">
-			<classpath location="${xslt.parser.classpath}" />
+			<classpath>
+				<fileset dir="${xalan.dir}" includes="*.jar" />
+			</classpath>
 			<param name="base.dir" expression="${build.dir}/${doc.dir}/" />
 			<param name="use.id.as.filename" expression="1" />
 			<param name="admon.graphics" expression="1" />
