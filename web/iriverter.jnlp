@@ -9,6 +9,10 @@
   		<description>iriverter is a cross-platform frontend to mencoder designed to facilitate the conversion of almost any video format to one that is playable on various multimedia players.</description>
   		<icon href="iriverter.gif" />
 		<offline-allowed />
+		<shortcut online="false">
+			<desktop />
+			<menu />
+		</shortcut>
 	</information>
 
 	<security>

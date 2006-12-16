@@ -32,15 +32,15 @@ public class Profile {
 	}
 
 	public static Profile getProfile(String profileName) {
-		return new Profile(new File(Config.getPackageDataDir() + File.separator + "profiles" + File.separator + profileName + ".profile"));
+		return new Profile(new File(ConverterOptions.CONF_DIR + File.separator + "profiles" + File.separator + profileName + ".profile"));
 	}
 
 	public static Profile[] getAllProfiles() {
-		String[] profilesStrings = new File(Config.getPackageDataDir() + File.separator + "profiles" + File.separator).list(new ProfileFilter());
+		String[] profilesStrings = new File(ConverterOptions.CONF_DIR + File.separator + "profiles" + File.separator).list(new ProfileFilter());
 		Profile[] profiles = new Profile[profilesStrings.length];
 
 		for (int i = 0; i < profiles.length; i++)
-			profiles[i] = new Profile(new File(Config.getPackageDataDir() + File.separator + "profiles" + File.separator + profilesStrings[i]));
+			profiles[i] = new Profile(new File(ConverterOptions.CONF_DIR + File.separator + "profiles" + File.separator + profilesStrings[i]));
 
 		return profiles;
 	}

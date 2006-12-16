@@ -31,12 +31,12 @@ public class Logger {
 	
 	private static void openLogFile() {
 		try {
-			output = new PrintWriter(new BufferedWriter(new FileWriter(new File(System.getProperty("user.home") + File.separator + ".iriverter.log"))));
+			output = new PrintWriter(new BufferedWriter(new FileWriter(new File(ConverterOptions.CONF_DIR + File.separator + "log"))));
 			
 			if (LogViewer.getSingleton() != null)
 				LogViewer.getSingleton().clear();
 			
-			logMessage("iriverter " + Config.VERSION + "\n", Logger.INFO);
+			logMessage("iriverter " + AboutDialog.VERSION + "\n", Logger.INFO);
 			logMessage("Settings:\n" + ConverterOptions.getOptionsText().trim() + "\n", Logger.INFO);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -66,10 +66,19 @@ public class Logger {
 			LogViewer.getSingleton().logMessage(message);
 	}
 	
+	public static void logException(Throwable t) {
+		String message = "An unhandled exception occured: " + t.getClass() + "\n" + t.getMessage() + "\n\n";
+		StackTraceElement[] st = t.getStackTrace();
+		for (int i = 0; i < st.length; i++)
+			message += st[i] + "\n";
+		
+		logMessage(message, Logger.ERROR);
+	}
+	
 	public static String getLogText() {
 		InputStream input = null;
 		try {
-			input = new FileInputStream(new File(System.getProperty("user.home") + File.separator + ".iriverter.log"));
+			input = new FileInputStream(new File(ConverterOptions.CONF_DIR + File.separator + "log"));
 		} catch (IOException e) {
 			// empty
 		}

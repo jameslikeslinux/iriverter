@@ -31,6 +31,7 @@ import org.eclipse.swt.dnd.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.*;
 
 public class ConverterUI implements SelectionListener, CTabFolder2Listener, DropTargetListener {
 	private Display display;
@@ -59,6 +60,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		gridLayout.verticalSpacing = 0;
 		shell.setLayout(gridLayout);
 		
+		extractResources();
 		setupMenus();
 		setupToolBar();
 		
@@ -300,6 +302,44 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		profileChanged();
 	}
 	
+	public void extractResources() {
+		ZipInputStream in = new ZipInputStream(getClass().getResourceAsStream("resources.zip"));
+		
+		try {
+			ZipEntry entry;
+			while ((entry = in.getNextEntry()) != null) {
+				File extractedFile = new File(ConverterOptions.CONF_DIR + File.separator + entry.getName());
+				if (entry.isDirectory() && !extractedFile.exists())
+					extractedFile.mkdirs();
+				else if (!extractedFile.exists() || entry.getTime() > extractedFile.lastModified()) {
+					OutputStream out = new FileOutputStream(extractedFile);
+					
+					int length;
+					byte[] buffer = new byte[4096];
+					while ((length = in.read(buffer)) > 0)
+						out.write(buffer, 0, length);
+					
+					out.close();
+					
+					extractedFile.setLastModified(entry.getTime());
+				}
+			}
+		} catch (IOException io) {
+			Logger.logException(io);
+			
+			MessageBox messageBox = new MessageBox(new Shell(display), SWT.ICON_ERROR | SWT.OK);
+			messageBox.setText("Could Not Extract Resources");
+			messageBox.setMessage("An error occured while extracting the resources.  Execution will try to continue.  Please see the log for details.");
+			messageBox.open();
+		}
+		
+		try {
+			in.close();
+		} catch (IOException io) {
+			Logger.logException(io);
+		}
+	}
+	
 	public void setupToolBar() {		
 		ToolBar toolBar = new ToolBar(shell, SWT.HORIZONTAL | SWT.FLAT);
 		toolBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -481,15 +521,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			new MPlayerPathDialog(shell, SWT.NONE).open();
 		}
 		
-		if (e.getSource() == contents) {
-			String index;
-			if (Config.getPackageDataDir().equals("."))
-				index = "file://" + System.getProperty("user.dir") + "/doc/html/index.html";
-			else
-				index = "file://" + Config.getPackageDataDir() + "/doc/html/index.html";
-			
-			new HelpBrowser(index);
-		}
+		if (e.getSource() == contents)
+			new HelpBrowser("file://" + ConverterOptions.CONF_DIR + "/doc/index.html");
 		
 		if (e.getSource() == logViewer) {
 			if (LogViewer.getSingleton() == null)
@@ -674,12 +707,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		try {
 			new ConverterUI();
 		} catch (Throwable t) {
-			String message = "An unhandled exception occured: " + t.getClass() + "\n" + t.getMessage() + "\n\n";
-			StackTraceElement[] st = t.getStackTrace();
-			for (int i = 0; i < st.length; i++)
-				message += st[i] + "\n";
-			
-			Logger.logMessage(message, Logger.ERROR);
+			Logger.logException(t);
 			
 			MessageBox messageBox = new MessageBox(new Shell(Display.getDefault()), SWT.ICON_ERROR | SWT.OK);
 			messageBox.setText("Error");

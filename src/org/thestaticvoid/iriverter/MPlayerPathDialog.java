@@ -56,7 +56,7 @@ public class MPlayerPathDialog extends Dialog implements SelectionListener {
 		Composite downloadComposite = new Composite(shell, SWT.RADIO);
 		gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
-		gridLayout.verticalSpacing = 0;
+		gridLayout.verticalSpacing = 3;
 		gridLayout.marginHeight = 0;
 		gridLayout.marginWidth = 0;
 		downloadComposite.setLayout(gridLayout);
@@ -75,7 +75,7 @@ public class MPlayerPathDialog extends Dialog implements SelectionListener {
 		Composite localComposite = new Composite(shell, SWT.NONE);
 		gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
-		gridLayout.verticalSpacing = 0;
+		gridLayout.verticalSpacing = 3;
 		gridLayout.marginHeight = 0;
 		gridLayout.marginWidth = 0;
 		gridLayout.numColumns = 2;
@@ -135,7 +135,8 @@ public class MPlayerPathDialog extends Dialog implements SelectionListener {
 			localDir.setText(ConverterOptions.getMPlayerPath());
 		}
 		
-		shell.pack();		
+		shell.pack();
+		shell.setSize(450, shell.getSize().y);
 		shell.open();
 		while (!shell.isDisposed())
 			if (!getParent().getDisplay().readAndDispatch())

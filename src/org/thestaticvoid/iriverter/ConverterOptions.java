@@ -24,12 +24,19 @@ package org.thestaticvoid.iriverter;
 import java.io.*;
 
 public class ConverterOptions {
-	private static File optionsFile = new File(System.getProperty("user.home") + File.separator + ".iriverter.conf");
+	public static final File CONF_DIR;
+	static {
+		if (System.getProperty("os.name").indexOf("Windows") >= 0)
+			CONF_DIR = new File(System.getProperty("user.home") + File.separator + "Application Data" + File.separator + "iriverter");
+		else
+			CONF_DIR = new File(System.getProperty("user.home") + File.separator + ".iriverter");
+	}
+	public static final File CONF_FILE = new File(CONF_DIR + File.separator + "conf");
 	
 	public static String getOptionsText() {
 		BufferedReader input = null;
 		try {
-			input = new BufferedReader(new FileReader(optionsFile));
+			input = new BufferedReader(new FileReader(CONF_FILE));
 		} catch (IOException e) {
 			// empty
 		}
@@ -52,10 +59,13 @@ public class ConverterOptions {
 		try {
 			Logger.logMessage("Setting: " + option + "=" + setting, Logger.INFO);
 			
-			if (!optionsFile.exists())
-				optionsFile.createNewFile();
+			if (!CONF_FILE.exists()) {
+				CONF_FILE.mkdirs();
+				CONF_FILE.delete();
+				CONF_FILE.createNewFile();
+			}
 
-			BufferedReader input = new BufferedReader(new FileReader(optionsFile));
+			BufferedReader input = new BufferedReader(new FileReader(CONF_FILE));
 
 			StringBuffer options = new StringBuffer();
 			String line;
@@ -74,7 +84,7 @@ public class ConverterOptions {
 
 			input.close();
 
-			PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter(optionsFile)));			
+			PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter(CONF_FILE)));			
 			output.print(options.toString());
 			output.close();
 		} catch (IOException e) {
@@ -86,7 +96,7 @@ public class ConverterOptions {
 		String returnSetting = "";
 
 		try {
-			BufferedReader input = new BufferedReader(new FileReader(optionsFile));
+			BufferedReader input = new BufferedReader(new FileReader(CONF_FILE));
 			String line;
 
 			while ((line = input.readLine()) != null)

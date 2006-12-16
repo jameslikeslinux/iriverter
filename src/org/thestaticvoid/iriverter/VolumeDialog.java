@@ -55,7 +55,7 @@ public class VolumeDialog extends Dialog implements SelectionListener {
 		Composite filterGroup = new Composite(shell, SWT.NONE);
 		gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
-		gridLayout.verticalSpacing = 0;
+		gridLayout.verticalSpacing = 3;
 		gridLayout.numColumns = 3;
 		filterGroup.setLayout(gridLayout);
 		

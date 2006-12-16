@@ -33,6 +33,8 @@ public class AboutDialog extends Dialog implements SelectionListener {
 	private Shell shell;
 	private Button dismiss;
 	
+	public static final String VERSION = "1.0.0";
+	
 	public AboutDialog(Shell parent, int style) {
 		super(parent, style);
 	}
@@ -58,7 +60,7 @@ public class AboutDialog extends Dialog implements SelectionListener {
 		imageLabel.setLayoutData(gridData);
 		
 		Label appName = new Label(shell, SWT.NONE);
-		appName.setText("iriverter " + Config.VERSION);
+		appName.setText("iriverter " + VERSION);
 		FontData[] fontData = appName.getFont().getFontData();
 		fontData[0].setStyle(SWT.BOLD);
 		fontData[0].setHeight(fontData[0].getHeight() + 7);
