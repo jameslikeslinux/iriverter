@@ -501,7 +501,17 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			new BitrateDialog(shell, SWT.NONE).open();
 
 		if (dimensionsMenuItems.containsKey(e.getSource())) {
-
+			MenuItem selectedMenuItem = (MenuItem) e.getSource();
+			Dimensions selectedDimensions = (Dimensions) dimensionsMenuItems.get(selectedMenuItem);
+			
+			if (selectedDimensions.equals(ConverterOptions.getDimensions()))
+				return;
+			
+			for (Iterator i = dimensionsMenuItems.keySet().iterator(); i.hasNext();)
+				((MenuItem) i.next()).setSelection(false);
+			selectedMenuItem.setSelection(true);
+			
+			ConverterOptions.setDimensions(selectedDimensions);
 		}
 		
 		if (e.getSource() == panAndScan)
