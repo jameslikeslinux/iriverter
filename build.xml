@@ -45,6 +45,8 @@
 			</classpath>
 			<param name="base.dir" expression="${build.dir}/${doc.dir}/" />
 			<param name="use.id.as.filename" expression="1" />
+			<param name="id.warnings" expression="0" />
+			<param name="chunk.quietly" expression="1" />
 			<param name="admon.graphics" expression="1" />
 		</xslt>
 		
