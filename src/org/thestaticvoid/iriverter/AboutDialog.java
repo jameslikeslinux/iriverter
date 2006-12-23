@@ -50,7 +50,7 @@ public class AboutDialog extends Dialog implements SelectionListener {
 		gridLayout.numColumns = 2;
 		shell.setLayout(gridLayout);
 
-		InputStream is = getClass().getResourceAsStream("icons/iriverter.png");
+		InputStream is = getClass().getResourceAsStream("icons/iriverter-64.png");
 		Image image = new Image(Display.getDefault(), is);
 
 		Label imageLabel = new Label(shell, SWT.NONE);

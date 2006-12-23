@@ -47,13 +47,13 @@ public class HelpBrowser implements SelectionListener, TitleListener, LocationLi
 		ToolBar toolBar = new ToolBar(shell, SWT.HORIZONTAL | SWT.FLAT);
 		
 		back = new ToolItem(toolBar, SWT.PUSH);
-		InputStream is = getClass().getResourceAsStream("icons/back-24.png");
+		InputStream is = getClass().getResourceAsStream("icons/back-22.png");
 		back.setImage(new Image(display, is));
 		back.setEnabled(false);
 		back.addSelectionListener(this);
 		
 		forward = new ToolItem(toolBar, SWT.PUSH);
-		is = getClass().getResourceAsStream("icons/forward-24.png");
+		is = getClass().getResourceAsStream("icons/forward-22.png");
 		forward.setImage(new Image(display, is));
 		forward.setEnabled(false);
 		forward.addSelectionListener(this);
@@ -61,7 +61,7 @@ public class HelpBrowser implements SelectionListener, TitleListener, LocationLi
 		new ToolItem(toolBar, SWT.SEPARATOR);
 		
 		home = new ToolItem(toolBar, SWT.PUSH);
-		is = getClass().getResourceAsStream("icons/home-24.png");
+		is = getClass().getResourceAsStream("icons/home-22.png");
 		home.setImage(new Image(display, is));
 		home.addSelectionListener(this);
 		

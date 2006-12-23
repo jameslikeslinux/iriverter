@@ -51,7 +51,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		
 		shell = new Shell(display);
 		shell.setText("iriverter");
-		InputStream is = getClass().getResourceAsStream("icons/iriverter.png");
+		InputStream is = getClass().getResourceAsStream("icons/iriverter-64.png");
 		shell.setImage(new Image(display, is));
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 0;
@@ -311,7 +311,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				File extractedFile = new File(ConverterOptions.CONF_DIR + File.separator + entry.getName());
 				if (entry.isDirectory() && !extractedFile.exists())
 					extractedFile.mkdirs();
-				else if (!extractedFile.exists() || entry.getTime() > extractedFile.lastModified()) {
+				else if (!entry.isDirectory() && (!extractedFile.exists() || entry.getTime() > extractedFile.lastModified())) {
 					OutputStream out = new FileOutputStream(extractedFile);
 					
 					int length;
@@ -345,7 +345,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		toolBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		convertTool = new ToolItem(toolBar, SWT.PUSH);
-		InputStream is = getClass().getResourceAsStream("icons/convert-24.png");
+		InputStream is = getClass().getResourceAsStream("icons/convert-22.png");
 		convertTool.setImage(new Image(display, is));
 		convertTool.setToolTipText("Convert");
 		convertTool.addSelectionListener(this);
@@ -353,19 +353,19 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		new ToolItem(toolBar, SWT.SEPARATOR);
 		
 		newSingleVideoTool = new ToolItem(toolBar, SWT.PUSH);
-		is = getClass().getResourceAsStream("icons/singlevideo-24.png");
+		is = getClass().getResourceAsStream("icons/singlevideo-22.png");
 		newSingleVideoTool.setImage(new Image(display, is));
 		newSingleVideoTool.setToolTipText("Single Video");
 		newSingleVideoTool.addSelectionListener(this);
 		
 		newDirectoryTool = new ToolItem(toolBar, SWT.PUSH);
-		is = getClass().getResourceAsStream("icons/directory-24.png");
+		is = getClass().getResourceAsStream("icons/directory-22.png");
 		newDirectoryTool.setImage(new Image(display, is));
 		newDirectoryTool.setToolTipText("Directory");
 		newDirectoryTool.addSelectionListener(this);
 		
 		newDVDTool = new ToolItem(toolBar, SWT.PUSH);
-		is = getClass().getResourceAsStream("icons/dvd-24.png");
+		is = getClass().getResourceAsStream("icons/dvd-22.png");
 		newDVDTool.setImage(new Image(display, is));
 		newDVDTool.setToolTipText("DVD");
 		newDVDTool.addSelectionListener(this);

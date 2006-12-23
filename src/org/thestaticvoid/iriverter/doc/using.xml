@@ -28,7 +28,7 @@
 					<guimenu>Jobs</guimenu>
 					<guisubmenu>New</guisubmenu>
 					<guimenuitem>Single Video</guimenuitem>
-				</menuchoice>, press <guiicon><inlinegraphic fileref="images/singlevideo-24.png" /></guiicon> on the toolbar, or drag a supported video from your file manager to the iriverter window.</para>
+				</menuchoice>, press <guiicon><inlinegraphic fileref="images/singlevideo-22.png" /></guiicon> on the toolbar, or drag a supported video from your file manager to the iriverter window.</para>
 
 			<para>Finally select your input and output videos if necessary.</para>
 			
@@ -45,7 +45,7 @@
 					<guimenu>Jobs</guimenu>
 					<guisubmenu>New</guisubmenu>
 					<guimenuitem>Directory</guimenuitem>
-				</menuchoice>, press <guiicon><inlinegraphic fileref="images/directory-24.png" /></guiicon> on the toolbar, or drag a directory from your file manager to the iriverter window.</para>
+				</menuchoice>, press <guiicon><inlinegraphic fileref="images/directory-22.png" /></guiicon> on the toolbar, or drag a directory from your file manager to the iriverter window.</para>
 
 			<para>iriverter will automatically suggest a new output directory for the converted files, but you can change that as you wish.  iriverter will convert all of the supported videos in the selected input directory and its subdirectories if specified and will change their endings to <filename>.h300.avi</filename> or <filename>.pmp.avi</filename> depending on your device so you don't need to worry about it overwriting your original videos.</para>
 		</sect2>
@@ -61,7 +61,7 @@
 					<guimenu>Jobs</guimenu>
 					<guisubmenu>New</guisubmenu>
 					<guimenuitem>DVD</guimenuitem>
-				</menuchoice>, press <guiicon><inlinegraphic fileref="images/dvd-24.png" /></guiicon> on the toolbar, or drag your DVD drive icon from your file manager to the iriverter window.</para>
+				</menuchoice>, press <guiicon><inlinegraphic fileref="images/dvd-22.png" /></guiicon> on the toolbar, or drag your DVD drive icon from your file manager to the iriverter window.</para>
 
 			<para>If you have a DVD in the drive already (and it is mounted if you are using Linux), iriverter will automatically detect the drive and the DVD's titles, chapters and languages.  Otherwise you need to put the DVD in the drive (and mount it on Linux) and select "Other..." from the DVD Drive drop-down box and pick the appropriate drive (or mount point in Linux).</para>
 
@@ -125,7 +125,7 @@
 					</shortcut>
 					<guimenu>Jobs</guimenu>
 					<guimenuitem>Convert...</guimenuitem>
-				</menuchoice> or press <guiicon><inlinegraphic fileref="images/convert-24.png" /></guiicon> on the toolbar.  A popup will appear indicating the conversion progress along with any questions like overwriting files and possible errors.</para>
+				</menuchoice> or press <guiicon><inlinegraphic fileref="images/convert-22.png" /></guiicon> on the toolbar.  A popup will appear indicating the conversion progress along with any questions like overwriting files and possible errors.</para>
 		</sect2>
 	</sect1>
 
