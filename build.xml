@@ -79,6 +79,10 @@
 			<fileset dir="${web.dir}" />
 			<fileset dir="${basedir}" includes="${doc.dir}/**" />
 		</copy>
+
+		<signjar keystore="keystore" alias="iriverter" storepass="iriverter">
+			<fileset dir="${dist.dir}" includes="*.jar" />
+		</signjar>
 	</target>
 
 	<target name="run" depends="resources">
