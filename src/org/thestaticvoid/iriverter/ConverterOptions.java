@@ -30,6 +30,14 @@ public class ConverterOptions {
 			CONF_DIR = new File(System.getProperty("user.home") + File.separator + "Application Data" + File.separator + "iriverter");
 		else
 			CONF_DIR = new File(System.getProperty("user.home") + File.separator + ".iriverter");
+
+		try {
+			if (!CONF_DIR.exists())
+				CONF_DIR.mkdirs();
+		} catch (Exception e) {
+			System.err.println("Could not create " + CONF_DIR);
+			System.exit(1);
+		}
 	}
 	public static final File CONF_FILE = new File(CONF_DIR + File.separator + "conf");
 	
