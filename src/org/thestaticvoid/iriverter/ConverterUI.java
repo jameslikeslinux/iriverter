@@ -537,7 +537,15 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		}
 		
 		if (e.getSource() == contents)
-			new HelpBrowser("file://" + ConverterOptions.CONF_DIR + "/doc/index.html");
+			try {
+				new HelpBrowser("file://" + ConverterOptions.CONF_DIR + "/doc/index.html");
+			} catch (Exception ex) {
+				MessageBox messageBox = new MessageBox(new Shell(Display.getDefault()), SWT.ICON_ERROR | SWT.OK);
+				messageBox.setText("Unable to Load Browser");
+				messageBox.setMessage("iriverter was unable to find the libraries required to display the browser\n\n" +
+						"You can read the help online.");
+				messageBox.open();
+			}
 		
 		if (e.getSource() == logViewer) {
 			if (LogViewer.getSingleton() == null)
