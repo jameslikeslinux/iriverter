@@ -284,10 +284,25 @@ public class ConverterOptions {
 		writeOption("downloadExtraCodecs", "" + downloadExtraCodecs);
 	}
 	
+	public static boolean getKeepUpdated() {
+		String keepUpdated = readOption("keepUpdated");
+		if (keepUpdated.equals(""))
+			return true;
+		
+		return keepUpdated.equals("true");
+	}
+	
+	public static void setKeepUpdated(boolean keepUpdated) {
+		writeOption("keepUpdated", "" + keepUpdated);
+	}
+	
 	public static String getMPlayerPath() {
 		String mplayerPath = readOption("mplayerPath");
 		if (mplayerPath.equals("") || !new File(mplayerPath).isDirectory())
-			return ".";
+			if (System.getProperty("os.name").indexOf("Windows") >= 0)
+				return ".";
+			else
+				return "/usr/bin";
 		
 		return mplayerPath;
 	}

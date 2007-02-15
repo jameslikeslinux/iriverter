@@ -29,7 +29,7 @@ import org.eclipse.swt.graphics.*;
 
 public class MPlayerPathDialog extends Dialog implements SelectionListener {
 	private Shell shell;
-	private Button download, extraCodecs, local, localDirSelect, cancel, ok;
+	private Button download, extraCodecs, keepUpdated, local, localDirSelect, cancel, ok;
 	private Text localDir;
 	private boolean canceled;
 	
@@ -71,6 +71,13 @@ public class MPlayerPathDialog extends Dialog implements SelectionListener {
 		GridData gridData = new GridData();
 		gridData.horizontalIndent = 24;
 		extraCodecs.setLayoutData(gridData);
+		
+		keepUpdated = new Button(downloadComposite, SWT.CHECK);
+		keepUpdated.setText("Keep updated");
+		keepUpdated.setSelection(ConverterOptions.getKeepUpdated());
+		gridData = new GridData();
+		gridData.horizontalIndent = 24;
+		keepUpdated.setLayoutData(gridData);
 		
 		Composite localComposite = new Composite(shell, SWT.NONE);
 		gridLayout = new GridLayout();
@@ -123,6 +130,7 @@ public class MPlayerPathDialog extends Dialog implements SelectionListener {
 		if (System.getProperty("os.name").indexOf("Windows") == -1) {
 			download.setEnabled(false);
 			extraCodecs.setEnabled(false);
+			keepUpdated.setEnabled(false);
 		}
 		
 		if (ConverterOptions.getMPlayerSource().equals("download")) {
@@ -152,6 +160,7 @@ public class MPlayerPathDialog extends Dialog implements SelectionListener {
 	public void widgetSelected(SelectionEvent event) {
 		if (event.getSource() == download) {
 			extraCodecs.setEnabled(true);
+			keepUpdated.setEnabled(true);
 			local.setSelection(false);
 			localDir.setEnabled(false);
 			localDirSelect.setEnabled(false);
@@ -160,6 +169,7 @@ public class MPlayerPathDialog extends Dialog implements SelectionListener {
 		if (event.getSource() == local) {
 			download.setSelection(false);
 			extraCodecs.setEnabled(false);
+			keepUpdated.setEnabled(false);
 			localDir.setEnabled(true);
 			localDirSelect.setEnabled(true);
 		}
