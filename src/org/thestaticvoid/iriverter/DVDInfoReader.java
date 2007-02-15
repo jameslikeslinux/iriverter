@@ -39,10 +39,10 @@ public class DVDInfoReader extends Thread {
 	
 	public void run() {
 		int numberOfTitles = new MPlayerInfo("dvd://", drive, mplayerPath).getNumberOfTitles();
-		progressDialog.setNumberOfTitles(numberOfTitles);
+		progressDialog.setMaximum(numberOfTitles);
 		
 		for (int i = 1; i <= numberOfTitles; i++) {
-			progressDialog.setCurrentTitle(i);
+			progressDialog.setCurrent(i);
 			MPlayerInfo rawTitleInfo = new MPlayerInfo("dvd://" + i, drive, mplayerPath);
 			
 			int length = rawTitleInfo.getLength();

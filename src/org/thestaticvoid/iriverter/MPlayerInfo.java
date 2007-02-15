@@ -41,9 +41,9 @@ public class MPlayerInfo {
 	public MPlayerInfo(String video, String dvdDrive, String mplayerPath) {
 		String[] command = null;
 		if (dvdDrive != null)
-			command = new String[]{mplayerPath + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", "-dvd-device", dvdDrive, video.toString(), "-v", "-identify"};
+			command = new String[]{mplayerPath + File.separator + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", "-dvd-device", dvdDrive, video.toString(), "-v", "-identify"};
 		else
-			command = new String[]{mplayerPath + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", video.toString(), "-identify"};
+			command = new String[]{mplayerPath + File.separator + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", video.toString(), "-identify"};
 		
 		String commandStr = "";
 		for (int i = 0; i < command.length; i++)

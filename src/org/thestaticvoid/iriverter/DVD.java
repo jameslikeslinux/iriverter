@@ -243,6 +243,8 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 						Logger.logMessage(commandStr, Logger.INFO);
 						
 						proc = Runtime.getRuntime().exec(command);
+						
+						canceled = true;
 					} catch (IOException io) {
 						io.printStackTrace();
 						canceled = true;
@@ -337,6 +339,8 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 				titleCombo.select(0);
 
 				setLanguageCombos();
+				
+				canceled = true;
 			} catch (MPlayerNotFoundException mpe) {
 				canceled = new MPlayerPathDialog(getParent().getShell(), SWT.NONE).open();
 				if (canceled)

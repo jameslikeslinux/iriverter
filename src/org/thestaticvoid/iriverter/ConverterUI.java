@@ -393,6 +393,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 					converter.start();
 					progressDialog.open();
 					converter.cancel();
+					
+					canceled = true;
 				} catch (MPlayerNotFoundException mpe) {
 					canceled = new MPlayerPathDialog(shell, SWT.NONE).open();
 				}
@@ -406,14 +408,17 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			String file = fileDialog.open();
 	
 			if (file != null) {
-				try {
-					proc = Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + "mplayer", file});
-				} catch (IOException io) {
-					io.printStackTrace();
-				} catch (MPlayerNotFoundException mpe) {
-					MPlayerPathDialog dialog = new MPlayerPathDialog(shell, SWT.NONE);
-					dialog.open();
-				}
+				boolean canceled = false;
+				while (!canceled)
+					try {
+						proc = Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + "mplayer", file});
+						canceled = true;
+					} catch (IOException io) {
+						io.printStackTrace();
+						canceled = true;
+					} catch (MPlayerNotFoundException mpe) {
+						canceled = new MPlayerPathDialog(shell, SWT.NONE).open();
+					}
 			}
 		}
 		
