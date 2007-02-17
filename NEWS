@@ -5,6 +5,7 @@ version 1.0.0 (2/16/2006):
 	* Distribute via Java Web Start
 	* Ability to choose MPlayer path in Linux
 	* Fixed video-size-change bug
+	* Added cancel buttons where applicable
 	* Added new logo
 	* Switched to Tango-style icons
 
