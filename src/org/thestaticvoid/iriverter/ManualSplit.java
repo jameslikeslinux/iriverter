@@ -189,7 +189,7 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 						
 						canceled = true;
 					} catch (MPlayerNotFoundException mpe) {
-						canceled = new MPlayerPathDialog(getParent().getShell(), SWT.NONE).open();
+						canceled = new MPlayerPathDialog(getParent().getShell()).open() == null;
 					}
 			}
 		}

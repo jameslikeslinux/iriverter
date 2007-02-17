@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <project name="iriverter" default="jar" basedir=".">
 	<property name="package" value="org/thestaticvoid/iriverter" />
+	<property name="mplayer.package" value="hu/mplayerhq" />
 	<property name="main.class" value="${package}/ConverterUI" />
 	<property name="src.dir" value="src" />
 	<property name="web.dir" value="web" />
@@ -64,11 +65,22 @@
 		<copy todir="${build.dir}/${icons.dir}">
 			<fileset dir="${src.dir}/${icons.dir}" />
 		</copy>
+
+		<mkdir dir="${build.dir}/${mplayer.package}" />
+
+		<ftp action="get" depends="yes" verbose="yes" server="ftp1.mplayerhq.hu" remotedir="/MPlayer/releases" userid="anonymous" password="jlee@iriverter.thestatictvoid.org">
+			<fileset dir="${build.dir}/${mplayer.package}">
+				<include name="win32/MPlayer-mingw32-1.0rc1.zip" />
+				<include name="codecs/windows-all-20061022.zip" />
+			</fileset>
+		</ftp>
 	</target>
 
 	<target name="jar" depends="compile,resources">
 		<mkdir dir="${jar.dir}" />
-		<jar destfile="${jar.dir}/iriverter.jar" basedir="${build.dir}" />
+		<jar destfile="${jar.dir}/iriverter.jar" basedir="${build.dir}" includes="${package}/**" />
+		<jar destfile="${jar.dir}/mplayer-win32.jar" basedir="${build.dir}" includes="${mplayer.package}/win32/**" />
+		<jar destfile="${jar.dir}/codecs-win32.jar" basedir="${build.dir}" includes="${mplayer.package}/codecs/**" />
 	</target>
 
 	<target name="dist" depends="jar">
@@ -82,7 +94,7 @@
 		<copy file="${swt.windows.dir}/swt.jar" tofile="${dist.dir}/swt-win32-win32-x86.jar" />
 		
 		<copy todir="${dist.dir}">
-			<fileset file="${jar.dir}/iriverter.jar" />
+			<fileset dir="${jar.dir}" includes="*.jar" />
 			<fileset dir="${web.dir}" />
 			<fileset dir="${basedir}" includes="${doc.dir}/**" />
 		</copy>

@@ -249,7 +249,7 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 						io.printStackTrace();
 						canceled = true;
 					} catch (MPlayerNotFoundException mpe) {
-						canceled = new MPlayerPathDialog(getParent().getShell(), SWT.NONE).open();
+						canceled = new MPlayerPathDialog(getParent().getShell()).open() == null;
 					}
 			}
 		}
@@ -342,7 +342,7 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 				
 				canceled = true;
 			} catch (MPlayerNotFoundException mpe) {
-				canceled = new MPlayerPathDialog(getParent().getShell(), SWT.NONE).open();
+				canceled = new MPlayerPathDialog(getParent().getShell()).open() == null;
 				if (canceled)
 					progressDialog.close();
 			}

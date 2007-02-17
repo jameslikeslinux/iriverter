@@ -60,7 +60,12 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		gridLayout.verticalSpacing = 0;
 		shell.setLayout(gridLayout);
 		
-		extractResources();
+		extractResources("/org/thestaticvoid/iriverter/resources.zip", ConverterOptions.CONF_DIR.toString());
+		extractResources("/hu/mplayerhq/win32/MPlayer-mingw32-1.0rc1.zip", ConverterOptions.CONF_DIR.toString());
+		File mplayerDir = new File(ConverterOptions.CONF_DIR + File.separator + "mplayer");
+		extractResources("/hu/mplayerhq/codecs/windows-all-20061022.zip", mplayerDir.toString());
+		new File(mplayerDir, "windows-all-20061022").renameTo(new File(mplayerDir, "codecs"));
+		
 		setupMenus();
 		setupToolBar();
 		
@@ -274,6 +279,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		volume.addSelectionListener(this);
 		
 		mplayerPath = new MenuItem(advancedOptionsMenu, SWT.PUSH);
+		if (System.getProperty("os.name").indexOf("Windows") >= 0)
+			mplayerPath.setMenu(null);
 		mplayerPath.setText("&MPlayer Path...");
 		mplayerPath.addSelectionListener(this);
 
@@ -302,13 +309,17 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		profileChanged();
 	}
 	
-	public void extractResources() {
-		ZipInputStream in = new ZipInputStream(getClass().getResourceAsStream("resources.zip"));
+	public void extractResources(String resourceName, String toDir) {
+		InputStream inputStream = getClass().getResourceAsStream(resourceName);
+		if (inputStream == null)
+			return;
+		
+		ZipInputStream in = new ZipInputStream(inputStream);
 		
 		try {
 			ZipEntry entry;
 			while ((entry = in.getNextEntry()) != null) {
-				File extractedFile = new File(ConverterOptions.CONF_DIR + File.separator + entry.getName());
+				File extractedFile = new File(toDir + File.separator + entry.getName());
 				if (entry.isDirectory() && !extractedFile.exists())
 					extractedFile.mkdirs();
 				else if (!entry.isDirectory() && (!extractedFile.exists() || entry.getTime() > extractedFile.lastModified())) {
@@ -396,7 +407,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 					
 					canceled = true;
 				} catch (MPlayerNotFoundException mpe) {
-					canceled = new MPlayerPathDialog(shell, SWT.NONE).open();
+					canceled = new MPlayerPathDialog(shell).open() == null;
 				}
 		}
 		
@@ -417,7 +428,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 						io.printStackTrace();
 						canceled = true;
 					} catch (MPlayerNotFoundException mpe) {
-						canceled = new MPlayerPathDialog(shell, SWT.NONE).open();
+						canceled = new MPlayerPathDialog(shell).open() == null;
 					}
 			}
 		}
@@ -533,7 +544,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			new VolumeDialog(shell, SWT.NONE).open();
 		
 		if (e.getSource() == mplayerPath) {
-			new MPlayerPathDialog(shell, SWT.NONE).open();
+			new MPlayerPathDialog(shell).open();
 		}
 		
 		if (e.getSource() == contents)

@@ -319,7 +319,7 @@ public class Converter extends Thread {
 		progressDialogInfo.setOutputVideo(new File(dvdInfo.getOutputVideo()).getName());
 		progressDialogInfo.setStatus("Gathering information about the input video...");
 		
-		MPlayerInfo info = new MPlayerInfo("dvd://" + dvdInfo.getTitle(), dvdInfo.getDrive(), ConverterOptions.getMPlayerPath());
+		MPlayerInfo info = new MPlayerInfo("dvd://" + dvdInfo.getTitle(), dvdInfo.getDrive(), mplayerPath);
 		
 		List commandList = prepareBaseCommandList("dvd://" + dvdInfo.getTitle(), dvdInfo.getOutputVideo(), info);
 		

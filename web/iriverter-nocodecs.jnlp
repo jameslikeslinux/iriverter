@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0+"
 	codebase="http://iriverter.thestaticvoid.org/dist/latest"
-	href="iriverter.jnlp">
+	href="iriverter-nocodecs.jnlp">
 	<information>
   		<title>iriverter</title>
   		<vendor>thestaticvoid.org</vendor>
@@ -28,7 +28,6 @@
 		<nativelib href="swt-native-win32-win32-x86.jar" />
 		<jar href="swt-win32-win32-x86.jar" />
 		<jar href="mplayer-win32.jar" />
-		<jar href="codecs-win32.jar" />
 	</resources>
 
 	<resources os="Linux" arch="i386">

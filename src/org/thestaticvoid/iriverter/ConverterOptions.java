@@ -257,50 +257,11 @@ public class ConverterOptions {
 		writeOption("gain", "" + gain);
 	}
 	
-	public static String getMPlayerSource() {
-		String mplayerSource = readOption("mplayerSource");
-		if (mplayerSource.equals(""))
-			if (System.getProperty("os.name").indexOf("Windows") >= 0)
-				return "download";
-			else
-				return "local";
-		
-		return mplayerSource;
-	}
-	
-	public static void setMPlayerSource(String mplayerSource) {
-		writeOption("mplayerSource", mplayerSource);
-	}
-	
-	public static boolean getDownloadExtraCodecs() {
-		String downloadExtraCodecs = readOption("downloadExtraCodecs");
-		if (downloadExtraCodecs.equals(""))
-			return false;
-		
-		return downloadExtraCodecs.equals("true");
-	}
-	
-	public static void setDownloadExtraCodecs(boolean downloadExtraCodecs) {
-		writeOption("downloadExtraCodecs", "" + downloadExtraCodecs);
-	}
-	
-	public static boolean getKeepUpdated() {
-		String keepUpdated = readOption("keepUpdated");
-		if (keepUpdated.equals(""))
-			return true;
-		
-		return keepUpdated.equals("true");
-	}
-	
-	public static void setKeepUpdated(boolean keepUpdated) {
-		writeOption("keepUpdated", "" + keepUpdated);
-	}
-	
 	public static String getMPlayerPath() {
 		String mplayerPath = readOption("mplayerPath");
 		if (mplayerPath.equals("") || !new File(mplayerPath).isDirectory())
 			if (System.getProperty("os.name").indexOf("Windows") >= 0)
-				return ".";
+				return ConverterOptions.CONF_DIR + File.separator + "mplayer";
 			else
 				return "/usr/bin";
 		
