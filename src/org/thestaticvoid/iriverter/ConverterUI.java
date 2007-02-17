@@ -280,7 +280,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		
 		mplayerPath = new MenuItem(advancedOptionsMenu, SWT.PUSH);
 		if (System.getProperty("os.name").indexOf("Windows") >= 0)
-			mplayerPath.setMenu(null);
+			mplayerPath.setEnabled(false);
 		mplayerPath.setText("&MPlayer Path...");
 		mplayerPath.addSelectionListener(this);
 
