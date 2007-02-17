@@ -23,19 +23,22 @@ package org.thestaticvoid.iriverter;
 
 import org.eclipse.swt.widgets.*;
 
-public class MPlayerPathDialog extends DirectoryDialog {
+public class MPlayerPathDialog {
+	private Shell shell;
+	
 	public MPlayerPathDialog(Shell shell) {
-		super(shell);
+		this.shell = shell;
 	}
 	
-	public String open() {
-		setFilterPath(ConverterOptions.getMPlayerPath());
-		setText("MPlayer Path");
-		setMessage("Select the path to MPlayer");
-		String directory = open();
+	public boolean open() {
+		DirectoryDialog dialog = new DirectoryDialog(shell);
+		dialog.setFilterPath(ConverterOptions.getMPlayerPath());
+		dialog.setText("MPlayer Path");
+		dialog.setMessage("Select the path to MPlayer");
+		String directory = dialog.open();
 		if (directory != null)
 			ConverterOptions.setMPlayerPath(directory);
 		
-		return directory;
+		return directory == null;
 	}
 }

@@ -407,7 +407,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 					
 					canceled = true;
 				} catch (MPlayerNotFoundException mpe) {
-					canceled = new MPlayerPathDialog(shell).open() == null;
+					canceled = new MPlayerPathDialog(shell).open();
 				}
 		}
 		
@@ -428,7 +428,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 						io.printStackTrace();
 						canceled = true;
 					} catch (MPlayerNotFoundException mpe) {
-						canceled = new MPlayerPathDialog(shell).open() == null;
+						canceled = new MPlayerPathDialog(shell).open();
 					}
 			}
 		}
