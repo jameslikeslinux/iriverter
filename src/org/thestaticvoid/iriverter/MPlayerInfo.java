@@ -26,8 +26,8 @@ import java.util.*;
 import java.util.regex.*;
 
 public class MPlayerInfo {
-	public static final String MPLAYER_BIN = System.getProperty("os.name").indexOf("Windows") > 0 ? "mplayer.exe" : "mplayer";
-	public static final String MENCODER_BIN = System.getProperty("os.name").indexOf("Windows") > 0 ? "mencoder.exe" : "mencoder";
+	public static final String MPLAYER_BIN = System.getProperty("os.name").indexOf("Windows") >= 0 ? "mplayer.exe" : "mplayer";
+	public static final String MENCODER_BIN = System.getProperty("os.name").indexOf("Windows") >= 0 ? "mencoder.exe" : "mencoder";
 	
 	private Process proc;
 	private StringBuffer mplayerOutput;
