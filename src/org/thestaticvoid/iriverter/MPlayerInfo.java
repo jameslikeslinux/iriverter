@@ -179,9 +179,9 @@ public class MPlayerInfo {
 		
 		boolean foundMplayer = false, foundMencoder = false;
 		for (int i = 0; i < files.length; i++) {
-			if (files[i].equals("mplayer"))
+			if (files[i].equals("mplayer") || files[i].equals("mplayer.exe"))
 				foundMplayer = true;
-			if (files[i].equals("mencoder"))
+			if (files[i].equals("mencoder") || files[i].equals("mencoder.exe"))
 				foundMencoder = true;
 		}
 		
