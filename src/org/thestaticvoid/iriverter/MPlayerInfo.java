@@ -26,6 +26,9 @@ import java.util.*;
 import java.util.regex.*;
 
 public class MPlayerInfo {
+	public static final String MPLAYER_BIN = System.getProperty("os.name").indexOf("Windows") > 0 ? "mplayer.exe" : "mplayer";
+	public static final String MENCODER_BIN = System.getProperty("os.name").indexOf("Windows") > 0 ? "mencoder.exe" : "mencoder";
+	
 	private Process proc;
 	private StringBuffer mplayerOutput;
 	private boolean commandFound = true;
@@ -41,9 +44,9 @@ public class MPlayerInfo {
 	public MPlayerInfo(String video, String dvdDrive, String mplayerPath) {
 		String[] command = null;
 		if (dvdDrive != null)
-			command = new String[]{mplayerPath + File.separator + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", "-dvd-device", dvdDrive, video.toString(), "-v", "-identify"};
+			command = new String[]{mplayerPath + File.separator + MPLAYER_BIN, "-vo", "null", "-ao", "null", "-frames", "1", "-dvd-device", dvdDrive, video.toString(), "-v", "-identify"};
 		else
-			command = new String[]{mplayerPath + File.separator + "mplayer", "-vo", "null", "-ao", "null", "-frames", "1", video.toString(), "-identify"};
+			command = new String[]{mplayerPath + File.separator + MPLAYER_BIN, "-vo", "null", "-ao", "null", "-frames", "1", video.toString(), "-identify"};
 		
 		String commandStr = "";
 		for (int i = 0; i < command.length; i++)
@@ -53,7 +56,7 @@ public class MPlayerInfo {
 		try {
 			proc = Runtime.getRuntime().exec(command);
 		} catch (IOException io) {
-			io.printStackTrace();
+			Logger.logException(io);
 		}
 		
 		mplayerOutput = new StringBuffer();
@@ -68,7 +71,7 @@ public class MPlayerInfo {
 			
 			input.close();
 		} catch (IOException io) {
-			io.printStackTrace();
+			Logger.logException(io);
 		}
 	}
 	

@@ -219,7 +219,7 @@ public class DVD extends Composite implements SelectionListener, TabItemControl,
 				while (!canceled)
 					try {
 						java.util.List commandList = new ArrayList();
-						commandList.add(MPlayerInfo.getMPlayerPath() + "mplayer");
+						commandList.add(MPlayerInfo.getMPlayerPath() + File.separator + MPlayerInfo.MPLAYER_BIN);
 						commandList.add("-dvd-device");
 						commandList.add(getDrive());
 						commandList.add("dvd://" + getTitle());

@@ -197,7 +197,7 @@ public class Converter extends Thread {
 	private List prepareBaseCommandList(String inputVideo, String outputVideo, MPlayerInfo info) {		
 		List commandList = new ArrayList();
 		
-		commandList.add(mplayerPath + "mencoder");
+		commandList.add(mplayerPath + MPlayerInfo.MENCODER_BIN);
 		
 		commandList.add(inputVideo);
 		commandList.add("-o");
@@ -362,11 +362,11 @@ public class Converter extends Thread {
 		progressDialogInfo.setStatus("Splitting");
 		
 		if (manualSplitInfo.getMarks()[0].getTime() == Mark.START_MARK)
-			runConversionCommand(new String[]{mplayerPath + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + manualSplitInfo.getMarks()[1].getTime()});
+			runConversionCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + manualSplitInfo.getMarks()[1].getTime()});
 		else if (manualSplitInfo.getMarks()[1].getTime() == Mark.END_MARK)
-			runConversionCommand(new String[]{mplayerPath + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + manualSplitInfo.getMarks()[0].getTime()});
+			runConversionCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + manualSplitInfo.getMarks()[0].getTime()});
 		else
-			runConversionCommand(new String[]{mplayerPath + "mencoder", manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + manualSplitInfo.getMarks()[0].getTime(), "-endpos", "" + (manualSplitInfo.getMarks()[1].getTime() - manualSplitInfo.getMarks()[0].getTime())});
+			runConversionCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, manualSplitInfo.getVideo(), "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + manualSplitInfo.getMarks()[0].getTime(), "-endpos", "" + (manualSplitInfo.getMarks()[1].getTime() - manualSplitInfo.getMarks()[0].getTime())});
 	}
 	
 	public void joinVideos(JoinVideosInfo joinVideosInfo) {
@@ -412,7 +412,7 @@ public class Converter extends Thread {
 				progressDialogInfo.setInputVideo(tempFile.getName());
 				progressDialogInfo.setOutputVideo(new File(joinVideosInfo.getOutputVideo()).getName());
 				progressDialogInfo.setStatus("Writing header");
-				splitVideo(joinVideosInfo.getOutputVideo(), runConversionCommand(new String[]{mplayerPath + "mencoder", "-forceidx", tempFile.toString(), "-o", joinVideosInfo.getOutputVideo(), "-ovc", "copy", "-oac", "copy"}));
+				splitVideo(joinVideosInfo.getOutputVideo(), runConversionCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, "-forceidx", tempFile.toString(), "-o", joinVideosInfo.getOutputVideo(), "-ovc", "copy", "-oac", "copy"}));
 			}
 		} catch (IOException e) {
 			// empty
@@ -466,11 +466,11 @@ public class Converter extends Thread {
 			progressDialogInfo.setStatus("Splitting");
 			
 			if ((i + 1) == 1)
-				runConversionCommand(new String[]{mplayerPath + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + (length / pieces)});
+				runConversionCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + (length / pieces)});
 			else if ((i + 1) == pieces)
-				runConversionCommand(new String[]{mplayerPath + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i});
+				runConversionCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i});
 			else
-				runConversionCommand(new String[]{mplayerPath + "mencoder", inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i, "-endpos", "" + (length / pieces)});
+				runConversionCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i, "-endpos", "" + (length / pieces)});
 		}
 	}
 	

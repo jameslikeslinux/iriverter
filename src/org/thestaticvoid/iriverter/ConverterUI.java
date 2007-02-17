@@ -422,7 +422,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				boolean canceled = false;
 				while (!canceled)
 					try {
-						proc = Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + "mplayer", file});
+						proc = Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + MPlayerInfo.MPLAYER_BIN, file});
 						canceled = true;
 					} catch (IOException io) {
 						io.printStackTrace();
