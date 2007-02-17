@@ -1,0 +1,121 @@
+iriverter:
+
+version 1.0.0 (2/16/2006):
+	* Moved build system from GNU autotools to Apache Ant
+	* Distribute via Java Web Start
+	* Ability to choose MPlayer path in Linux
+	* Fixed video-size-change bug
+	* Added new logo
+	* Switched to Tango-style icons
+
+version 0.16 (5/15/2006):
+	* Update clix / U10 profile
+	* Better defaults for X5
+	* Added Zen Vision:M profile (thanks Mat Sheehan)
+	* Added logging to diagnose problems easier (Help->Log Viewer)
+	* Simplified conversion code
+	* Fixed black and white wmv conversions
+	* Installer now optionally installs codecs like Real and Windows Media
+	* Support for iPod Video (not enabled yet)
+
+version 0.15 (1/28/2006):
+	* Fixed Windows start-up issues (no longer need work-around)
+	* Added U10 profile
+	* Readded OSX packages (not tested though)
+	* Updated SWT in Windows and OSX
+
+version 0.14 (7/7/2005):
+	* Build process now uses GNU Autotools
+	* Added profiling system for easier support for other players
+	* Added a beautiful icon (thanks Caleb)
+	* Forced fourcc so converted videos can be played in WMP again
+	* Added simple DVD preview for verifying title and languages
+	* Added Gmini profile mostly as a proof-of-concept
+	* Package renamed to org.thestaticvoid.iriverter to reflect new
+	codebase
+	* Added ability to manually specify volume
+	* Allow floating-point frame rates
+
+version 0.13 (6/9/2005):
+	* Supports video conversion for iAudio X5
+	* Added more configureable FPS setting for PMP and X5
+	* Automatic splitting can be used with all players
+	* The piece length for automatic splitting can be configured
+	* Updated documentation accordingly
+
+version 0.12 (5/30/2005):
+	* Added ability to join AVIs
+	* Updated MPlayer/MEncoder to 1.0pre7 in hope for stability
+	* Removed "Extra Options" due to all of the confusion
+	* Inteface now uses the proper theme on Windows XP
+	* Updated documentation regarding "Not Support Skipping"
+
+version 0.11 (4/13/2005):
+	* Appropriatetly handle first and last pieces of a split job (thanks
+	mirak63)
+	* Improved initial DVD reading to prevent freezing
+	* Fixed jar execution
+	* Updated SWT library
+	* Documentation updates for new firmware
+	* Code clean-up
+
+version 0.10 (3/11/2005):
+	* Added manual split
+	* Added manual sync
+	* Created help
+	* Added video playback
+	* Show title length in DVD mode
+	* Added drag-and-drop
+	* Windows MEncoder fixes
+	* Various other bug-fixes
+
+version 0.09 (2/21/2005):
+	* Rewritten from scratch with a new user interface
+	* No longer requires the Java runtime on Windows
+	* Much better support for DVD chapter selection
+	* Nice .app package for OSX
+	* New MPlayer binaries which are compatible with OSX 10.2 and up
+	* New MPlayer binaries which should help Windows stability
+	* This log entry really understates the amount of changes :-|
+
+version 0.08 (2/15/2005):
+	* Uses xvid instead of ffmpeg to improve A/V sync
+	* Improved audio resampling
+	* Prefixes chapters with 0 if under 10
+
+version 0.07 (1/31/2005):
+	* Reduced the time it takes to get information from DVD
+	* Added ability to select certain chapters from a DVD
+	* Fixed the alignment of various GUI components
+
+version 0.06 (1/30/2005):
+	* Ensure output video file name ends with ".avi"
+	* Check if output video exists when in DVD mode
+	* No longer splits video if using PMP device
+	* Now shows all audio streams even if they have the same language
+	* Cleaned up DVD mode
+	* Fixed stretching with crop mode on
+
+version 0.05 (1/28/2005):
+	* Added drag-and-drop to video and directory inputs and queue list
+
+version 0.04 (1/27/2005):
+	* Fixed choppy DVD conversion
+	* Fixed splitting of middle parts of video
+	* Changed window decorations to a better looking set
+
+version 0.03 (1/26/2005):
+	* Fixed sample rate output
+	* Added code to net.sourceforge.iriverter package
+
+version 0.02 (1/25/2005):
+	* Fixed bug when not normalizing audio
+	* Removed command prompt in background in Windows
+
+version 0.01 (1/25/2005):
+	* Initial release
+	* Changed resampling method in an attempt to improve sound
+	synchronization
+	* Remember last directory the file chooser used
+	* Moved configuration file to home directory and made hidden
+	* Redesigned about screen to be more GPL friendly
