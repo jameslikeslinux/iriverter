@@ -33,7 +33,7 @@ public class AboutDialog extends Dialog implements SelectionListener {
 	private Shell shell;
 	private Button dismiss;
 	
-	public static final String VERSION = "1.0.0";
+	public static final String VERSION = "17";
 	
 	public AboutDialog(Shell parent, int style) {
 		super(parent, style);

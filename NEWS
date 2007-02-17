@@ -1,6 +1,6 @@
 iriverter:
 
-version 1.0.0 (2/16/2006):
+version 17 (2/16/2006):
 	* Moved build system from GNU autotools to Apache Ant
 	* Distribute via Java Web Start
 	* Ability to choose MPlayer path in Linux

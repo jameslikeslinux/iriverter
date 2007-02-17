@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0+"
-	codebase="http://iriverter.thestaticvoid.org/dist/latest"
+	codebase="http://iriverter.thestaticvoid.org/dist/17"
 	href="iriverter.jnlp">
 	<information>
   		<title>iriverter</title>
