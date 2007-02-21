@@ -8,9 +8,10 @@
 	<property name="build.dir" value="build" />
 	<property name="jar.dir" value="jar" />
 	<property name="dist.dir" value="dist" />
-	<property name="swt.linux.x86.dir" value="lib/swt-M20060921-0945-gtk-linux-x86" />
-	<property name="swt.linux.x86_64.dir" value="lib/swt-M20060921-0945-gtk-linux-x86_64" />
-	<property name="swt.windows.dir" value="lib/swt-M20060921-0945-win32-win32-x86" />
+	<property name="swt.linux.x86.dir" value="lib/swt-M20070212-1330-gtk-linux-x86" />
+	<property name="swt.linux.x86_64.dir" value="lib/swt-M20070212-1330-gtk-linux-x86_64" />
+	<property name="swt.osx.dir" value="lib/swt-M20070212-1330-carbon-macosx" />
+	<property name="swt.windows.dir" value="lib/swt-M20070212-1330-win32-win32-x86" />
 	<property name="icons.dir" value="${package}/icons" />
 	<property name="resources.zip.file" value="${build.dir}/${package}/resources.zip" />
 	<property name="doc.dir" value="doc" />
@@ -26,6 +27,10 @@
 	
 	<condition property="swt.dir" value="${swt.linux.x86_64.dir}">
 		<os name="Linux" arch="amd64" />
+	</condition>
+
+	<condition property="swt.dir" value="${swt.osx.dir}">
+		<os name="Mac OS X" />
 	</condition>
 
 	<condition property="swt.dir" value="${swt.windows.dir}">
@@ -88,9 +93,11 @@
 	
 		<jar destfile="${dist.dir}/swt-native-gtk-linux-x86.jar" basedir="${swt.linux.x86.dir}" includes="*.so" />
 		<jar destfile="${dist.dir}/swt-native-gtk-linux-x86_64.jar" basedir="${swt.linux.x86_64.dir}" includes="*.so" />
+		<jar destfile="${dist.dir}/swt-native-carbon-macosx" basedir="${swt.osx.dir}" includes="*.jnilib" />
 		<jar destfile="${dist.dir}/swt-native-win32-win32-x86.jar" basedir="${swt.windows.dir}" includes="*.dll" />
 		<copy file="${swt.linux.x86.dir}/swt.jar" tofile="${dist.dir}/swt-gtk-linux-x86.jar" />
 		<copy file="${swt.linux.x86_64.dir}/swt.jar" tofile="${dist.dir}/swt-gtk-linux-x86_64.jar" />
+		<copy file="${swt.osx.dir}/swt.jar" tofile="${dist.dir}/swt-carbon-macosx.jar" />
 		<copy file="${swt.windows.dir}/swt.jar" tofile="${dist.dir}/swt-win32-win32-x86.jar" />
 		
 		<copy todir="${dist.dir}">

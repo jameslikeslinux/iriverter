@@ -30,6 +30,11 @@
 		<jar href="mplayer-win32.jar" />
 	</resources>
 
+	<resources os="Mac OS X">
+		<nativelib href="swt-native-carbon-macosx.jar" />
+		<jar href="swt-carbon-macosx.jar" />
+	</resources>
+
 	<resources os="Linux" arch="i386">
 		<nativelib href="swt-native-gtk-linux-x86.jar" />
 		<jar href="swt-gtk-linux-x86.jar" />
