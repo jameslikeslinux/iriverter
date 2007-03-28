@@ -104,7 +104,7 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		if (e.getSource() == inputVideoSelect) {
 			FileDialog fileDialog = new FileDialog(getShell(), SWT.OPEN);
 			fileDialog.setText("Input Video");
-			fileDialog.setFilterExtensions(new String[]{"*.avi;*.vob;*.mkv;*.mpg;*.mpeg;*.ogm;*.mov;*.rm;*.ram;*.wmv;*.asf", "*.avi", "*.vob", "*.mkv", "*.mpg;*.mpeg;*.mp4", "*.ogm", "*.mov", "*.rm;*.ram", "*.wmv;*.asf", "*"});
+			fileDialog.setFilterExtensions(new String[]{"*.avi;*.vob;*.mkv;*.mpg;*.mpeg;*.mp4;*.ogm;*.mov;*.rm;*.ram;*.wmv;*.asf", "*.avi", "*.vob", "*.mkv", "*.mpg;*.mpeg;*.mp4", "*.ogm", "*.mov", "*.rm;*.ram", "*.wmv;*.asf", "*"});
 			fileDialog.setFilterNames(new String[]{"All Video Files", "AVI Video (*.avi)", "DVD Video Object (*.vob)", "Matroska Video (*.mkv)", "MPEG Video (*.mpg, *.mpeg, *.mp4)", "Ogg Video (*.ogm)", "Quicktime Movie (*.mov)", "Real Video (*.rm, *.ram)", "Windows Media Video (*.wmv, *.asf)", "All Files"});
 			String file = fileDialog.open();
 			if (file != null) {
