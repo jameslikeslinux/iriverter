@@ -195,9 +195,6 @@ public class MPlayerInfo {
 	}
 	
 	public boolean videoSupported() {
-		if (getFrameRate() == -1 || getDimensions().getWidth() == -1 || getDimensions().getHeight() == -1)
-			return false;
-		
-		return true;
+		return getFrameRate() != -1 && getDimensions().getWidth() != -1 && getDimensions().getHeight() != -1;
 	}
 }

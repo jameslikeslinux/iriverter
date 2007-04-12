@@ -1,5 +1,5 @@
 /*
- * ManualSplitInfo.java
+ * Job.java
  * Copyright (C) 2005-2007 James Lee
  *
  * This program is free software; you can redistribute it and/or
@@ -21,8 +21,7 @@
  */
 package org.thestaticvoid.iriverter;
 
-public interface ManualSplitInfo {
-	public String getVideo();
-	public Mark[] getMarks();
-	public int getPart();
+public interface Job {
+	public String getDescription();
+	public MencoderCommand[] getMencoderCommands();
 }

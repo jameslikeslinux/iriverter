@@ -391,24 +391,16 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			tabChanged(false);
 		
 		if (e.getSource() == convert || e.getSource() == convertTool) {
-			java.util.List jobs = new ArrayList();
+			Job[] jobs = new Job[tabFolder.getItemCount()];
 			for (int i = 0; i < tabFolder.getItemCount(); i++)
-				jobs.add(tabFolder.getItem(i).getControl());
+				jobs[i] = (Job) tabFolder.getItem(i).getControl();
 			
 			progressDialog = new ProgressDialog(shell, SWT.NONE);
 			
-			boolean canceled = false;
-			while (!canceled)
-				try {
-					Converter converter = new Converter(jobs, progressDialog, MPlayerInfo.getMPlayerPath());
-					converter.start();
-					progressDialog.open();
-					converter.cancel();
-					
-					canceled = true;
-				} catch (MPlayerNotFoundException mpe) {
-					canceled = new MPlayerPathDialog(shell).open();
-				}
+			Converter converter = new Converter(jobs, progressDialog);
+			converter.start();
+			progressDialog.open();
+			converter.cancel();
 		}
 		
 		if (e.getSource() == playFile) {
@@ -433,11 +425,18 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			}
 		}
 		
-		if (e.getSource() == newSingleVideo || e.getSource() == newSingleVideoTool)
-			newSingleVideo();
+		if (e.getSource() == newSingleVideo || e.getSource() == newSingleVideoTool) {
+			FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
+			fileDialog.setText("Input Video");
+			fileDialog.setFilterExtensions(new String[]{"*.avi;*.vob;*.mkv;*.mpg;*.mpeg;*.mp4;*.ogm;*.mov;*.rm;*.ram;*.wmv;*.asf", "*.avi", "*.vob", "*.mkv", "*.mpg;*.mpeg;*.mp4", "*.ogm", "*.mov", "*.rm;*.ram", "*.wmv;*.asf", "*"});
+			fileDialog.setFilterNames(new String[]{"All Video Files", "AVI Video (*.avi)", "DVD Video Object (*.vob)", "Matroska Video (*.mkv)", "MPEG Video (*.mpg, *.mpeg, *.mp4)", "Ogg Video (*.ogm)", "Quicktime Movie (*.mov)", "Real Video (*.rm, *.ram)", "Windows Media Video (*.wmv, *.asf)", "All Files"});
+			String file = fileDialog.open();
+			if (file != null)
+				newSingleVideo(file);
+		}
 		
-		if (e.getSource() == newDirectory || e.getSource() == newDirectoryTool)
-			newDirectory();
+		/*if (e.getSource() == newDirectory || e.getSource() == newDirectoryTool)
+			newDirectory();*/
 		
 		if (e.getSource() == newDVD || e.getSource() == newDVDTool)
 			newDVD();
@@ -662,12 +661,12 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				File file = new File(files[i]);
 				
 				if (file.isFile() && new VideoFileFilter().accept(file))
-					newSingleVideo().setInputVideo(files[i]);
+					newSingleVideo(files[i].toString());
 				else if (file.isDirectory())
 					if (new File(files[i] + File.separator + "VIDEO_TS").exists())
 						newDVD().setDrive(files[i]);
-					else
-						newDirectory().setInputDirectory(files[i]);
+					/* else
+						newDirectory().setInputDirectory(files[i]);*/
 			}
 		}		
 	}
@@ -676,17 +675,29 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 
 	}
 	
-	private SingleVideo newSingleVideo() {
+	private SingleVideo newSingleVideo(String video) {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		SingleVideo singleVideo = new SingleVideo(tabFolder, SWT.NONE, tabItem);
-		tabItem.setControl(singleVideo);
-		tabFolder.setSelection(tabItem);
-		tabChanged(false);
+		SingleVideo singleVideo = null;
+		
+		boolean canceled = false;
+		while (!canceled)
+			try {
+				singleVideo = new SingleVideo(tabFolder, SWT.NONE, tabItem, video, MPlayerInfo.getMPlayerPath()); 
+				tabItem.setControl(singleVideo);
+				tabFolder.setSelection(tabItem);
+				tabChanged(false);
+				canceled = true;
+			} catch (MPlayerNotFoundException mpe) {
+				canceled = new MPlayerPathDialog(shell).open();
+			} catch (Exception e) {
+				tabItem.dispose();
+				canceled = true;
+			}
 		
 		return singleVideo;
 	}
 	
-	private Directory newDirectory() {
+	/* private Directory newDirectory() {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
 		Directory directory = new Directory(tabFolder, SWT.NONE, tabItem);
 		tabItem.setControl(directory);
@@ -694,7 +705,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		tabChanged(false);
 		
 		return directory;
-	}
+	} */
 	
 	private DVD newDVD() {
 		DVD lastDVD = null;

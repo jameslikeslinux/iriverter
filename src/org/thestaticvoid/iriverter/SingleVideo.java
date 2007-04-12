@@ -29,20 +29,34 @@ import org.eclipse.swt.custom.*;
 import org.eclipse.swt.graphics.*;
 
 import java.io.*;
+import java.util.*;
 
-public class SingleVideo extends Composite implements SelectionListener, TabItemControl, SingleVideoInfo {
+public class SingleVideo extends Composite implements SelectionListener, TabItemControl, Job {
 	private CTabItem tabItem;
-	private Text inputVideoInput, outputVideoInput;
-	private Button inputVideoSelect, outputVideoSelect;
-	private String syncInputVideo, syncOutputVideo;
+	private String inputVideo;
+	private MPlayerInfo inputVideoInfo;
+	private Text outputVideoInput;
+	private Button outputVideoSelect;
+	private String mplayerPath, outputVideoText;
 	
-	public SingleVideo(Composite parent, int style, CTabItem tabItem) {
+	public SingleVideo(Composite parent, int style, CTabItem tabItem, String inputVideo, String mplayerPath) throws Exception {
 		super(parent, style);
 		this.tabItem = tabItem;
+		this.inputVideo = inputVideo;
+		this.mplayerPath = mplayerPath;
+		
+		inputVideoInfo = new MPlayerInfo(inputVideo.toString(), mplayerPath);
+		if (!inputVideoInfo.videoSupported()) {
+			MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
+			messageBox.setText("Unsupported Video");
+			messageBox.setMessage("MPlayer does not recognize this type of video:\n" + new File(inputVideo).getName());
+			messageBox.open();
+			throw new Exception("Unsupported video");
+		}
 		
 		InputStream is = getClass().getResourceAsStream("icons/singlevideo-16.png");
 		tabItem.setImage(new Image(getDisplay(), is));
-		tabItem.setText("New Single Video");
+		tabItem.setText(new File(inputVideo).getName());
 		
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
@@ -63,29 +77,11 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		gridData.horizontalSpan = 3;
 		singleVideoLabel.setLayoutData(gridData);
 		
-		/* Label tab = new Label(this, SWT.NONE);
-		tab.setText("\t"); */
-		
-		Label inputVideo = new Label(this, SWT.NONE);
-		inputVideo.setText("Input:");
-		
-		inputVideoInput = new Text(this, SWT.BORDER);
-		inputVideoInput.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		inputVideoSelect = new Button(this, SWT.PUSH);
-		inputVideoSelect.setText("Select");
-		gridData = new GridData();
-		gridData.widthHint = 75;
-		inputVideoSelect.setLayoutData(gridData);
-		inputVideoSelect.addSelectionListener(this);
-		
-		/* tab = new Label(this, SWT.NONE);
-		tab.setText("\t"); */
-		
 		Label outputVideo = new Label(this, SWT.NONE);
 		outputVideo.setText("Output:");
 		
 		outputVideoInput = new Text(this, SWT.BORDER);
+		outputVideoInput.setText(inputVideo.substring(0, inputVideo.lastIndexOf('.')) + "." + ConverterOptions.getCurrentProfile().getProfileName() + "." + ConverterOptions.getCurrentProfile().getWrapperFormat());
 		outputVideoInput.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		outputVideoSelect = new Button(this, SWT.PUSH);
@@ -100,20 +96,7 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		// empty
 	}
 	
-	public void widgetSelected(SelectionEvent e) {
-		if (e.getSource() == inputVideoSelect) {
-			FileDialog fileDialog = new FileDialog(getShell(), SWT.OPEN);
-			fileDialog.setText("Input Video");
-			fileDialog.setFilterExtensions(new String[]{"*.avi;*.vob;*.mkv;*.mpg;*.mpeg;*.mp4;*.ogm;*.mov;*.rm;*.ram;*.wmv;*.asf", "*.avi", "*.vob", "*.mkv", "*.mpg;*.mpeg;*.mp4", "*.ogm", "*.mov", "*.rm;*.ram", "*.wmv;*.asf", "*"});
-			fileDialog.setFilterNames(new String[]{"All Video Files", "AVI Video (*.avi)", "DVD Video Object (*.vob)", "Matroska Video (*.mkv)", "MPEG Video (*.mpg, *.mpeg, *.mp4)", "Ogg Video (*.ogm)", "Quicktime Movie (*.mov)", "Real Video (*.rm, *.ram)", "Windows Media Video (*.wmv, *.asf)", "All Files"});
-			String file = fileDialog.open();
-			if (file != null) {
-				inputVideoInput.setText(file);
-				outputVideoInput.setText(file.substring(0, file.lastIndexOf('.')) + "." + ConverterOptions.getCurrentProfile().getProfileName() + "." + ConverterOptions.getCurrentProfile().getWrapperFormat());
-				tabItem.setText(new File(file).getName());
-			}
-		}
-		
+	public void widgetSelected(SelectionEvent e) {		
 		if (e.getSource() == outputVideoSelect) {
 			FileDialog fileDialog = new FileDialog(getShell(), SWT.SAVE);
 			fileDialog.setText("Output Video");
@@ -134,40 +117,46 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		this.tabItem = tabItem;
 	}
 	
-	public void setInputVideo(String inputVideo) {
-		tabItem.setText(new File(inputVideo).getName());
-		
-		inputVideoInput.setText(inputVideo);
-		outputVideoInput.setText(inputVideo.substring(0, inputVideo.lastIndexOf('.')) + "." + ConverterOptions.getCurrentProfile().getProfileName() + ".avi");
-	}
-	
-	public synchronized String getInputVideo() {		
+	private String getOutputVideo() {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				syncInputVideo = inputVideoInput.getText();
+				outputVideoText = outputVideoInput.getText();
 			}
 		});
 		
-		return syncInputVideo;
+		return outputVideoText;
 	}
 	
-	public synchronized String getOutputVideo() {
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				syncOutputVideo = outputVideoInput.getText();
-			}
-		});
+	public String getDescription() {		
+		return "Converting " + new File(inputVideo).getName();
+	}
+	
+	public MencoderCommand[] getMencoderCommands() {
+		java.util.List mencoderCommandsList = new ArrayList();
 		
-		return syncOutputVideo;
-	}
-	
-	public synchronized void setOutputVideo(String outputVideo) {
-		syncOutputVideo = outputVideo;
-
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				outputVideoInput.setText(syncOutputVideo);
+		
+		java.util.List commandList = MencoderCommand.prepareBaseCommandList(inputVideo, getOutputVideo(), mplayerPath, inputVideoInfo, 0);
+		String[] command = (String[]) commandList.toArray(new String[]{});
+		mencoderCommandsList.add(new MencoderCommand("Encoding...", command));
+		
+		int length = inputVideoInfo.getLength();
+		String inputVideo = getOutputVideo();
+		if (length > ConverterOptions.getSplitTime() * 60 && ConverterOptions.getAutoSplit()) {
+			int pieces = (length / (ConverterOptions.getSplitTime() * 60)) + 1;
+			for (int i = 0; i < pieces; i++) {
+				String outputVideo = inputVideo.substring(0, inputVideo.lastIndexOf('.')) + ".part" + (i + 1) + ".avi";
+				
+				if ((i + 1) == 1)
+					command = new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-endpos", "" + (length / pieces)};
+				else if ((i + 1) == pieces)
+					command = new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i};
+				else
+					command = new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i, "-endpos", "" + (length / pieces)};
+				
+				mencoderCommandsList.add(new MencoderCommand("Splitting Part " + (i + 1) + " of " + pieces, command));
 			}
-		});
+		}
+		
+		return (MencoderCommand[]) mencoderCommandsList.toArray(new MencoderCommand[]{});
 	}
 }
