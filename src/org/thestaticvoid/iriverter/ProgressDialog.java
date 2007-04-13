@@ -29,11 +29,10 @@ import org.eclipse.swt.graphics.*;
 
 public class ProgressDialog extends Dialog implements SelectionListener, ProgressDialogInfo {
 	private Shell shell;
-	private Label header, inputVideoLabel, inputVideo, outputVideoLabel, outputVideo, status;
+	private Label header, jobDescription, subdescription, miscellaneous1, miscellaneous2;
 	private ProgressBar progressBar;
-	private String syncInputVideo, syncOutputVideo, syncStatus;
 	private Button dismiss;
-	private int currentJob, totalJobs, syncPercentComplete;
+	private int currentJob, totalJobs;
 	
 	public ProgressDialog(Shell parent, int style) {
 		super(parent, style);
@@ -50,7 +49,7 @@ public class ProgressDialog extends Dialog implements SelectionListener, Progres
 		shell.setLayout(gridLayout);
 		
 		header = new Label(shell, SWT.NONE);
-		header.setText("Converting");
+		header.setText("Job");
 		FontData[] fontData = header.getFont().getFontData();
 		fontData[0].setStyle(SWT.BOLD);
 		fontData[0].setHeight(fontData[0].getHeight() + 4);
@@ -58,38 +57,31 @@ public class ProgressDialog extends Dialog implements SelectionListener, Progres
 		GridData gridData = new GridData();
 		header.setLayoutData(gridData);
 		
-		Composite infoComp = new Composite(shell, SWT.NONE);
-		gridLayout = new GridLayout();
-		gridLayout.horizontalSpacing = 6;
-		gridLayout.verticalSpacing = 0;
-		gridLayout.marginHeight = 0;
-		gridLayout.marginWidth = 0;
-		gridLayout.numColumns = 2;
-		infoComp.setLayout(gridLayout);
-		infoComp.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		inputVideoLabel = new Label(infoComp, SWT.NONE);
-		inputVideoLabel.setText("Input:");
-		fontData = inputVideoLabel.getFont().getFontData();
+		jobDescription = new Label(shell, SWT.NONE);
+		fontData = jobDescription.getFont().getFontData();
 		fontData[0].setStyle(SWT.BOLD);
-		inputVideoLabel.setFont(new Font(getParent().getDisplay(), fontData));
-		
-		inputVideo = new Label(infoComp, SWT.NONE);
-		
-		outputVideoLabel = new Label(infoComp, SWT.NONE);
-		outputVideoLabel.setText("Output:");
-		outputVideoLabel.setFont(new Font(getParent().getDisplay(), fontData));
-		
-		outputVideo = new Label(infoComp, SWT.NONE);
+		jobDescription.setFont(new Font(getParent().getDisplay(), fontData));
 		
 		progressBar = new ProgressBar(shell, SWT.HORIZONTAL | SWT.SMOOTH);
 		progressBar.setMaximum(100);
 		progressBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		status = new Label(shell, SWT.NONE);
-		fontData = status.getFont().getFontData();
+		subdescription = new Label(shell, SWT.NONE);
+		fontData = subdescription.getFont().getFontData();
 		fontData[0].setStyle(SWT.ITALIC);
-		status.setFont(new Font(getParent().getDisplay(), fontData));
+		subdescription.setFont(new Font(getParent().getDisplay(), fontData));
+		
+		Composite details = new Composite(shell, SWT.NONE);
+		gridLayout = new GridLayout();
+		gridLayout.horizontalSpacing = 6;
+		gridLayout.verticalSpacing = 0;
+		gridLayout.marginHeight = 0;
+		gridLayout.marginWidth = 0;
+		details.setLayout(gridLayout);
+		details.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		miscellaneous1 = new Label(details, SWT.NONE);
+		miscellaneous2 = new Label(details, SWT.NONE);
 		
 		dismiss = new Button(shell, SWT.PUSH);
 		dismiss.setText("Cancel");
@@ -121,105 +113,74 @@ public class ProgressDialog extends Dialog implements SelectionListener, Progres
 		close();
 	}
 	
-	public synchronized void complete(final boolean success) {		
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				if (!success) {
-					MessageBox dialog = new MessageBox(getParent().getShell(), SWT.ICON_ERROR);
-					dialog.setText("There Was an Error While Converting");
-					dialog.setMessage("An error occurred while converting " + inputVideo.getText());
-					dialog.open();
-				}
-
-				shell.setText("Complete");
-				header.setText("Complete");
-				inputVideoLabel.setText("");
-				inputVideo.setText("");
-				outputVideoLabel.setText("");
-				outputVideo.setText("");
-				progressBar.setSelection(100);
-				status.setText("");
-				dismiss.setText("Close");
-			}
-		});
-	}
-	
-	public synchronized void setCurrentJob(int currentJob) {
+	public void setCurrentJob(int currentJob) {
 		this.currentJob = currentJob;
 		
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				if (!shell.isDisposed() && !header.isDisposed()) {
-					shell.setText("Converting " + ProgressDialog.this.currentJob + " of " + totalJobs);
-					header.setText("Converting " + ProgressDialog.this.currentJob + " of " + totalJobs);
+					shell.setText("Job " + ProgressDialog.this.currentJob + " of " + totalJobs);
+					header.setText("Job " + ProgressDialog.this.currentJob + " of " + totalJobs);
 					header.pack();
 				}
 			}
 		});		
 	}
 	
-	public synchronized void setTotalJobs(int totalJobs) {
+	public void setTotalJobs(int totalJobs) {
 		this.totalJobs = totalJobs;
 	}
 	
-	public synchronized void setInputVideo(String inputVideo) {
-		syncInputVideo = inputVideo;
-
+	public synchronized void setJobDescription(final String jobDescription) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				if (!ProgressDialog.this.inputVideo.isDisposed()) {
-					ProgressDialog.this.inputVideo.setText(syncInputVideo);
-					ProgressDialog.this.inputVideo.pack();
+				if (!ProgressDialog.this.jobDescription.isDisposed()) {
+					ProgressDialog.this.jobDescription.setText(jobDescription);
+					ProgressDialog.this.jobDescription.pack();
 				}
 			}
 		});
 	}
 	
-	public synchronized void setOutputVideo(String outputVideo) {
-		syncOutputVideo = outputVideo;
-		
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				if (!ProgressDialog.this.outputVideo.isDisposed()) {
-					ProgressDialog.this.outputVideo.setText(syncOutputVideo);
-					ProgressDialog.this.outputVideo.pack();
-				}
-			}
-		});
-	}
-	
-	public synchronized void setPercentComplete(int percentComplete) {
-		syncPercentComplete = percentComplete;
-		
+	public void setPercentComplete(final int percentComplete) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				if (!progressBar.isDisposed())
-					progressBar.setSelection(syncPercentComplete);
+					progressBar.setSelection(percentComplete);
 			}
 		});
 	}
 	
-	public synchronized void setStatus(String status) {
-		syncStatus = status;
-		
+	public void setSubdescription(final String subdescription) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				if (!ProgressDialog.this.status.isDisposed()) {
-					ProgressDialog.this.status.setText(syncStatus);
-					ProgressDialog.this.status.pack();
+				if (!ProgressDialog.this.subdescription.isDisposed()) {
+					ProgressDialog.this.subdescription.setText(subdescription);
+					ProgressDialog.this.subdescription.pack();
 				}
 			}
 		});
 	}
 	
-	public synchronized String getStatus() {		
+	public void setMiscellaneous1(final String miscellaneous1) {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
-				if (!status.isDisposed())
-					syncStatus = status.getText();
+				if (!ProgressDialog.this.miscellaneous1.isDisposed()) {
+					ProgressDialog.this.miscellaneous1.setText(miscellaneous1);
+					ProgressDialog.this.miscellaneous1.pack();
+				}
 			}
 		});
-		
-		return syncStatus;
+	}
+	
+	public void setMiscellaneous2(final String miscellaneous2) {
+		Display.getDefault().syncExec(new Runnable() {
+			public void run() {
+				if (!ProgressDialog.this.miscellaneous2.isDisposed()) {
+					ProgressDialog.this.miscellaneous2.setText(miscellaneous2);
+					ProgressDialog.this.miscellaneous2.pack();
+				}
+			}
+		});
 	}
 }

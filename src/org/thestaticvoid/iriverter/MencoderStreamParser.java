@@ -26,14 +26,12 @@ import java.util.regex.*;
 
 public class MencoderStreamParser extends Thread {
 	private ProgressDialogInfo progressDialogInfo;
-	private String status;
 	private BufferedReader input;
 	private String inputLine = "", lengthLine = "";
 	private boolean stopReading = false;
 	
 	public MencoderStreamParser(ProgressDialogInfo progressDialogInfo) {
 		this.progressDialogInfo = progressDialogInfo;
-		status = progressDialogInfo.getStatus();
 	}
 	
 	public void parse(BufferedReader input) {
@@ -82,13 +80,14 @@ public class MencoderStreamParser extends Thread {
 					
 					String timeRemaining = inputLine.substring(inputLine.indexOf("Trem:") + 6, inputLine.indexOf("min")).trim();
 					if (timeRemaining.equals("0"))
-						timeRemaining = "less than a minute remaining";
+						timeRemaining = "Less than a minute remaining.";
 					else if (timeRemaining.equals("1"))
-						timeRemaining = "about " + timeRemaining + " minute remaining";
+						timeRemaining = "About " + timeRemaining + " minute remaining.";
 					else
-						timeRemaining = "about " + timeRemaining + " minutes remaining";
+						timeRemaining = "About " + timeRemaining + " minutes remaining.";
 					
-					progressDialogInfo.setStatus(status + " at " + inputLine.substring(inputLine.indexOf(")") + 1, inputLine.indexOf("fps")).trim() + " FPS with " + timeRemaining);
+					progressDialogInfo.setMiscellaneous1(timeRemaining);
+					progressDialogInfo.setMiscellaneous2(inputLine.substring(inputLine.indexOf(")") + 1, inputLine.indexOf("fps")).trim() + " frames per second");
 				}
 				
 				try {

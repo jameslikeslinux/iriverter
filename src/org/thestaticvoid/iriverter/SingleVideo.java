@@ -131,13 +131,13 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		return "Converting " + new File(inputVideo).getName();
 	}
 	
-	public MencoderCommand[] getMencoderCommands() {
-		java.util.List mencoderCommandsList = new ArrayList();
+	public DoSomeShit[] getShitToDo() {
+		java.util.List shitToDo = new ArrayList();
 		
 		
 		java.util.List commandList = MencoderCommand.prepareBaseCommandList(inputVideo, getOutputVideo(), mplayerPath, inputVideoInfo, 0);
 		String[] command = (String[]) commandList.toArray(new String[]{});
-		mencoderCommandsList.add(new MencoderCommand("Encoding...", command));
+		shitToDo.add(new MencoderCommand("Encoding...", command));
 		
 		int length = inputVideoInfo.getLength();
 		String inputVideo = getOutputVideo();
@@ -153,10 +153,10 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 				else
 					command = new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, inputVideo, "-o", outputVideo, "-ovc", "copy", "-oac", "copy", "-ss", "" + (length / pieces) * i, "-endpos", "" + (length / pieces)};
 				
-				mencoderCommandsList.add(new MencoderCommand("Splitting Part " + (i + 1) + " of " + pieces, command));
+				shitToDo.add(new MencoderCommand("Splitting Part " + (i + 1) + " of " + pieces, command));
 			}
 		}
 		
-		return (MencoderCommand[]) mencoderCommandsList.toArray(new MencoderCommand[]{});
+		return (DoSomeShit[]) shitToDo.toArray(new DoSomeShit[]{});
 	}
 }

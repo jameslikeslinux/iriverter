@@ -24,7 +24,7 @@ package org.thestaticvoid.iriverter;
 import java.util.*;
 import java.io.*;
 
-public class MencoderCommand {
+public class MencoderCommand implements DoSomeShit {
 	private String description;
 	private String[] command;
 	private Process proc;
@@ -34,7 +34,7 @@ public class MencoderCommand {
 		this.command = command;
 	}
 	
-	public int run(ProgressDialogInfo progressDialogInfo) {
+	public void run(ProgressDialogInfo progressDialogInfo) throws FailedToDoSomeShit {
 		int exitCode = 1;
 		
 		MencoderStreamParser inputStream = null;
@@ -44,6 +44,8 @@ public class MencoderCommand {
 		for (int i = 0; i < command.length; i++)
 			commandStr += command[i] + " ";
 		Logger.logMessage(description + " " + commandStr, Logger.INFO);
+		
+		progressDialogInfo.setSubdescription(description);
 		
 		try {
 			proc = Runtime.getRuntime().exec(command);
@@ -58,7 +60,8 @@ public class MencoderCommand {
 			e.printStackTrace();
 		}
 		
-		return exitCode;
+		if (exitCode > 0)
+			throw new FailedToDoSomeShit(description);
 	}
 	
 	public void cancel() {

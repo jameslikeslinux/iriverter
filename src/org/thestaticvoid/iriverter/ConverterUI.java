@@ -42,8 +42,6 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 	private MenuItem convert, playFile, newSingleVideo, newDirectory, newDVD, advancedJobs, manualSplit, joinVideos, moveUp, moveDown, closeJob, closeAllJobs, quit, bitrate, videoSize, panAndScan, advancedOptions, audioSync, automaticallySplit, volume, mplayerPath, contents, logViewer, about;
 	private Menu videoSizeMenu;
 	private DropTarget target;
-	private String fileName;
-	private Process proc;
 	private ProgressDialog progressDialog;
 	
 	public ConverterUI() {		
@@ -396,6 +394,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				jobs[i] = (Job) tabFolder.getItem(i).getControl();
 			
 			progressDialog = new ProgressDialog(shell, SWT.NONE);
+			progressDialog.setTotalJobs(jobs.length);
 			
 			Converter converter = new Converter(jobs, progressDialog);
 			converter.start();
@@ -414,10 +413,10 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				boolean canceled = false;
 				while (!canceled)
 					try {
-						proc = Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + MPlayerInfo.MPLAYER_BIN, file});
+						Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + MPlayerInfo.MPLAYER_BIN, file});
 						canceled = true;
 					} catch (IOException io) {
-						io.printStackTrace();
+						Logger.logException(io);
 						canceled = true;
 					} catch (MPlayerNotFoundException mpe) {
 						canceled = new MPlayerPathDialog(shell).open();
@@ -435,8 +434,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				newSingleVideo(file);
 		}
 		
-		/*if (e.getSource() == newDirectory || e.getSource() == newDirectoryTool)
-			newDirectory();*/
+		if (e.getSource() == newDirectory || e.getSource() == newDirectoryTool)
+			newDirectory();
 		
 		if (e.getSource() == newDVD || e.getSource() == newDVDTool)
 			newDVD();
@@ -660,13 +659,13 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			for (int i = 0; i < files.length; i++) {
 				File file = new File(files[i]);
 				
-				if (file.isFile() && new VideoFileFilter().accept(file))
+				/* if (file.isFile() && new VideoFileFilter().accept(file))
 					newSingleVideo(files[i].toString());
 				else if (file.isDirectory())
 					if (new File(files[i] + File.separator + "VIDEO_TS").exists())
 						newDVD().setDrive(files[i]);
-					/* else
-						newDirectory().setInputDirectory(files[i]);*/
+					else
+						newDirectory().setInputDirectory(files[i]); */
 			}
 		}		
 	}
@@ -675,37 +674,48 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 
 	}
 	
-	private SingleVideo newSingleVideo(String video) {
-		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		SingleVideo singleVideo = null;
-		
-		boolean canceled = false;
-		while (!canceled)
-			try {
-				singleVideo = new SingleVideo(tabFolder, SWT.NONE, tabItem, video, MPlayerInfo.getMPlayerPath()); 
-				tabItem.setControl(singleVideo);
-				tabFolder.setSelection(tabItem);
-				tabChanged(false);
-				canceled = true;
-			} catch (MPlayerNotFoundException mpe) {
-				canceled = new MPlayerPathDialog(shell).open();
-			} catch (Exception e) {
-				tabItem.dispose();
-				canceled = true;
+	private void newSingleVideo(final String video) {
+		display.syncExec(new Runnable() {
+			public void run() {
+				CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
+				SingleVideo singleVideo = null;
+				
+				boolean canceled = false;
+				while (!canceled)
+					try {
+						singleVideo = new SingleVideo(tabFolder, SWT.NONE, tabItem, video, MPlayerInfo.getMPlayerPath()); 
+						tabItem.setControl(singleVideo);
+						tabFolder.setSelection(tabItem);
+						tabChanged(false);
+						canceled = true;
+					} catch (MPlayerNotFoundException mpe) {
+						canceled = new MPlayerPathDialog(shell).open();
+					} catch (Exception e) {
+						tabItem.dispose();
+						canceled = true;
+					}
 			}
-		
-		return singleVideo;
+		});
 	}
 	
-	/* private Directory newDirectory() {
-		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		Directory directory = new Directory(tabFolder, SWT.NONE, tabItem);
-		tabItem.setControl(directory);
-		tabFolder.setSelection(tabItem);
-		tabChanged(false);
-		
-		return directory;
-	} */
+	private void newDirectory() {
+		final DirectoryScanner directoryScanner = new AddDirectoryDialog(shell, SWT.NONE).open();
+		if (directoryScanner != null) {
+			final DirectoryProgressDialog directoryProgressDialog = new DirectoryProgressDialog(shell, SWT.NONE);
+			new Thread() {
+				public void run() {
+					String[] videos = directoryScanner.getVideos();
+					directoryProgressDialog.setMaximum(videos.length);
+					for (int i = 0; i < videos.length; i++) {
+						directoryProgressDialog.setCurrent(i + 1);
+						newSingleVideo(videos[i]);
+					}
+					directoryProgressDialog.close();
+				}
+			}.start();
+			directoryProgressDialog.open();
+		}
+	}
 	
 	private DVD newDVD() {
 		DVD lastDVD = null;

@@ -1,5 +1,5 @@
 /*
- * ProgressDialogInfo.java
+ * DirectoryProgressDialog.java
  * Copyright (C) 2005-2007 James Lee
  *
  * This program is free software; you can redistribute it and/or
@@ -21,12 +21,17 @@
  */
 package org.thestaticvoid.iriverter;
 
-public interface ProgressDialogInfo {
-	public void setCurrentJob(int currentJob);
-	public void setTotalJobs(int totalJobs);
-	public void setJobDescription(String jobDescription);
-	public void setPercentComplete(int percentComplete);
-	public void setSubdescription(String subdescription);
-	public void setMiscellaneous1(String miscellaneous1);
-	public void setMiscellaneous2(String miscellaneous2);
+import org.eclipse.swt.widgets.*;
+
+public class DirectoryProgressDialog extends GenericProgressDialog {
+	public DirectoryProgressDialog(Shell parent, int style) {
+		super(parent, style, "Adding Video Files");
+	}
+	
+	public String getStatusText() {
+		if (getMaximum() == 0)
+			return "Building list of files...";
+		
+		return "Adding file " + getCurrent() + " of " + getMaximum();
+	}
 }

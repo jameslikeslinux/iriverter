@@ -34,7 +34,7 @@ public class MPlayerPathDialog {
 		DirectoryDialog dialog = new DirectoryDialog(shell);
 		dialog.setFilterPath(ConverterOptions.getMPlayerPath());
 		dialog.setText("MPlayer Path");
-		dialog.setMessage("Select the path to MPlayer");
+		dialog.setMessage("Select the path to 'mplayer'");
 		String directory = dialog.open();
 		if (directory != null)
 			ConverterOptions.setMPlayerPath(directory);
