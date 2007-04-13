@@ -131,9 +131,8 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 		return "Converting " + new File(inputVideo).getName();
 	}
 	
-	public DoSomeShit[] getShitToDo() {
+	public ShitToDo[] getShitToDo() {
 		java.util.List shitToDo = new ArrayList();
-		
 		
 		java.util.List commandList = MencoderCommand.prepareBaseCommandList(inputVideo, getOutputVideo(), mplayerPath, inputVideoInfo, 0);
 		String[] command = (String[]) commandList.toArray(new String[]{});
@@ -157,6 +156,6 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 			}
 		}
 		
-		return (DoSomeShit[]) shitToDo.toArray(new DoSomeShit[]{});
+		return (ShitToDo[]) shitToDo.toArray(new ShitToDo[]{});
 	}
 }

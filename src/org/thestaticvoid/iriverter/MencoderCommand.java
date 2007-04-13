@@ -24,7 +24,7 @@ package org.thestaticvoid.iriverter;
 import java.util.*;
 import java.io.*;
 
-public class MencoderCommand implements DoSomeShit {
+public class MencoderCommand implements ShitToDo {
 	private String description;
 	private String[] command;
 	private Process proc;

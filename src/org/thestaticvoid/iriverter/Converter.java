@@ -26,7 +26,7 @@ import java.util.*;
 public class Converter extends Thread {
 	private Job[] jobs;
 	private ProgressDialogInfo progressDialogInfo;
-	private DoSomeShit currentCommand;
+	private ShitToDo currentCommand;
 	private List failures;
 	
 	public Converter(Job[] jobs, ProgressDialogInfo progressDialogInfo) {
@@ -41,7 +41,7 @@ public class Converter extends Thread {
 			progressDialogInfo.setJobDescription(jobs[i].getDescription());
 			
 			try {
-				DoSomeShit[] shitToDo = jobs[i].getShitToDo();
+				ShitToDo[] shitToDo = jobs[i].getShitToDo();
 				for (int j = 0; j < shitToDo.length; j++) {
 					currentCommand = shitToDo[j];
 					currentCommand.run(progressDialogInfo);

@@ -23,5 +23,5 @@ package org.thestaticvoid.iriverter;
 
 public interface Job {
 	public String getDescription();
-	public DoSomeShit[] getShitToDo();
+	public ShitToDo[] getShitToDo();
 }

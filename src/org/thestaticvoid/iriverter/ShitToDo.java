@@ -1,5 +1,5 @@
 /*
- * DoSomeShit.java
+ * ShitToDo.java
  * Copyright (C) 2005-2007 James Lee
  *
  * This program is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
  */
 package org.thestaticvoid.iriverter;
 
-public interface DoSomeShit {
+public interface ShitToDo {
 	public void run(ProgressDialogInfo progressDialogInfo) throws FailedToDoSomeShit;
 	public void cancel();
 }
