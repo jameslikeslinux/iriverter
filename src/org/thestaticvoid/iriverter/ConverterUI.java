@@ -413,7 +413,9 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				boolean canceled = false;
 				while (!canceled)
 					try {
-						Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + MPlayerInfo.MPLAYER_BIN, file});
+						Process proc = Runtime.getRuntime().exec(new String[]{MPlayerInfo.getMPlayerPath() + MPlayerInfo.MPLAYER_BIN, file});
+						BlackHole.suck(proc.getInputStream());
+						BlackHole.suck(proc.getInputStream());
 						canceled = true;
 					} catch (IOException io) {
 						Logger.logException(io);
@@ -437,8 +439,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		if (e.getSource() == newDirectory || e.getSource() == newDirectoryTool)
 			newDirectory();
 		
-		if (e.getSource() == newDVD || e.getSource() == newDVDTool)
-			newDVD();
+		/*if (e.getSource() == newDVD || e.getSource() == newDVDTool)
+			newDVD();*/
 		
 		if (e.getSource() == manualSplit)
 			newManualSplit();
@@ -683,7 +685,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 				boolean canceled = false;
 				while (!canceled)
 					try {
-						singleVideo = new SingleVideo(tabFolder, SWT.NONE, tabItem, video, MPlayerInfo.getMPlayerPath()); 
+						singleVideo = new SingleVideo(tabFolder, SWT.NONE, tabItem, new InputVideo(video), MPlayerInfo.getMPlayerPath()); 
 						tabItem.setControl(singleVideo);
 						tabFolder.setSelection(tabItem);
 						tabChanged(false);
@@ -717,7 +719,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		}
 	}
 	
-	private DVD newDVD() {
+	/*private DVD newDVD() {
 		DVD lastDVD = null;
 		for (int i = tabFolder.getItemCount() - 1; i >= 0 && lastDVD == null; i--)
 			if (tabFolder.getItem(i).getControl() instanceof DVD)
@@ -736,7 +738,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			dvd.setTitleCombo();
 		
 		return dvd;
-	}
+	}*/
 	
 	private ManualSplit newManualSplit() {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);

@@ -22,94 +22,66 @@
 package org.thestaticvoid.iriverter;
 
 import java.util.*;
-import java.io.*;
 
-public class MencoderCommand implements ShitToDo {
-	private String description;
-	private String[] command;
-	private Process proc;
+public class MencoderCommand extends ArrayList {
+	private InputVideo inputVideo;
+	private String outputVideo;
 	
-	public MencoderCommand(String description, String[] command) {
-		this.description = description;
-		this.command = command;
-	}
-	
-	public void run(ProgressDialogInfo progressDialogInfo) throws FailedToDoSomeShit {
-		int exitCode = 1;
+	public MencoderCommand(String[] command, InputVideo inputVideo, String outputVideo) {
+		this.inputVideo = inputVideo;
+		this.outputVideo = outputVideo;
 		
-		MencoderStreamParser inputStream = null;
-		MencoderStreamParser errorStream = null;
-		
-		String commandStr = "";
 		for (int i = 0; i < command.length; i++)
-			commandStr += command[i] + " ";
-		Logger.logMessage(description + " " + commandStr, Logger.INFO);
+			add(command[i]);
 		
-		progressDialogInfo.setSubdescription(description);
-		
-		try {
-			proc = Runtime.getRuntime().exec(command);
-			
-			inputStream = new MencoderStreamParser(progressDialogInfo);
-			inputStream.parse(new BufferedReader(new InputStreamReader(proc.getInputStream())));
-			errorStream = new MencoderStreamParser(progressDialogInfo);
-			errorStream.parse(new BufferedReader(new InputStreamReader(proc.getErrorStream())));
-			
-			exitCode = proc.waitFor();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		if (exitCode > 0)
-			throw new FailedToDoSomeShit(description);
+		inputVideo.appendToCommandList(this);
+		add("-o");
+		add(outputVideo);
 	}
 	
-	public void cancel() {
-		proc.destroy();
-	}
-	
-	public static List prepareBaseCommandList(String inputVideo, String outputVideo, String mplayerPath, MPlayerInfo info, int pass) {
-		List commandList = new ArrayList();
+	public MencoderCommand(InputVideo inputVideo, String outputVideo, String mplayerPath, MPlayerInfo info, int pass) {
+		this.inputVideo = inputVideo;
+		this.outputVideo = outputVideo;
 		
-		commandList.add(mplayerPath + MPlayerInfo.MENCODER_BIN);
+		add(mplayerPath + MPlayerInfo.MENCODER_BIN);
 		
-		commandList.add(inputVideo);
-		commandList.add("-o");
-		commandList.add(outputVideo);
+		inputVideo.appendToCommandList(this);
+		add("-o");
+		add(outputVideo);
 		
 		if (ConverterOptions.getCurrentProfile().getWrapperFormat().equals("mp4")) {
-			commandList.add("-of");
-			commandList.add("lavf");
-			commandList.add("-lavfopts");
-			commandList.add("format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames");
+			add("-of");
+			add("lavf");
+			add("-lavfopts");
+			add("format=mp4:i_certify_that_my_video_stream_does_not_use_b_frames");
 		}
 		
-		commandList.add("-ovc");
+		add("-ovc");
 		if (ConverterOptions.getCurrentProfile().getVideoFormat().equals("h264")) {
-			commandList.add("x264");
-			commandList.add("-x264encopts");
-			commandList.add("bitrate=" + ConverterOptions.getVideoBitrate() + ":bframes=0:level_idc=13:nocabac");
+			add("x264");
+			add("-x264encopts");
+			add("bitrate=" + ConverterOptions.getVideoBitrate() + ":bframes=0:level_idc=13:nocabac");
 		} else {
-			commandList.add("xvid");
-			commandList.add("-xvidencopts");
-			commandList.add("bitrate=" + ConverterOptions.getVideoBitrate() + ":max_bframes=0");
+			add("xvid");
+			add("-xvidencopts");
+			add("bitrate=" + ConverterOptions.getVideoBitrate() + ":max_bframes=0");
 		}
 		
-		commandList.add("-oac");
+		add("-oac");
 		if (ConverterOptions.getCurrentProfile().getAudioFormat().equals("aac")) {
-			commandList.add("faac");
-			commandList.add("-faacopts");
-			commandList.add("br=" + ConverterOptions.getAudioBitrate() + ":object=1");
+			add("faac");
+			add("-faacopts");
+			add("br=" + ConverterOptions.getAudioBitrate() + ":object=1");
 		} else {
-			commandList.add("mp3lame");
-			commandList.add("-lameopts");
-			commandList.add("mode=0:cbr:br=" + ConverterOptions.getAudioBitrate());
+			add("mp3lame");
+			add("-lameopts");
+			add("mode=0:cbr:br=" + ConverterOptions.getAudioBitrate());
 		}
 		
 		double ofps = (info.getFrameRate() > ConverterOptions.getCurrentProfile().getMaxFrameRate() ? ConverterOptions.getCurrentProfile().getMaxFrameRate() : info.getFrameRate());
 		if (info.getFrameRate() != ofps && info.getFrameRate() < 1000) {	// HACK: wmv always shows 1000 fps
-			commandList.add("-vf-add");
-			commandList.add("filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000)));
+			add("-vf-add");
+			add("filmdint=io=" + ((int) Math.round(info.getFrameRate() * 1000)) + ":" + ((int) Math.round(ofps * 1000)));
 		}
 		
 		int scaledWidth = ConverterOptions.getDimensions().getWidth();
@@ -120,33 +92,52 @@ public class MencoderCommand implements ShitToDo {
 			scaledHeight = ConverterOptions.getDimensions().getHeight();
 		}
 		
-		commandList.add("-vf-add");
+		add("-vf-add");
 		if (ConverterOptions.getPanAndScan())
-			commandList.add("scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) ConverterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + ConverterOptions.getDimensions().getHeight() + ",crop=" + ConverterOptions.getDimensions().getWidth() + ":" + ConverterOptions.getDimensions().getHeight());
+			add("scale=" + ((int) ((info.getDimensions().getWidth()) * (((double) ConverterOptions.getDimensions().getHeight()) / (double) info.getDimensions().getHeight()))) + ":" + ConverterOptions.getDimensions().getHeight() + ",crop=" + ConverterOptions.getDimensions().getWidth() + ":" + ConverterOptions.getDimensions().getHeight());
 		else
-			commandList.add("scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + ConverterOptions.getDimensions().getWidth() + ":" + ConverterOptions.getDimensions().getHeight());
+			add("scale=" + scaledWidth + ":" + scaledHeight + ",expand=" + ConverterOptions.getDimensions().getWidth() + ":" + ConverterOptions.getDimensions().getHeight());
 		
-		commandList.add("-vf-add");
-		commandList.add("harddup");
+		add("-vf-add");
+		add("harddup");
 		
 		if (ConverterOptions.getVolumeFilter().equals(VolumeFilter.VOLNORM)) {
-			commandList.add("-af");
-			commandList.add("volnorm");
+			add("-af");
+			add("volnorm");
 		} else if (ConverterOptions.getVolumeFilter().equals(VolumeFilter.VOLUME)) {
-			commandList.add("-af");
-			commandList.add("volume=" + ConverterOptions.getGain());
+			add("-af");
+			add("volume=" + ConverterOptions.getGain());
 		}
 		
-		commandList.add("-ofps");
-		commandList.add("" + ofps);
-		commandList.add("-srate");
-		commandList.add("44100");
+		add("-ofps");
+		add("" + ofps);
+		add("-srate");
+		add("44100");
 		
 		if (!ConverterOptions.getAutoSync()) {
-			commandList.add("-delay");
-			commandList.add("" + (ConverterOptions.getAudioDelay() / 1000.0));
+			add("-delay");
+			add("" + (ConverterOptions.getAudioDelay() / 1000.0));
 		}
+	}
+	
+	public String toString() {
+		String string = "";
 		
-		return commandList;
+		for (int i = 0; i < size(); i++)
+			string += (String) get(i);
+		
+		return string;
+	}
+	
+	public String[] toStringArray() {
+		return (String[]) toArray(new String[]{});
+	}
+	
+	public InputVideo getInputVideo() {
+		return inputVideo;
+	}
+	
+	public String getOutputVideo() {
+		return outputVideo;
 	}
 }

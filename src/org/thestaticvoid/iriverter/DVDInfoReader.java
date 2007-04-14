@@ -25,12 +25,13 @@ import java.util.*;
 
 public class DVDInfoReader extends Thread {
 	private DVDProgressDialog progressDialog;
-	private String drive, mplayerPath;
+	private InputVideo inputVideo;
+	private String mplayerPath;
 	private Map titleInfo;
 	
-	public DVDInfoReader(DVDProgressDialog progressDialog, String drive, String mplayerPath) {
+	public DVDInfoReader(DVDProgressDialog progressDialog, InputVideo inputVideo, String mplayerPath) {
 		this.progressDialog = progressDialog;
-		this.drive = drive;
+		this.inputVideo = inputVideo;
 		this.mplayerPath = mplayerPath;
 		titleInfo = new LinkedHashMap();
 		
@@ -38,12 +39,12 @@ public class DVDInfoReader extends Thread {
 	}
 	
 	public void run() {
-		int numberOfTitles = new MPlayerInfo("dvd://", drive, mplayerPath).getNumberOfTitles();
+		int numberOfTitles = new MPlayerInfo(inputVideo, mplayerPath).getNumberOfTitles();
 		progressDialog.setMaximum(numberOfTitles);
 		
 		for (int i = 1; i <= numberOfTitles; i++) {
 			progressDialog.setCurrent(i);
-			MPlayerInfo rawTitleInfo = new MPlayerInfo("dvd://" + i, drive, mplayerPath);
+			MPlayerInfo rawTitleInfo = new MPlayerInfo(new InputVideo("dvd://" + i, inputVideo.getName()), mplayerPath);
 			
 			int length = rawTitleInfo.getLength();
 			int seconds = length % 60;
