@@ -30,20 +30,32 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
 
-public class ManualSplit extends Composite implements SelectionListener, ManualSplitInfo {
+public class ManualSplit extends Composite implements SelectionListener, Job {
 	private CTabItem tabItem;
-	private Text videoInput, hr, min, sec;
-	private Button videoSelect, add, remove;
+	private InputVideo inputVideo;
+	private Text hr, min, sec;
+	private Button add, remove;
 	private Label length;
 	private List marksList;
-	private String syncVideo;
+	private String mplayerPath, syncVideo;
 	private Mark[] syncMarks;
 	
-	public ManualSplit(Composite parent, int style, CTabItem tabItem) {
+	public ManualSplit(Composite parent, int style, CTabItem tabItem, InputVideo inputVideo, String mplayerPath) throws Exception {
 		super(parent, style);
 		this.tabItem = tabItem;
+		this.inputVideo = inputVideo;
+		this.mplayerPath = mplayerPath;
 		
-		tabItem.setText("New Manual Split");
+		MPlayerInfo inputVideoInfo = new MPlayerInfo(inputVideo, mplayerPath);
+		if (!inputVideoInfo.videoSupported()) {
+			MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
+			messageBox.setText("Unsupported Video");
+			messageBox.setMessage("MPlayer does not recognize this type of video:\n" + new File(inputVideo.getName()).getName());
+			messageBox.open();
+			throw new Exception("Unsupported video");
+		}
+		
+		tabItem.setText(new File(inputVideo.getName()).getName());
 		
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
@@ -62,34 +74,7 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 		gridData.horizontalSpan = 3;
 		manualSplitLabel.setLayoutData(gridData);
 		
-		Label video = new Label(this, SWT.NONE);
-		video.setText("Video:");
-		
-		videoInput = new Text(this, SWT.BORDER);
-		videoInput.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		videoSelect = new Button(this, SWT.PUSH);
-		videoSelect.setText("Select");
-		gridData = new GridData();
-		gridData.widthHint = 75;
-		videoSelect.setLayoutData(gridData);
-		videoSelect.addSelectionListener(this);
-		
-		Group splitMarksGroup = new Group(this, SWT.NONE);
-		splitMarksGroup.setText("Split Marks");
-		gridLayout = new GridLayout();
-		gridLayout.horizontalSpacing = 6;
-		gridLayout.verticalSpacing = 6;
-		gridLayout.marginHeight = 0;
-		gridLayout.marginWidth = 0;
-		gridLayout.numColumns = 3;
-		//gridLayout.makeColumnsEqualWidth = true;
-		splitMarksGroup.setLayout(gridLayout);
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 3;
-		splitMarksGroup.setLayoutData(gridData);
-		
-		Composite addMarkComp = new Composite(splitMarksGroup, SWT.NONE);
+		Composite addMarkComp = new Composite(this, SWT.NONE);
 		gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
 		gridLayout.verticalSpacing = 6;
@@ -127,7 +112,7 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 		sec.setText("00");
 		sec.addSelectionListener(this);
 		
-		Composite addRemoveButtonComp = new Composite(splitMarksGroup, SWT.NONE);
+		Composite addRemoveButtonComp = new Composite(this, SWT.NONE);
 		gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
 		gridLayout.verticalSpacing = 6;
@@ -144,7 +129,7 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 		remove.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		remove.addSelectionListener(this);
 		
-		Composite marksListComp = new Composite(splitMarksGroup, SWT.NONE);
+		Composite marksListComp = new Composite(this, SWT.NONE);
 		gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
 		gridLayout.verticalSpacing = 6;
@@ -153,47 +138,25 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 		
 		marksList = new List(marksListComp, SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
 		marksList.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		int length = inputVideoInfo.getLength();
+		int seconds = length % 60;
+		int minutes = length / 60;
+		int hours = minutes / 60;
+		minutes = minutes - (hours * 60);
+
+		this.length.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : "" + minutes) + ":" + ((seconds < 10) ? "0" + seconds : "" + seconds));
+		hr.setText("0");
+		min.setText("00");
+		sec.setText("00");
+		marksList.removeAll();
 	}
 	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		widgetSelected(e);
 	}
 	
-	public void widgetSelected(SelectionEvent e) {
-		if (e.getSource() == videoSelect) {
-			FileDialog fileDialog = new FileDialog(getShell(), SWT.OPEN);
-			fileDialog.setText("Input Video");
-			fileDialog.setFilterExtensions(new String[]{"*.avi"});
-			fileDialog.setFilterNames(new String[]{"AVI Video (*.avi)"});
-			String file = fileDialog.open();
-			if (file != null) {
-				boolean canceled = false;
-				while (!canceled)
-					try {
-						videoInput.setText(file);
-						tabItem.setText(new File(file).getName());
-
-						MPlayerInfo titleInfo = new MPlayerInfo(videoInput.getText());
-
-						int length = titleInfo.getLength();
-						int seconds = length % 60;
-						int minutes = length / 60;
-						int hours = minutes / 60;
-						minutes = minutes - (hours * 60);
-
-						this.length.setText(hours + ":" + ((minutes < 10) ? "0" + minutes : "" + minutes) + ":" + ((seconds < 10) ? "0" + seconds : "" + seconds));
-						hr.setText("0");
-						min.setText("00");
-						sec.setText("00");
-						marksList.removeAll();
-						
-						canceled = true;
-					} catch (MPlayerNotFoundException mpe) {
-						canceled = new MPlayerPathDialog(getParent().getShell()).open();
-					}
-			}
-		}
-		
+	public void widgetSelected(SelectionEvent e) {		
 		if (e.getSource() == add || e.getSource() == hr || e.getSource() == min || e.getSource() == sec) {
 			try {
 				Integer.parseInt(hr.getText());
@@ -228,17 +191,7 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 		}	
 	}
 	
-	public synchronized String getVideo() {
-		Display.getDefault().syncExec(new Runnable() {
-			public void run() {
-				syncVideo = videoInput.getText();
-			}
-		});
-		
-		return syncVideo;
-	}
-	
-	public synchronized Mark[] getMarks() {
+	public Mark[] getMarks() {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				syncMarks = new Mark[marksList.getItemCount() + 2];
@@ -252,7 +205,29 @@ public class ManualSplit extends Composite implements SelectionListener, ManualS
 		return syncMarks;
 	}
 	
-	public synchronized int getPart() {
+	public int getPart() {
 		return -1;
+	}
+	
+	public String getDescription() {
+		return "Splitting " + new File(inputVideo.getName()).getName();
+	}
+	
+	public ShitToDo[] getShitToDo() {
+		java.util.List shitToDo = new java.util.ArrayList();
+		
+		for (int i = 0; (i + 1) < getMarks().length; i++) {
+			String inputVideo = this.inputVideo.getName();
+			String outputVideo = inputVideo.substring(0, inputVideo.lastIndexOf('.')) + ".part" + (i + 1) + ".avi";
+			
+			if (getMarks()[i].getTime() == Mark.START_MARK)
+				shitToDo.add(new MencoderShit("Working on part " + (i + 1) + " of " + (getMarks().length - 1) + "...", new MencoderCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, "-ovc", "copy", "-oac", "copy", "-endpos", "" + getMarks()[i + 1].getTime()}, this.inputVideo, outputVideo)));
+			else if (getMarks()[i + 1].getTime() == Mark.END_MARK)
+				shitToDo.add(new MencoderShit("Working on part " + (i + 1) + " of " + (getMarks().length - 1) + "...", new MencoderCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, "-ovc", "copy", "-oac", "copy", "-ss", "" + getMarks()[i].getTime()}, this.inputVideo, outputVideo)));
+			else
+				shitToDo.add(new MencoderShit("Working on part " + (i + 1) + " of " + (getMarks().length - 1) + "...", new MencoderCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, "-ovc", "copy", "-oac", "copy", "-ss", "" + getMarks()[i].getTime(), "-endpos", "" + getMarks()[i + 1].getTime()}, this.inputVideo, outputVideo)));
+		}
+		
+		return (ShitToDo[]) shitToDo.toArray(new ShitToDo[]{});
 	}
 }

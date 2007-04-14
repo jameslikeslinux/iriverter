@@ -442,8 +442,15 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		/*if (e.getSource() == newDVD || e.getSource() == newDVDTool)
 			newDVD();*/
 		
-		if (e.getSource() == manualSplit)
-			newManualSplit();
+		if (e.getSource() == manualSplit) {
+			FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
+			fileDialog.setText("Input Video");
+			fileDialog.setFilterExtensions(new String[]{"*.avi"});
+			fileDialog.setFilterNames(new String[]{"AVI Video (*.avi)"});
+			String file = fileDialog.open();
+			if (file != null)
+				newManualSplit(file);
+		}
 		
 		if (e.getSource() == joinVideos)
 			newJoinVideos();
@@ -740,14 +747,24 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		return dvd;
 	}*/
 	
-	private ManualSplit newManualSplit() {
+	private void newManualSplit(String video) {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		ManualSplit manualSplit = new ManualSplit(tabFolder, SWT.NONE, tabItem);
-		tabItem.setControl(manualSplit);
-		tabFolder.setSelection(tabItem);
-		tabChanged(false);
+		ManualSplit manualSplit = null;
 		
-		return manualSplit;
+		boolean canceled = false;
+		while (!canceled)
+			try {
+				manualSplit = new ManualSplit(tabFolder, SWT.NONE, tabItem, new InputVideo(video), MPlayerInfo.getMPlayerPath()); 
+				tabItem.setControl(manualSplit);
+				tabFolder.setSelection(tabItem);
+				tabChanged(false);
+				canceled = true;
+			} catch (MPlayerNotFoundException mpe) {
+				canceled = new MPlayerPathDialog(shell).open();
+			} catch (Exception e) {
+				tabItem.dispose();
+				canceled = true;
+			}
 	}
 	
 	private JoinVideos newJoinVideos() {
