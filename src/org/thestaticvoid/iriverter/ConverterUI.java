@@ -767,14 +767,24 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			}
 	}
 	
-	private JoinVideos newJoinVideos() {
+	private void newJoinVideos() {
 		CTabItem tabItem = new CTabItem(tabFolder, SWT.NONE);
-		JoinVideos joinVideos = new JoinVideos(tabFolder, SWT.NONE, tabItem);
-		tabItem.setControl(joinVideos);
-		tabFolder.setSelection(tabItem);
-		tabChanged(false);
+		JoinVideos joinVideos = null;
 		
-		return joinVideos;
+		boolean canceled = false;
+		while (!canceled)
+			try {
+				joinVideos = new JoinVideos(tabFolder, SWT.NONE, tabItem, MPlayerInfo.getMPlayerPath()); 
+				tabItem.setControl(joinVideos);
+				tabFolder.setSelection(tabItem);
+				tabChanged(false);
+				canceled = true;
+			} catch (MPlayerNotFoundException mpe) {
+				canceled = new MPlayerPathDialog(shell).open();
+			} catch (Exception e) {
+				tabItem.dispose();
+				canceled = true;
+			}
 	}
 	
 	public static void main(String[] args) {

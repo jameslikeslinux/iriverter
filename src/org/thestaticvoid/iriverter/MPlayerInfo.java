@@ -32,7 +32,6 @@ public class MPlayerInfo {
 	
 	private Process proc;
 	private StringBuffer mplayerOutput;
-	private boolean commandFound = true;
 	
 	public MPlayerInfo(InputVideo inputVideo) throws MPlayerNotFoundException {
 		this(inputVideo, MPlayerInfo.getMPlayerPath());

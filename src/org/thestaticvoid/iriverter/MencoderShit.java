@@ -44,6 +44,8 @@ public class MencoderShit implements ShitToDo {
 		Logger.logMessage(description + " " + mencoderCommand, Logger.INFO);
 		
 		progressDialogInfo.setSubdescription(description);
+		progressDialogInfo.setMiscellaneous1("");
+		progressDialogInfo.setMiscellaneous2("");
 		
 		try {
 			proc = Runtime.getRuntime().exec(command);
@@ -91,6 +93,7 @@ public class MencoderShit implements ShitToDo {
 			} catch (MPlayerNotFoundException e) {
 				// This should never happen
 				e.printStackTrace();
+				throw new FailedToDoSomeShit(description);
 			}			
 		}
 	}

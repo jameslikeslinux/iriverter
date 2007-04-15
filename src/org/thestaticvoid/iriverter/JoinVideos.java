@@ -30,17 +30,18 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
 
-public class JoinVideos extends Composite implements SelectionListener, TabItemControl, JoinVideosInfo {	
+public class JoinVideos extends Composite implements SelectionListener, TabItemControl, Job {	
 	private CTabItem tabItem;
 	private java.util.List inputVideos;
 	private List videosList;
 	private Button up, add, remove, down, outputVideoSelect;
 	private Text outputVideoInput;
-	private String syncOutputVideo;
+	private String syncOutputVideo, mplayerPath;
 	
-	public JoinVideos(Composite parent, int style, CTabItem tabItem) {
+	public JoinVideos(Composite parent, int style, CTabItem tabItem, String mplayerPath) {
 		super(parent, style);
 		this.tabItem = tabItem;
+		this.mplayerPath = mplayerPath;
 		inputVideos = new java.util.ArrayList();
 		
 		tabItem.setText("New Join Videos");
@@ -240,7 +241,7 @@ public class JoinVideos extends Composite implements SelectionListener, TabItemC
 		return inputVideos;
 	}
 	
-	public synchronized String getOutputVideo() {
+	public String getOutputVideo() {
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				syncOutputVideo = outputVideoInput.getText();
@@ -250,7 +251,7 @@ public class JoinVideos extends Composite implements SelectionListener, TabItemC
 		return syncOutputVideo;
 	}
 	
-	public synchronized void setOutputVideo(String outputVideo) {
+	public void setOutputVideo(String outputVideo) {
 		syncOutputVideo = outputVideo;
 		
 		Display.getDefault().syncExec(new Runnable() {
@@ -258,5 +259,27 @@ public class JoinVideos extends Composite implements SelectionListener, TabItemC
 				outputVideoInput.setText(syncOutputVideo);
 			}
 		});
+	}
+	
+	public String getDescription() {
+		return "Joining videos into " + new File(getOutputVideo()).getName();
+	}
+	
+	public ShitToDo[] getShitToDo() {
+		java.util.List shitToDo = new java.util.ArrayList();
+		
+		File tempFile;		
+		try {
+			tempFile = File.createTempFile("iriverter-", ".avi");
+			tempFile.deleteOnExit();
+		} catch (IOException io) {
+			Logger.logException(io);
+			return new ShitToDo[]{};
+		}
+		
+		shitToDo.add(new ConcatenateShit("Concatenating videos to a temporary file...", getInputVideos(), tempFile.toString()));
+		shitToDo.add(new MencoderShit("Writing header...", new MencoderCommand(new String[]{mplayerPath + MPlayerInfo.MENCODER_BIN, "-forceidx", "-ovc", "copy", "-oac", "copy"}, new InputVideo(tempFile.toString()), getOutputVideo())));
+		
+		return (ShitToDo[]) shitToDo.toArray(new ShitToDo[]{});
 	}
 }
