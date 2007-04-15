@@ -30,14 +30,16 @@ import org.eclipse.swt.graphics.*;
 import java.io.*;
 
 public class AddDirectoryDialog extends Dialog implements SelectionListener {
+	private String directory;
 	private Shell shell;
-	private Text directory, fileType;
+	private Text directoryText, fileType;
 	private Button select, doSubdirectories, add, remove, cancel, ok;
 	private List fileTypesList;
 	private DirectoryScanner directoryScanner;
 	
-	public AddDirectoryDialog(Shell parent, int style) {
+	public AddDirectoryDialog(Shell parent, int style, String directory) {
 		super(parent, style);
+		this.directory = directory;
 	}
 	
 	public DirectoryScanner open() {
@@ -67,11 +69,12 @@ public class AddDirectoryDialog extends Dialog implements SelectionListener {
 		inputComposite.setLayout(gridLayout);
 		inputComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		directory = new Text(inputComposite, SWT.BORDER);
+		directoryText = new Text(inputComposite, SWT.BORDER);
+		directoryText.setText(directory);
 		GridData gridData = new GridData();
 		gridData.widthHint = 200;
-		directory.setLayoutData(gridData);
-		directory.addSelectionListener(this);
+		directoryText.setLayoutData(gridData);
+		directoryText.addSelectionListener(this);
 		
 		select = new Button(inputComposite, SWT.PUSH);
 		select.setText("Select");
@@ -92,27 +95,36 @@ public class AddDirectoryDialog extends Dialog implements SelectionListener {
 		fileTypesGroup.setLayout(gridLayout);
 		fileTypesGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Composite modifyTypesGroup = new Composite(fileTypesGroup, SWT.NONE);
+		Composite modifyTypesComposite = new Composite(fileTypesGroup, SWT.NONE);
+		gridLayout = new GridLayout();
+		gridLayout.horizontalSpacing = 6;
+		gridLayout.verticalSpacing = 6;
+		gridLayout.marginHeight = 0;
+		gridLayout.marginWidth = 0;
+		modifyTypesComposite.setLayout(gridLayout);
+		modifyTypesComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		fileType = new Text(modifyTypesComposite, SWT.BORDER);
+		fileType.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		fileType.addSelectionListener(this);
+		
+		Composite addRemoveComposite = new Composite(modifyTypesComposite, SWT.NONE);
 		gridLayout = new GridLayout();
 		gridLayout.horizontalSpacing = 6;
 		gridLayout.verticalSpacing = 6;
 		gridLayout.marginHeight = 0;
 		gridLayout.marginWidth = 0;
 		gridLayout.numColumns = 2;
-		modifyTypesGroup.setLayout(gridLayout);
-		modifyTypesGroup.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
-		fileType = new Text(modifyTypesGroup, SWT.BORDER);
+		addRemoveComposite.setLayout(gridLayout);
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		fileType.setLayoutData(gridData);
-		fileType.addSelectionListener(this);
+		gridData.horizontalAlignment = SWT.CENTER;
+		addRemoveComposite.setLayoutData(gridData);
 		
-		add = new Button(modifyTypesGroup, SWT.PUSH);
+		add = new Button(addRemoveComposite, SWT.PUSH);
 		add.setText("Add");
 		add.addSelectionListener(this);
 		
-		remove = new Button(modifyTypesGroup, SWT.PUSH);
+		remove = new Button(addRemoveComposite, SWT.PUSH);
 		remove.setText("Remove");
 		remove.addSelectionListener(this);
 		
@@ -145,17 +157,7 @@ public class AddDirectoryDialog extends Dialog implements SelectionListener {
 		shell.pack();		
 		shell.open();
 		
-		fileTypesList.add(".asf");
-		fileTypesList.add(".avi");
-		fileTypesList.add(".mkv");
-		fileTypesList.add(".mov");
-		fileTypesList.add(".mp4");
-		fileTypesList.add(".mpeg");
-		fileTypesList.add(".mpg");
-		fileTypesList.add(".ogm");
-		fileTypesList.add(".rm");
-		fileTypesList.add(".vob");
-		fileTypesList.add(".wmv");
+		fileTypesList.setItems(VideoFileFilter.getFileTypes());
 		
 		while (!shell.isDisposed())
 			if (!getParent().getDisplay().readAndDispatch())
@@ -172,31 +174,24 @@ public class AddDirectoryDialog extends Dialog implements SelectionListener {
 		if (e.getSource() == select) {
 			String directory = new DirectoryDialog(shell, SWT.OPEN).open();
 			if (directory != null)
-				this.directory.setText(directory);
+				this.directoryText.setText(directory);
 		}
 		
 		if (e.getSource() == add || e.getSource() == fileType) {
-			String fileType = this.fileType.getText();
-			if (!fileType.equals("")) {				
-				int index;
-				for (index = 0; index < fileTypesList.getItemCount() && fileType.compareTo(fileTypesList.getItem(index)) > 0; index++);
-				if (fileType.compareTo(fileTypesList.getItem(index)) != 0)
-						fileTypesList.add(fileType, index);
-			}
+			VideoFileFilter.addFileType(fileType.getText());
+			fileTypesList.setItems(VideoFileFilter.getFileTypes());
 		}
 		
 		if (e.getSource() == remove) {
-			int index = fileTypesList.getSelectionIndex();
-			
-			if (index > -1)
-				fileTypesList.remove(index);
+			VideoFileFilter.removeFileType(fileTypesList.getSelection()[0]);
+			fileTypesList.setItems(VideoFileFilter.getFileTypes());
 		}
 		
 		if (e.getSource() == cancel)
 			shell.dispose();
 		
 		if (e.getSource() == ok) {
-			if (this.directory.getText().equals("")) {
+			if (this.directoryText.getText().equals("")) {
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 				messageBox.setText("Empty Directory");
 				messageBox.setMessage("Select a directory");
@@ -212,7 +207,7 @@ public class AddDirectoryDialog extends Dialog implements SelectionListener {
 				return;
 			}
 			
-			File directory = new File(this.directory.getText());
+			File directory = new File(this.directoryText.getText());
 			if (!directory.isDirectory()) {
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 				messageBox.setText("Invalid Directory");

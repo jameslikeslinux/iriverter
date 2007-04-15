@@ -437,7 +437,7 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		}
 		
 		if (e.getSource() == newDirectory || e.getSource() == newDirectoryTool)
-			newDirectory();
+			newDirectory("");
 		
 		/*if (e.getSource() == newDVD || e.getSource() == newDVDTool)
 			newDVD();*/
@@ -668,13 +668,15 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 			for (int i = 0; i < files.length; i++) {
 				File file = new File(files[i]);
 				
-				/* if (file.isFile() && new VideoFileFilter().accept(file))
+				if (file.isFile() && new VideoFileFilter().accept(file))
 					newSingleVideo(files[i].toString());
 				else if (file.isDirectory())
-					if (new File(files[i] + File.separator + "VIDEO_TS").exists())
-						newDVD().setDrive(files[i]);
-					else
-						newDirectory().setInputDirectory(files[i]); */
+					if (new File(files[i] + File.separator + "VIDEO_TS").exists());
+						// newDVD().setDrive(files[i]);
+					else {
+						newDirectory(files[i]);
+						break;
+					}
 			}
 		}		
 	}
@@ -707,8 +709,8 @@ public class ConverterUI implements SelectionListener, CTabFolder2Listener, Drop
 		});
 	}
 	
-	private void newDirectory() {
-		final DirectoryScanner directoryScanner = new AddDirectoryDialog(shell, SWT.NONE).open();
+	private void newDirectory(String directory) {
+		final DirectoryScanner directoryScanner = new AddDirectoryDialog(shell, SWT.NONE, directory).open();
 		if (directoryScanner != null) {
 			final DirectoryProgressDialog directoryProgressDialog = new DirectoryProgressDialog(shell, SWT.NONE);
 			new Thread() {
