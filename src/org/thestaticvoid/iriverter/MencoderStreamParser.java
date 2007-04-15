@@ -93,7 +93,7 @@ public class MencoderStreamParser extends Thread {
 				try {
 					Thread.sleep(500);
 				} catch (Exception e) {
-					e.printStackTrace();
+					Logger.logException(e);
 				}
 			}
 		}

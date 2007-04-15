@@ -57,7 +57,7 @@ public class MencoderShit implements ShitToDo {
 			
 			exitCode = proc.waitFor();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.logException(e);
 		}
 		
 		if (exitCode > 0)
@@ -92,7 +92,7 @@ public class MencoderShit implements ShitToDo {
 				new MencoderShit("Splitting Part " + (i + 1) + " of " + pieces, command).run(progressDialogInfo);
 			} catch (MPlayerNotFoundException e) {
 				// This should never happen
-				e.printStackTrace();
+				Logger.logException(e);
 				throw new FailedToDoSomeShit(description);
 			}			
 		}

@@ -39,7 +39,7 @@ public class BlackHole extends Thread {
 			while (stream.read() != -1)
 				stream.skip(1024);
 		} catch (IOException io) {
-			io.printStackTrace();
+			Logger.logException(io);
 		}
 	}
 }

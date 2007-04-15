@@ -56,7 +56,7 @@ public class ConverterOptions {
 				while ((line = input.readLine()) != null)
 					text += line + "\n";
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.logException(e);
 			}
 		}
 		
