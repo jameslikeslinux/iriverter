@@ -70,30 +70,30 @@
 		<copy todir="${build.dir}/${icons.dir}">
 			<fileset dir="${src.dir}/${icons.dir}" />
 		</copy>
-
-		<mkdir dir="${build.dir}/${mplayer.package}" />
-
-		<ftp action="get" depends="yes" verbose="yes" server="ftp1.mplayerhq.hu" remotedir="/MPlayer/releases" userid="anonymous" password="jlee@iriverter.thestatictvoid.org">
-			<fileset dir="${build.dir}/${mplayer.package}">
-				<include name="win32/MPlayer-mingw32-1.0rc1.zip" />
-				<include name="codecs/windows-all-20061022.zip" />
-			</fileset>
-		</ftp>
 	</target>
 
 	<target name="jar" depends="compile,resources">
 		<mkdir dir="${jar.dir}" />
 		<jar destfile="${jar.dir}/iriverter.jar" basedir="${build.dir}" includes="${package}/**" />
+	</target>
+
+	<target name="mplayer">
+		<mkdir dir="${build.dir}/${mplayer.package}/win32" />
+		<mkdir dir="${build.dir}/${mplayer.package}/codecs" />
+		
+		<get src="http://www4.mplayerhq.hu/MPlayer/releases/win32/MPlayer-mingw32-1.0rc2.zip" dest="${build.dir}/${mplayer.package}/win32/MPlayer-mingw32-1.0rc2.zip" usetimestamp="true" />
+		<get src="http://www4.mplayerhq.hu/MPlayer/releases/codecs/windows-all-20071007.zip" dest="${build.dir}/${mplayer.package}/codecs/windows-all-20071007.zip" usetimestamp="true" />
+	
 		<jar destfile="${jar.dir}/mplayer-win32.jar" basedir="${build.dir}" includes="${mplayer.package}/win32/**" />
 		<jar destfile="${jar.dir}/codecs-win32.jar" basedir="${build.dir}" includes="${mplayer.package}/codecs/**" />
 	</target>
 
-	<target name="dist" depends="jar">
+	<target name="dist" depends="jar,mplayer">
 		<mkdir dir="${dist.dir}" />
 	
 		<jar destfile="${dist.dir}/swt-native-gtk-linux-x86.jar" basedir="${swt.linux.x86.dir}" includes="*.so" />
 		<jar destfile="${dist.dir}/swt-native-gtk-linux-x86_64.jar" basedir="${swt.linux.x86_64.dir}" includes="*.so" />
-		<jar destfile="${dist.dir}/swt-native-carbon-macosx" basedir="${swt.osx.dir}" includes="*.jnilib" />
+		<jar destfile="${dist.dir}/swt-native-carbon-macosx.jar" basedir="${swt.osx.dir}" includes="*.jnilib" />
 		<jar destfile="${dist.dir}/swt-native-win32-win32-x86.jar" basedir="${swt.windows.dir}" includes="*.dll" />
 		<copy file="${swt.linux.x86.dir}/swt.jar" tofile="${dist.dir}/swt-gtk-linux-x86.jar" />
 		<copy file="${swt.linux.x86_64.dir}/swt.jar" tofile="${dist.dir}/swt-gtk-linux-x86_64.jar" />
