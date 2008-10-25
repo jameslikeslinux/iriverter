@@ -22,7 +22,6 @@
 package org.thestaticvoid.iriverter;
 
 import java.io.*;
-import java.util.*;
 
 public class Profile {
 	private File profileFile;

@@ -24,6 +24,7 @@ package org.thestaticvoid.iriverter;
 import java.util.*;
 
 public class MencoderCommand extends ArrayList {
+	private static final long serialVersionUID = 1L;
 	private InputVideo inputVideo;
 	private String outputVideo;
 	

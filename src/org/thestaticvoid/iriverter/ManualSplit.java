@@ -31,18 +31,16 @@ import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
 
 public class ManualSplit extends Composite implements SelectionListener, Job {
-	private CTabItem tabItem;
 	private InputVideo inputVideo;
 	private Text hr, min, sec;
 	private Button add, remove;
 	private Label length;
 	private List marksList;
-	private String mplayerPath, syncVideo;
+	private String mplayerPath;
 	private Mark[] syncMarks;
 	
 	public ManualSplit(Composite parent, int style, CTabItem tabItem, InputVideo inputVideo, String mplayerPath) throws Exception {
 		super(parent, style);
-		this.tabItem = tabItem;
 		this.inputVideo = inputVideo;
 		this.mplayerPath = mplayerPath;
 		

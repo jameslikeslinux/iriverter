@@ -28,7 +28,6 @@ public class MencoderStreamParser extends Thread {
 	private ProgressDialogInfo progressDialogInfo;
 	private BufferedReader input;
 	private String inputLine = "", lengthLine = "";
-	private boolean stopReading = false;
 	
 	public MencoderStreamParser(ProgressDialogInfo progressDialogInfo) {
 		this.progressDialogInfo = progressDialogInfo;

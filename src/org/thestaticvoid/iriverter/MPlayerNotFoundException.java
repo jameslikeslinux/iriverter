@@ -22,5 +22,5 @@
 package org.thestaticvoid.iriverter;
 
 public class MPlayerNotFoundException extends Exception {
-	// empty
+	private static final long serialVersionUID = 1L;
 }

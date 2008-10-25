@@ -22,6 +22,8 @@
 package org.thestaticvoid.iriverter;
 
 public class FailedToDoSomeShit extends Exception {
+	private static final long serialVersionUID = 1L;
+
 	public FailedToDoSomeShit(String message) {
 		super(message);
 	}

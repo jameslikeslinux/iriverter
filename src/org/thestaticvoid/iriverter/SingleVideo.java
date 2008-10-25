@@ -32,7 +32,6 @@ import java.io.*;
 import java.util.*;
 
 public class SingleVideo extends Composite implements SelectionListener, TabItemControl, Job {
-	private CTabItem tabItem;
 	private InputVideo inputVideo;
 	private MPlayerInfo inputVideoInfo;
 	private Text outputVideoInput;
@@ -43,7 +42,6 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 	
 	public SingleVideo(Composite parent, int style, CTabItem tabItem, InputVideo inputVideo, String mplayerPath) throws Exception {
 		super(parent, style);
-		this.tabItem = tabItem;
 		this.inputVideo = inputVideo;
 		this.mplayerPath = mplayerPath;
 		
@@ -233,7 +231,7 @@ public class SingleVideo extends Composite implements SelectionListener, TabItem
 	}
 	
 	public void setTabItem(CTabItem tabItem) {
-		this.tabItem = tabItem;
+		// empty
 	}
 	
 	private String getOutputVideo() {
